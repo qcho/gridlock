@@ -1,0 +1,87 @@
+group 'ar.edu.itba.sia.c12017.g5.gridlock'
+version '0.0.1'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+apply plugin: 'jacoco'
+apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
+
+mainClassName = "ar.edu.itba.sia.c12017.g5.gridlock.Main"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+def jdkVersion = '1.8'
+
+idea {
+    module {
+        name = project.name
+        jdkName = jdkVersion
+    }
+    project {
+        vcs = 'Git'
+        jdkName = jdkVersion
+        languageLevel = jdkVersion
+    }
+}
+
+eclipse {
+    project {
+        name = project.name
+    }
+    jdt {
+        sourceCompatibility = jdkVersion
+        targetCompatibility = jdkVersion
+    }
+}
+
+dependencies {
+    compile 'ch.qos.logback:logback-classic:1.1.7'
+    compile group: 'com.google.code.findbugs', name: 'annotations', version: '3.0.1'
+    testCompile 'junit:junit:4.11'
+    testCompile "org.mockito:mockito-core:1.+"
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+tasks.withType(Checkstyle) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
+
+checkstyle {
+    toolVersion = '6.18'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+    jacocoTestReport {
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: [
+                    '**/Main.**',
+                ])
+            })
+        }
+    }
+}
