@@ -64,16 +64,20 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        IntStream.range(0, (cols + 1) * 2).forEach(x -> sb.append("-"));
+        sb.append("\n");
         IntStream.range(0, rows).forEach(y -> {
+            sb.append("|");
             IntStream.range(0, cols).forEach(x -> {
-                sb.append(board[y][x]);
+                sb.append(board[y][x] == 0 ? " " : board[y][x]);
                 sb.append(" ");
             });
-            if (y == exitY - 1) {
-                sb.append("X");
+            if (y != exitY - 1) {
+                sb.append("|");
             }
             sb.append("\n");
         });
+        IntStream.range(0, (cols + 1) * 2).forEach(x -> sb.append("-"));
         return sb.toString();
     }
 }
