@@ -34,11 +34,9 @@ public class Board {
     }
 
     private void fillBoardWith(int value) {
-        IntStream.range(0, rows).forEach(i -> {
-            IntStream.range(0, cols).forEach(j -> {
-                board[i][j] = value;
-            });
-        });
+        IntStream.range(0, rows).forEach(i ->
+                IntStream.range(0, cols).forEach(j ->
+                        board[i][j] = value));
     }
 
     public void addChip(boolean main, long sx, long sy, long ex, long ey) {
@@ -46,16 +44,14 @@ public class Board {
         if (sx == ex) {
             assert (sy < ey);
             // VERTICAL CHIP
-            IntStream.range(Long.valueOf(sy - 1).intValue(), Long.valueOf(ey).intValue()).forEach(y -> {
-                board[y][Long.valueOf(sx - 1).intValue()] = symbol;
-            });
+            IntStream.range(Long.valueOf(sy - 1).intValue(), Long.valueOf(ey).intValue()).forEach(y ->
+                    board[y][Long.valueOf(sx - 1).intValue()] = symbol);
         }
         else if (sy == ey) {
             assert (sx < ex);
             // HORIZONTAL CHIP
-            IntStream.range(Long.valueOf(sx - 1).intValue(), Long.valueOf(ex).intValue()).forEach(x -> {
-                board[Long.valueOf(sy - 1).intValue()][x] = symbol;
-            });
+            IntStream.range(Long.valueOf(sx - 1).intValue(), Long.valueOf(ex).intValue()).forEach(x ->
+                    board[Long.valueOf(sy - 1).intValue()][x] = symbol);
         }
         else {
             throw new IllegalArgumentException("Cannot insert diagonal chips");
