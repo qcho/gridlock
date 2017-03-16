@@ -35,16 +35,6 @@ idea {
     }
 }
 
-eclipse {
-    project {
-        name = project.name
-    }
-    jdt {
-        sourceCompatibility = jdkVersion
-        targetCompatibility = jdkVersion
-    }
-}
-
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.7'
     compile group: 'com.google.code.findbugs', name: 'annotations', version: '3.0.1'
