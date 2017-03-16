@@ -8,18 +8,18 @@ import gps.exception.NotAppliableException;
  * Created by alebian on 14/03/17.
  */
 public class GridlockRule implements GPSRule {
-    @Override
-    public Integer getCost() {
-        return null;
-    }
+  @Override
+  public Integer getCost() {
+    return null;
+  }
 
-    @Override
-    public String getName() {
-        return null;
-    }
+  @Override
+  public String getName() {
+    return null;
+  }
 
-    @Override
-    public GPSState evalRule(GPSState state) throws NotAppliableException {
-        return null;
-    }
+  @Override
+  public GPSState evalRule(GPSState state) throws NotAppliableException {
+    return null;
+  }
 }

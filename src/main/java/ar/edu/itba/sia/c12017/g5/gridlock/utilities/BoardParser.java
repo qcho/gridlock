@@ -12,64 +12,64 @@ import java.nio.file.Path;
  * Created by alebian on 14/03/17.
  */
 public class BoardParser {
-    private Path path;
+  private Path path;
 
-    public BoardParser(Path path) {
-        this.path = path.toAbsolutePath();
-    }
+  public BoardParser(Path path) {
+    this.path = path.toAbsolutePath();
+  }
 
-    /*
-    * The expected format:
-    * {
-    *   "board": {
-    *       "size": {
-    *           "rows": Integer,
-    *           "columns": Integer
-    *       },
-    *       "exit": {
-    *           "position": {
-    *               "x": Integer,
-    *               "y": Integer
-    *           }
-    *       },
-    *       "chips":[
-    *           {
-    *               "main": Boolean,
-    *               "start_position": {
-    *                   "x": Integer,
-    *                   "y": Integer
-    *               },
-    *               "end_position": {
-    *                   "x": Integer,
-    *                   "y": Integer
-    *               }
-    *           },
-    *           ...
-    *       ]
-    *   }
-    * }
-    * */
-    public Board parse() {
-        JSONParser parser = new JSONParser();
-        Board answer = null;
-        try {
-            Object obj = parser.parse(new FileReader(path.toString()));
-            JSONObject json = (JSONObject) obj;
-            JSONObject boardInfo = (JSONObject) json.get("board");
-            JSONObject size = (JSONObject) boardInfo.get("size");
-            JSONObject exit = (JSONObject) ((JSONObject) boardInfo.get("exit")).get("position");
-            JSONArray chips = (JSONArray) boardInfo.get("chips");
-            Board board = new Board((long)size.get("rows"), (long)size.get("columns"), (long)exit.get("x"), (long)exit.get("y"));
-            chips.forEach(c -> {
-                boolean main = (boolean) ((JSONObject)c).get("main");
-                JSONObject start = (JSONObject) ((JSONObject)c).get("start_position");
-                JSONObject end = (JSONObject) ((JSONObject)c).get("end_position");
-                board.addChip(main, (long)start.get("x"), (long)start.get("y"), (long)end.get("x"), (long)end.get("y"));
-            });
-            answer = board;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return answer;
+  /*
+  * The expected format:
+  * {
+  *   "board": {
+  *       "size": {
+  *           "rows": Integer,
+  *           "columns": Integer
+  *       },
+  *       "exit": {
+  *           "position": {
+  *               "x": Integer,
+  *               "y": Integer
+  *           }
+  *       },
+  *       "chips":[
+  *           {
+  *               "main": Boolean,
+  *               "start_position": {
+  *                   "x": Integer,
+  *                   "y": Integer
+  *               },
+  *               "end_position": {
+  *                   "x": Integer,
+  *                   "y": Integer
+  *               }
+  *           },
+  *           ...
+  *       ]
+  *   }
+  * }
+  * */
+  public Board parse() {
+    JSONParser parser = new JSONParser();
+    Board answer = null;
+    try {
+      Object obj = parser.parse(new FileReader(path.toString()));
+      JSONObject json = (JSONObject) obj;
+      JSONObject boardInfo = (JSONObject) json.get("board");
+      JSONObject size = (JSONObject) boardInfo.get("size");
+      JSONObject exit = (JSONObject) ((JSONObject) boardInfo.get("exit")).get("position");
+      JSONArray chips = (JSONArray) boardInfo.get("chips");
+      Board board = new Board((long) size.get("rows"), (long) size.get("columns"), (long) exit.get("x"), (long) exit.get("y"));
+      chips.forEach(c -> {
+        boolean main = (boolean) ((JSONObject) c).get("main");
+        JSONObject start = (JSONObject) ((JSONObject) c).get("start_position");
+        JSONObject end = (JSONObject) ((JSONObject) c).get("end_position");
+        board.addChip(main, (long) start.get("x"), (long) start.get("y"), (long) end.get("x"), (long) end.get("y"));
+      });
+      answer = board;
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
     }
+    return answer;
+  }
 }
