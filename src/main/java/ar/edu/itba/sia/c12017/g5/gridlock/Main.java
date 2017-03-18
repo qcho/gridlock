@@ -21,8 +21,7 @@ public class Main {
     String boardName = "easyboard.json";
     Path boardPath = Paths.get(boardsFolder + boardName);
     assert (boardPath.toFile().exists());
-    BoardParser parser = new BoardParser(boardPath);
-    Board board = parser.parse();
+    Board board = BoardParser.parse(boardPath);
     System.out.println(board.toString());
     // Create the GPS objects
 //    GPSState initialState = new GridlockState(board);

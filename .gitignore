@@ -167,7 +167,7 @@ tramp
 # reftex files
 *.rel
 
-# AUCTeX auto folder
+# AUCTeX auto boards
 /auto/
 
 # cask packages

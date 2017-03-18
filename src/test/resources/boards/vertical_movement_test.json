@@ -1,0 +1,27 @@
+{
+  "board": {
+    "size": {
+      "rows": 6,
+      "columns": 1
+    },
+    "exit": {
+      "position": {
+        "x": 2,
+        "y": 2
+      }
+    },
+    "chips": [
+      {
+        "main": true,
+        "start_position": {
+          "x": 1,
+          "y": 3
+        },
+        "end_position": {
+          "x": 1,
+          "y": 4
+        }
+      }
+    ]
+  }
+}

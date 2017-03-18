@@ -12,12 +12,6 @@ import java.nio.file.Path;
  * Created by alebian on 14/03/17.
  */
 public class BoardParser {
-  private Path path;
-
-  public BoardParser(Path path) {
-    this.path = path.toAbsolutePath();
-  }
-
   /*
   * The expected format:
   * {
@@ -49,7 +43,7 @@ public class BoardParser {
   *   }
   * }
   * */
-  public Board parse() {
+  public static Board parse(Path path) {
     JSONParser parser = new JSONParser();
     Board answer = null;
     try {
