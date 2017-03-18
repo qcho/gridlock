@@ -135,7 +135,7 @@ public class Board {
     StringBuilder sb = new StringBuilder();
     // Column numbers
     IntStream.rangeClosed(0, cols).forEach(x -> {
-      sb.append(x < 2 ? " " : x - 1);
+      sb.append(x < 2 ? " " : x - 2);
       sb.append(" ");
     });
     sb.append("\n");
@@ -143,7 +143,7 @@ public class Board {
     IntStream.rangeClosed(0, rows).forEach(y -> {
       // Row number
       if (y < rows) {
-        sb.append(y < 1 ? " " : y);
+        sb.append(y < 1 ? " " : y - 1);
         sb.append(" ");
       } else {
         sb.append("  ");
