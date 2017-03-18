@@ -1,12 +1,9 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.gps;
 
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
-import gps.api.GPSState;
+import gps.api.GpsState;
 
-/**
- * Created by alebian on 14/03/17.
- */
-public class GridlockState implements GPSState {
+public class GridlockState implements GpsState {
   private Board board;
 
   public GridlockState(Board board) {
@@ -18,13 +15,14 @@ public class GridlockState implements GPSState {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    GridlockState that = (GridlockState) o;
-
-    return board.equals(that.board);
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    return board.equals(((GridlockState) other).board);
   }
 
   @Override
