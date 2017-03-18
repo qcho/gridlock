@@ -1,16 +1,17 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.utilities;
 
-import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.google.gson.Gson;
 
-import java.io.FileReader;
+import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
+
+import org.pmw.tinylog.Logger;
+
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
-/**
- * Created by alebian on 14/03/17.
- */
 public class BoardParser {
   private Path path;
 
@@ -49,27 +50,19 @@ public class BoardParser {
   *   }
   * }
   * */
+
+  /**
+   * Parses a board from a json definition.
+   * @return parsed board.
+   */
   public Board parse() {
-    JSONParser parser = new JSONParser();
-    Board answer = null;
-    try {
-      Object obj = parser.parse(new FileReader(path.toString()));
-      JSONObject json = (JSONObject) obj;
-      JSONObject boardInfo = (JSONObject) json.get("board");
-      JSONObject size = (JSONObject) boardInfo.get("size");
-      JSONObject exit = (JSONObject) ((JSONObject) boardInfo.get("exit")).get("position");
-      JSONArray chips = (JSONArray) boardInfo.get("chips");
-      Board board = new Board((long) size.get("rows"), (long) size.get("columns"), (long) exit.get("x"), (long) exit.get("y"));
-      chips.forEach(c -> {
-        boolean main = (boolean) ((JSONObject) c).get("main");
-        JSONObject start = (JSONObject) ((JSONObject) c).get("start_position");
-        JSONObject end = (JSONObject) ((JSONObject) c).get("end_position");
-        board.addChip(main, (long) start.get("x"), (long) start.get("y"), (long) end.get("x"), (long) end.get("y"));
-      });
-      answer = board;
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
+    try (Reader reader = new InputStreamReader(
+            new FileInputStream(path.toString()), StandardCharsets.UTF_8)) {
+      BoardModel model = new Gson().fromJson(reader, BoardModel.class);
+      return model.toBoard();
+    } catch (Exception exception) {
+      Logger.error(exception);
     }
-    return answer;
+    return null;
   }
 }
