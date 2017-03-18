@@ -6,12 +6,11 @@ import org.junit.Test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
-/**
- * Created by alebian on 3/18/17.
- */
 public class BoardTest {
   private Board board1;
   private Board regularBoard;
@@ -33,11 +32,11 @@ public class BoardTest {
 
   @Test
   public void testEquals() {
-    assertEquals(true, board1.equals(verticalMovementBoard));
-    assertEquals(true, verticalMovementBoard.equals(board1));
-    assertEquals(true, verticalMovementBoard.equals(verticalMovementBoard));
-    assertEquals(false, verticalMovementBoard.equals(horizontalMovementBoard));
-    assertEquals(false, horizontalMovementBoard.equals(verticalMovementBoard));
+    assertTrue(board1.equals(verticalMovementBoard));
+    assertTrue(verticalMovementBoard.equals(board1));
+    assertTrue(verticalMovementBoard.equals(verticalMovementBoard));
+    assertFalse(verticalMovementBoard.equals(horizontalMovementBoard));
+    assertFalse(horizontalMovementBoard.equals(verticalMovementBoard));
   }
 
   @Test
@@ -48,16 +47,16 @@ public class BoardTest {
 
   @Test
   public void testChipAlignment() {
-    assertEquals(true, verticalMovementBoard.getMainChip().isVertical());
-    assertEquals(false, verticalMovementBoard.getMainChip().isHorizontal());
-    assertEquals(false, horizontalMovementBoard.getMainChip().isVertical());
-    assertEquals(true, horizontalMovementBoard.getMainChip().isHorizontal());
+    assertTrue(verticalMovementBoard.getMainChip().isVertical());
+    assertFalse(verticalMovementBoard.getMainChip().isHorizontal());
+    assertFalse(horizontalMovementBoard.getMainChip().isVertical());
+    assertTrue(horizontalMovementBoard.getMainChip().isHorizontal());
   }
 
   @Test
   public void testIsGoal() {
-    assertEquals(true, verticalMovementBoard.isGoal());
-    assertEquals(true, horizontalMovementBoard.isGoal());
-    assertEquals(false, regularBoard.isGoal());
+    assertTrue(verticalMovementBoard.isGoal());
+    assertTrue(horizontalMovementBoard.isGoal());
+    assertFalse(regularBoard.isGoal());
   }
 }
