@@ -1,0 +1,25 @@
+{
+  "size": {
+    "rows": 1,
+    "columns": 6
+  },
+  "exit": {
+    "position": {
+      "x": 7,
+      "y": 1
+    }
+  },
+  "chips": [
+    {
+      "main": true,
+      "start_position": {
+        "x": 3,
+        "y": 1
+      },
+      "end_position": {
+        "x": 4,
+        "y": 1
+      }
+    }
+  ]
+}

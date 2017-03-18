@@ -13,49 +13,41 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 public class BoardParser {
-  private Path path;
-
-  public BoardParser(Path path) {
-    this.path = path.toAbsolutePath();
-  }
-
   /*
   * The expected format:
-  * {
-  *   "board": {
-  *       "size": {
-  *           "rows": Integer,
-  *           "columns": Integer
-  *       },
-  *       "exit": {
-  *           "position": {
-  *               "x": Integer,
-  *               "y": Integer
-  *           }
-  *       },
-  *       "chips":[
-  *           {
-  *               "main": Boolean,
-  *               "start_position": {
-  *                   "x": Integer,
-  *                   "y": Integer
-  *               },
-  *               "end_position": {
-  *                   "x": Integer,
-  *                   "y": Integer
-  *               }
-  *           },
-  *           ...
-  *       ]
-  *   }
-  * }
+  *  {
+  *     "size": {
+  *         "rows": Integer,
+  *         "columns": Integer
+  *     },
+  *     "exit": {
+  *         "position": {
+  *             "x": Integer,
+  *             "y": Integer
+  *         }
+  *     },
+  *     "chips":[
+  *         {
+  *             "main": Boolean,
+  *             "start_position": {
+  *                 "x": Integer,
+  *                 "y": Integer
+  *             },
+  *             "end_position": {
+  *                 "x": Integer,
+  *                 "y": Integer
+  *             }
+  *         },
+  *         ...
+  *     ]
+  *  }
   * */
 
   /**
    * Parses a board from a json definition.
    * @return parsed board.
    */
-  public Board parse() {
+  public static Board parse(Path path) {
     try (Reader reader = new InputStreamReader(
             new FileInputStream(path.toString()), StandardCharsets.UTF_8)) {
       BoardModel model = new Gson().fromJson(reader, BoardModel.class);
