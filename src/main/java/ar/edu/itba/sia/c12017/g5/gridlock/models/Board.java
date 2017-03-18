@@ -1,10 +1,14 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.models;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /*
-* The board has centinel cells around the board.
+* The board has sentinel cells around the actual game grid.
 * The board positions are interpreted as:
 *    (x = 1, y = 1) +-----+-----+-----+ (y = 1, x = cols)
 *                   |     |     |     |
@@ -28,6 +32,9 @@ public class Board {
   private int[][] board;
   private int nextChip = MAIN_CHIP_SYMBOL + 1;
 
+  private Chip mainChip;
+  private List<Chip> chips;
+
   /**
    * Builds a board of the given dimensions with the given exit.
    * @param rows amount of rows in the board
@@ -40,6 +47,7 @@ public class Board {
     this.cols = cols + 1;
     this.exitX = exitX;
     this.exitY = exitY;
+    chips = new ArrayList<>();
     createBoard();
   }
 
@@ -96,21 +104,39 @@ public class Board {
    * @param ex x-position for the end of the chip.
    * @param ey y-position for the end of the chip.
    */
-  public void addChip(boolean main, int sx, int sy, int ex, int ey) {
+  public void addChip(final boolean main, final int sx, final int sy, final int ex, final int ey) {
     int symbol = main ? MAIN_CHIP_SYMBOL : nextChip;
-    if (sx == ex) {
-      assert (sy < ey);
+    Chip chip = new Chip(main, new Point(sx, sy), new Point(ex, ey));
+    if (chip.start_position.x == chip.end_position.x) {
+      assert (chip.start_position.y < chip.end_position.y);
       // VERTICAL CHIP
-      IntStream.rangeClosed(sy, ey).forEach(y -> board[y][sx] = symbol);
-    } else if (sy == ey) {
-      assert (sx < ex);
+      IntStream.rangeClosed(chip.start_position.y, chip.end_position.y).forEach(y -> board[y][chip.start_position.x] = symbol);
+    } else if (chip.start_position.y == chip.end_position.y) {
+      assert (chip.start_position.x < chip.end_position.x);
       // HORIZONTAL CHIP
-      IntStream.rangeClosed(sx, ex).forEach(x -> board[sy][x] = symbol);
+      IntStream.rangeClosed(chip.start_position.x, chip.end_position.x).forEach(x -> board[chip.start_position.y][x] = symbol);
     } else {
       throw new IllegalArgumentException("Cannot insert diagonal chips");
     }
+    chips.add(chip);
     if (!main) {
       nextChip++;
+    } else {
+      if (mainChip != null) {
+        throw new IllegalArgumentException("Only one main chip is allowed");
+      }
+      if (!chipCanScape(chip)) {
+        throw new IllegalArgumentException("The main chip can't scape from this board!");
+      }
+      mainChip = chip;
+    }
+  }
+
+  private boolean chipCanScape(Chip chip) {
+    if (chip.isHorizontal()) {
+      return chip.end_position.y == exitY;
+    } else {
+      return chip.end_position.x == exitX;
     }
   }
 
@@ -119,8 +145,22 @@ public class Board {
    * @return true if current board has a goal configuration.
    */
   public boolean isGoal() {
-    // TODO
-    return false;
+    if (mainChip.isHorizontal()) {
+      for (int x = mainChip.end_position.x; x < exitX; x++) {
+        int symbol = board[mainChip.end_position.y][x];
+        if (symbol != MAIN_CHIP_SYMBOL && symbol != EMPTY_SYMBOL) {
+          return false;
+        }
+      }
+    } else {
+      for (int y = mainChip.end_position.y; y < exitY; y++) {
+        int symbol = board[y][mainChip.end_position.x];
+        if (symbol != MAIN_CHIP_SYMBOL && symbol != EMPTY_SYMBOL) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   private static final String MAIN_CHIP_PRINT_SYMBOL = "X";
@@ -191,5 +231,9 @@ public class Board {
 
   private boolean isHorizontalWall(int x, int y) {
     return (y == 0 || y == rows) && (x != 0 && x != cols);
+  }
+
+  public Chip getMainChip() {
+    return mainChip;
   }
 }

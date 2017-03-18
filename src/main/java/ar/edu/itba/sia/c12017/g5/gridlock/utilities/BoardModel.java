@@ -1,8 +1,10 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.utilities;
 
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
+import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
+import java.awt.*;
 import java.util.List;
 
 @SuppressWarnings("checkstyle:membername")
@@ -27,17 +29,6 @@ class BoardModel {
   }
 
   class Exit {
-    Position position;
-  }
-
-  class Position {
-    int x;
-    int y;
-  }
-
-  class Chip {
-    Boolean main;
-    Position start_position;
-    Position end_position;
+    Point position;
   }
 }
