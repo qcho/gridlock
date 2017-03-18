@@ -3,9 +3,6 @@ package ar.edu.itba.sia.c12017.g5.gridlock.models;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
-/**
- * Created by alebian on 14/03/17.
- */
 /*
 * The board has centinel cells around the board.
 * The board positions are interpreted as:
@@ -17,6 +14,7 @@ import java.util.stream.IntStream;
 *                   |     |     |     |
 * (y = rows, x = 1) +-----+-----+-----+ (rows, cols)
 * */
+@SuppressWarnings("checkstyle:parametername")
 public class Board {
   private static final int MAIN_CHIP_SYMBOL = 1;
   private static final int WALL_SYMBOL = -2;
@@ -30,6 +28,13 @@ public class Board {
   private int[][] board;
   private int nextChip = MAIN_CHIP_SYMBOL + 1;
 
+  /**
+   * Builds a board of the given dimensions with the given exit.
+   * @param rows amount of rows in the board
+   * @param cols amount of columns in the board
+   * @param exitX exit x-position
+   * @param exitY exit y-position
+   */
   public Board(int rows, int cols, int exitX, int exitY) {
     this.rows = rows + 1;
     this.cols = cols + 1;
@@ -58,18 +63,24 @@ public class Board {
 
   private void fillBoard() {
     IntStream.rangeClosed(1, rows - 1).forEach(i ->
-      IntStream.rangeClosed(1, cols - 1).forEach(j -> board[i][j] = EMPTY_SYMBOL)
+        IntStream.rangeClosed(1, cols - 1).forEach(j -> board[i][j] = EMPTY_SYMBOL)
     );
   }
 
+  /**
+   * Compares another object to this board.
+   * @param other object to compare.
+   * @return true if other is a board and with my same contents.
+   */
   @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    Board that = (Board) o;
-
-    return Arrays.deepEquals(board, that.board);
+  public boolean equals(Object other) {
+    if (this == other) {
+      return true;
+    }
+    if (other == null || getClass() != other.getClass()) {
+      return false;
+    }
+    return Arrays.deepEquals(board, ((Board) other).board);
   }
 
   @Override
@@ -77,6 +88,14 @@ public class Board {
     return Arrays.deepHashCode(board);
   }
 
+  /**
+   * Adds a new chip to the board.
+   * @param main indicates if it is the main chip. Only one should exist.
+   * @param sx x-position for the beginning of the chip.
+   * @param sy y-position for the beginning of the chip.
+   * @param ex x-position for the end of the chip.
+   * @param ey y-position for the end of the chip.
+   */
   public void addChip(boolean main, int sx, int sy, int ex, int ey) {
     int symbol = main ? MAIN_CHIP_SYMBOL : nextChip;
     if (sx == ex) {
@@ -95,6 +114,10 @@ public class Board {
     }
   }
 
+  /**
+   * Indicates whether the current board configuration is a solution.
+   * @return true if current board has a goal configuration.
+   */
   public boolean isGoal() {
     // TODO
     return false;
@@ -154,7 +177,8 @@ public class Board {
   }
 
   private boolean isCorner(int x, int y) {
-    return (y == 0 && x == 0) || (y == 0 && x == cols) || (y == rows && x == 0) || (y == rows && x == cols);
+    return (y == 0 && x == 0) || (y == 0 && x == cols)
+            || (y == rows && x == 0) || (y == rows && x == cols);
   }
 
   private boolean isVerticalWall(int x, int y) {
