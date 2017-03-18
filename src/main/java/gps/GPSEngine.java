@@ -1,30 +1,43 @@
 package gps;
 
-import gps.api.GPSProblem;
-import gps.api.GPSRule;
-import gps.api.GPSState;
-import gps.exception.NotAppliableException;
+import gps.api.GpsProblem;
+import gps.api.GpsRule;
+import gps.api.GpsState;
+import gps.exception.NotApplicableException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.TreeSet;
 
-public abstract class GPSEngine {
 
-  protected Queue<GPSNode> open;
-  protected Map<GPSState, Integer> bestCosts;
+public abstract class GpsEngine {
 
-  protected GPSProblem problem;
-  long explosionCounter;
+  protected Queue<GpsNode> open;
+  protected Map<GpsState, Integer> bestCosts;
+
+  protected GpsProblem problem;
+  private long explosionCounter;
 
   // Use this variable in open set order.
   protected SearchStrategy strategy;
 
-  public GPSEngine(GPSProblem myProblem, SearchStrategy myStrategy) {
-    // TODO: open = *Su queue favorito, TENIENDO EN CUENTA EL ORDEN DE LOS NODOS*
-    bestCosts = new HashMap<GPSState, Integer>();
+  /**
+   * TODO
+   * @param myProblem Problem to solve.
+   * @param myStrategy Strategy for problem resolution.
+   */
+  public GpsEngine(GpsProblem myProblem, SearchStrategy myStrategy) {
+    // TODO: Cambiar la Queue de open por algo que nos sirva. Puse PQ por ahora.
+    open = new PriorityQueue<>();
+    bestCosts = new HashMap<>();
     problem = myProblem;
     strategy = myStrategy;
 
-    GPSNode rootNode = new GPSNode(problem.getInitState(), 0);
+    GpsNode rootNode = new GpsNode(problem.getInitState(), 0);
     explosionCounter = 0;
     boolean finished = false;
     boolean failed = false;
@@ -34,7 +47,7 @@ public abstract class GPSEngine {
       if (open.size() <= 0) {
         failed = true;
       } else {
-        GPSNode currentNode = open.remove();
+        GpsNode currentNode = open.remove();
         if (problem.isGoal(currentNode.getState())) {
           finished = true;
           System.out.println(currentNode.getSolution());
@@ -52,8 +65,8 @@ public abstract class GPSEngine {
     }
   }
 
-  private void explode(GPSNode node) {
-    Collection<GPSNode> newCandidates;
+  private void explode(GpsNode node) {
+    Collection<GpsNode> newCandidates;
     switch (strategy) {
       case ASTAR:
         if (!isBest(node.getState(), node.getCost())) {
@@ -77,12 +90,13 @@ public abstract class GPSEngine {
     }
     explosionCounter++;
     updateBest(node);
-    for (GPSRule rule : problem.getRules()) {
+    for (GpsRule rule : problem.getRules()) {
       try {
-        GPSNode newNode = new GPSNode(rule.evalRule(node.getState()), node.getCost() + rule.getCost());
+        GpsNode newNode = new GpsNode(rule.evalRule(node.getState()),
+                node.getCost() + rule.getCost());
         newNode.setParent(node);
         newCandidates.add(newNode);
-      } catch (NotAppliableException e) {
+      } catch (NotApplicableException exception) {
         // Si no es aplicable, se saltea.
       }
     }
@@ -98,14 +112,16 @@ public abstract class GPSEngine {
         break;
       case GREEDY:
         break;
+      default:
+        throw new IllegalArgumentException("Illegal strategy provided: " + strategy);
     }
   }
 
-  private boolean isBest(GPSState state, Integer cost) {
+  private boolean isBest(GpsState state, Integer cost) {
     return !bestCosts.containsKey(state) || cost < bestCosts.get(state);
   }
 
-  private void updateBest(GPSNode node) {
+  private void updateBest(GpsNode node) {
     bestCosts.put(node.getState(), node.getCost());
   }
 

@@ -1,29 +1,29 @@
 package gps;
 
-import gps.api.GPSState;
+import gps.api.GpsState;
 
-public class GPSNode {
+public class GpsNode {
 
-  private GPSState state;
+  private GpsState state;
 
-  private GPSNode parent;
+  private GpsNode parent;
 
   private Integer cost;
 
-  public GPSNode(GPSState state, Integer cost) {
+  public GpsNode(GpsState state, Integer cost) {
     this.state = state;
     this.cost = cost;
   }
 
-  public GPSNode getParent() {
+  public GpsNode getParent() {
     return parent;
   }
 
-  public void setParent(GPSNode parent) {
+  public void setParent(GpsNode parent) {
     this.parent = parent;
   }
 
-  public GPSState getState() {
+  public GpsState getState() {
     return state;
   }
 
@@ -36,6 +36,10 @@ public class GPSNode {
     return state.toString();
   }
 
+  /**
+   * TODO
+   * @return solution as string.
+   */
   public String getSolution() {
     if (this.parent == null) {
       return this.state.toString();
@@ -45,19 +49,31 @@ public class GPSNode {
 
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
+    if (this == obj) {
       return true;
-    if (obj == null)
+    }
+    if (obj == null) {
       return false;
-    if (getClass() != obj.getClass())
+    }
+    if (getClass() != obj.getClass()) {
       return false;
-    GPSNode other = (GPSNode) obj;
+    }
+    GpsNode other = (GpsNode) obj;
     if (state == null) {
-      if (other.state != null)
+      if (other.state != null) {
         return false;
-    } else if (!state.equals(other.state))
+      }
+    } else if (!state.equals(other.state)) {
       return false;
+    }
     return true;
   }
 
+  @Override
+  public int hashCode() {
+    int result = state.hashCode();
+    result = 31 * result + parent.hashCode();
+    result = 31 * result + cost.hashCode();
+    return result;
+  }
 }

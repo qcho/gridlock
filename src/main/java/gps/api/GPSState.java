@@ -1,9 +1,9 @@
 package gps.api;
 
 /**
- * GPSState interface.
+ * GpsState interface.
  */
-public interface GPSState {
+public interface GpsState {
 
   /**
    * Compares self to another state to determine whether they are the same or not.

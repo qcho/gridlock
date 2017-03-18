@@ -1,11 +1,11 @@
 package gps.api;
 
-import gps.exception.NotAppliableException;
+import gps.exception.NotApplicableException;
 
 /**
- * GPSRule interface.
+ * GpsRule interface.
  */
-public interface GPSRule {
+public interface GpsRule {
 
   /**
    * Provides the cost of the rule.
@@ -22,11 +22,12 @@ public interface GPSRule {
   String getName();
 
   /**
-   * Computes the next state based on the previous one. The next state is the result of applying the rule to the previous state.
+   * Computes the next state based on the previous one.
+   * The next state is the result of applying the rule to the previous state.
    *
    * @param state The previous state of the problem.
    * @return The next state of the problem.
-   * @throws NotAppliableException If the rule can not be applied to the received state.
+   * @throws NotApplicableException If the rule can not be applied to the received state.
    */
-  GPSState evalRule(GPSState state) throws NotAppliableException;
+  GpsState evalRule(GpsState state) throws NotApplicableException;
 }

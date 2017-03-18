@@ -30,11 +30,11 @@ public class Board {
   private int[][] board;
   private int nextChip = MAIN_CHIP_SYMBOL + 1;
 
-  public Board(long rows, long cols, long exitX, long exitY) {
-    this.rows = Long.valueOf(rows).intValue() + 1;
-    this.cols = Long.valueOf(cols).intValue() + 1;
-    this.exitX = Long.valueOf(exitX).intValue();
-    this.exitY = Long.valueOf(exitY).intValue();
+  public Board(int rows, int cols, int exitX, int exitY) {
+    this.rows = rows + 1;
+    this.cols = cols + 1;
+    this.exitX = exitX;
+    this.exitY = exitY;
     createBoard();
   }
 
@@ -57,11 +57,9 @@ public class Board {
   }
 
   private void fillBoard() {
-    IntStream.rangeClosed(1, rows - 1).forEach(i -> {
-      IntStream.rangeClosed(1, cols - 1).forEach(j -> {
-        board[i][j] = EMPTY_SYMBOL;
-      });
-    });
+    IntStream.rangeClosed(1, rows - 1).forEach(i ->
+      IntStream.rangeClosed(1, cols - 1).forEach(j -> board[i][j] = EMPTY_SYMBOL)
+    );
   }
 
   @Override
@@ -79,20 +77,16 @@ public class Board {
     return Arrays.deepHashCode(board);
   }
 
-  public void addChip(boolean main, long sx, long sy, long ex, long ey) {
+  public void addChip(boolean main, int sx, int sy, int ex, int ey) {
     int symbol = main ? MAIN_CHIP_SYMBOL : nextChip;
     if (sx == ex) {
       assert (sy < ey);
       // VERTICAL CHIP
-      IntStream.rangeClosed(Long.valueOf(sy).intValue(), Long.valueOf(ey).intValue()).forEach(y -> {
-        board[y][Long.valueOf(sx).intValue()] = symbol;
-      });
+      IntStream.rangeClosed(sy, ey).forEach(y -> board[y][sx] = symbol);
     } else if (sy == ey) {
       assert (sx < ex);
       // HORIZONTAL CHIP
-      IntStream.rangeClosed(Long.valueOf(sx).intValue(), Long.valueOf(ex).intValue()).forEach(x -> {
-        board[Long.valueOf(sy).intValue()][x] = symbol;
-      });
+      IntStream.rangeClosed(sx, ex).forEach(x -> board[sy][x] = symbol);
     } else {
       throw new IllegalArgumentException("Cannot insert diagonal chips");
     }
@@ -160,33 +154,14 @@ public class Board {
   }
 
   private boolean isCorner(int x, int y) {
-    if (y == 0 && x == 0) {
-      return true;
-    } else if (y == 0 && x == cols) {
-      return true;
-    } else if (y == rows && x == 0) {
-      return true;
-    } else if (y == rows && x == cols) {
-      return true;
-    }
-    return false;
+    return (y == 0 && x == 0) || (y == 0 && x == cols) || (y == rows && x == 0) || (y == rows && x == cols);
   }
 
   private boolean isVerticalWall(int x, int y) {
-    if (x == 0 || x == cols) {
-      if (y != 0 && y != rows) {
-        return true;
-      }
-    }
-    return false;
+    return (x == 0 || x == cols) && (y != 0 && y != rows);
   }
 
   private boolean isHorizontalWall(int x, int y) {
-    if (y == 0 || y == rows) {
-      if (x != 0 && x != cols) {
-        return true;
-      }
-    }
-    return false;
+    return (y == 0 || y == rows) && (x != 0 && x != cols);
   }
 }
