@@ -1,38 +1,35 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.gps;
 
-import gps.api.GPSProblem;
-import gps.api.GPSRule;
-import gps.api.GPSState;
+import gps.api.GpsProblem;
+import gps.api.GpsRule;
+import gps.api.GpsState;
 
 import java.util.List;
 
-/**
- * Created by alebian on 14/03/17.
- */
-public class GridlockProblem implements GPSProblem {
-    private GPSState initState;
+public class GridlockProblem implements GpsProblem {
+  private GpsState initState;
 
-    public GridlockProblem(GPSState initState) {
-        this.initState = initState;
-    }
+  public GridlockProblem(GpsState initState) {
+    this.initState = initState;
+  }
 
-    @Override
-    public GPSState getInitState() {
-        return initState;
-    }
+  @Override
+  public GpsState getInitState() {
+    return initState;
+  }
 
-    @Override
-    public boolean isGoal(GPSState state) {
-        return false;
-    }
+  @Override
+  public boolean isGoal(GpsState state) {
+    return ((GridlockState)state).isGoal();
+  }
 
-    @Override
-    public List<GPSRule> getRules() {
-        return null;
-    }
+  @Override
+  public List<GpsRule> getRules() {
+    return null;
+  }
 
-    @Override
-    public Integer getHValue(GPSState state) {
-        return null;
-    }
+  @Override
+  public Integer getHValue(GpsState state) {
+    return null;
+  }
 }

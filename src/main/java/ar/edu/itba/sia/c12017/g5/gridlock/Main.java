@@ -7,11 +7,21 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
-    public static void main(String[] args) {
-        Path boardPath = Paths.get("src/main/resources/boards/board1.json");
-        assert (boardPath.toFile().exists());
-        BoardParser parser = new BoardParser(boardPath);
-        Board board = parser.parse();
-        System.out.println(board.toString());
-    }
+  /**
+   * Main function.
+   * @param args should contain at least a board.
+   */
+  public static void main(String[] args) {
+    // Parse board
+    String boardsFolder = "src/main/resources/boards/";
+    String boardName = "easyboard.json";
+    Path boardPath = Paths.get(boardsFolder + boardName);
+    assert (boardPath.toFile().exists());
+    Board board = BoardParser.parse(boardPath);
+    System.out.println(board.toString());
+  //  Create gps objects
+  //  GpsState initialState = new GridlockState(board);
+  //  GpsProblem gridlockProblem = new GridlockProblem(initialState);
+  //  GpsEngine engine = new GridlockEngine(gridlockProblem, SearchStrategy.BFS);
+  }
 }
