@@ -134,16 +134,20 @@ public class Board {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     // Column numbers
-    IntStream.rangeClosed(0, cols + 1).forEach(x -> {
-      sb.append(String.valueOf(x));
+    IntStream.rangeClosed(0, cols).forEach(x -> {
+      sb.append(x < 2 ? " " : x - 2);
       sb.append(" ");
     });
     sb.append("\n");
 
     IntStream.rangeClosed(0, rows).forEach(y -> {
       // Row number
-      sb.append(String.valueOf(y + 1));
-      sb.append(" ");
+      if (y < rows) {
+        sb.append(y < 1 ? " " : y - 1);
+        sb.append(" ");
+      } else {
+        sb.append("  ");
+      }
       // Board
       IntStream.rangeClosed(0, cols).forEach(x -> {
         switch (board[y][x]) {
