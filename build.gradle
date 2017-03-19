@@ -59,6 +59,7 @@ tasks.withType(Checkstyle) {
 
 checkstyle {
     toolVersion = '6.18'
+    maxWarnings = 0
 }
 
 jacocoTestReport {
