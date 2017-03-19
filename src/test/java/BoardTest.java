@@ -20,14 +20,12 @@ public class BoardTest {
   @Before
   public void initialize() {
     String boardsFolder = "src/test/resources/boards/";
-    Path horizontalBoardPath = Paths.get(boardsFolder + "horizontal_movement_test.json");
     Path verticalBoardPath = Paths.get(boardsFolder + "vertical_movement_test.json");
-    Path regularBoardPath = Paths.get("src/main/resources/boards/board1.json");
-
     verticalMovementBoard = BoardParser.parse(verticalBoardPath);
-    horizontalMovementBoard = BoardParser.parse(horizontalBoardPath);
+    horizontalMovementBoard = BoardParser.parse(
+        Paths.get(boardsFolder + "horizontal_movement_test.json"));
     board1 = BoardParser.parse(verticalBoardPath);
-    regularBoard = BoardParser.parse(regularBoardPath);
+    regularBoard = BoardParser.parse(Paths.get("src/main/resources/boards/board1.json"));
   }
 
   @Test
