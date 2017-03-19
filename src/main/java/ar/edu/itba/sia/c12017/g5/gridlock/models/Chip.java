@@ -1,19 +1,26 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.models;
 
-import java.awt.*;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-/**
- * Created by alebian on 3/18/17.
- */
+import java.awt.Point;
+
+@SuppressWarnings("checkstyle:membername")
+@SuppressFBWarnings
 public class Chip {
   public Boolean main;
   public Point start_position;
   public Point end_position;
 
-  public Chip(Boolean main, Point start_position, Point end_position) {
+  /**
+   * Board chip
+   * @param main true if the chip is the main one.
+   * @param startPosition indicates where the chip starts.
+   * @param endPosition indicates where the chip ends.
+   */
+  public Chip(Boolean main, Point startPosition, Point endPosition) {
     this.main = main;
-    this.start_position = start_position;
-    this.end_position = end_position;
+    this.start_position = startPosition;
+    this.end_position = endPosition;
   }
 
   public boolean isVertical() {
@@ -21,6 +28,6 @@ public class Chip {
   }
 
   public boolean isHorizontal() {
-    return start_position.y == end_position.y;
+    return !isVertical();
   }
 }

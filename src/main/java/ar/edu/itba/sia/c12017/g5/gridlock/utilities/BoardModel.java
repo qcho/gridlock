@@ -4,7 +4,7 @@ import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.List;
 
 @SuppressWarnings("checkstyle:membername")

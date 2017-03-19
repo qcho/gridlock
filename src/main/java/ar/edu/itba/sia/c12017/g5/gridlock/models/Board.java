@@ -1,10 +1,9 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.models;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 /*
@@ -110,11 +109,13 @@ public class Board {
     if (chip.start_position.x == chip.end_position.x) {
       assert (chip.start_position.y < chip.end_position.y);
       // VERTICAL CHIP
-      IntStream.rangeClosed(chip.start_position.y, chip.end_position.y).forEach(y -> board[y][chip.start_position.x] = symbol);
+      IntStream.rangeClosed(chip.start_position.y, chip.end_position.y)
+          .forEach(y -> board[y][chip.start_position.x] = symbol);
     } else if (chip.start_position.y == chip.end_position.y) {
       assert (chip.start_position.x < chip.end_position.x);
       // HORIZONTAL CHIP
-      IntStream.rangeClosed(chip.start_position.x, chip.end_position.x).forEach(x -> board[chip.start_position.y][x] = symbol);
+      IntStream.rangeClosed(chip.start_position.x, chip.end_position.x)
+          .forEach(x -> board[chip.start_position.y][x] = symbol);
     } else {
       throw new IllegalArgumentException("Cannot insert diagonal chips");
     }
