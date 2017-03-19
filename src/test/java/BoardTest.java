@@ -9,7 +9,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNull;
 
 public class BoardTest {
   private Board board1;
@@ -72,11 +75,11 @@ public class BoardTest {
     assertEquals(1, main.getEndPosition().x);
     assertEquals(2, main.getStartPosition().y);
     assertEquals(3, main.getEndPosition().y);
-    int[][] originalB = verticalMovementBoard.getBoard();
-    int[][] b = nextMove.getBoard();
-    assertEquals(originalB.length, b.length);
-    assertEquals(originalB[0].length, b[0].length);
-    assertNotEquals(originalB, b);
+    int[][] originalBoard = verticalMovementBoard.getBoard();
+    int[][] newBoard = nextMove.getBoard();
+    assertEquals(originalBoard.length, newBoard.length);
+    assertEquals(originalBoard[0].length, newBoard[0].length);
+    assertNotEquals(originalBoard, newBoard);
 
     nextMove = nextMove.applyMovement(main, Movement.UP);
     main = nextMove.getMainChip();
@@ -103,11 +106,11 @@ public class BoardTest {
     assertEquals(1, main.getEndPosition().x);
     assertEquals(4, main.getStartPosition().y);
     assertEquals(5, main.getEndPosition().y);
-    int[][] originalB = verticalMovementBoard.getBoard();
-    int[][] b = nextMove.getBoard();
-    assertEquals(originalB.length, b.length);
-    assertEquals(originalB[0].length, b[0].length);
-    assertNotEquals(originalB, b);
+    int[][] originalBoard = verticalMovementBoard.getBoard();
+    int[][] newBoard = nextMove.getBoard();
+    assertEquals(originalBoard.length, newBoard.length);
+    assertEquals(originalBoard[0].length, newBoard[0].length);
+    assertNotEquals(originalBoard, newBoard);
 
     nextMove = nextMove.applyMovement(main, Movement.DOWN);
     main = nextMove.getMainChip();
@@ -134,11 +137,11 @@ public class BoardTest {
     assertEquals(3, main.getEndPosition().x);
     assertEquals(1, main.getStartPosition().y);
     assertEquals(1, main.getEndPosition().y);
-    int[][] originalB = horizontalMovementBoard.getBoard();
-    int[][] b = nextMove.getBoard();
-    assertEquals(originalB.length, b.length);
-    assertEquals(originalB[0].length, b[0].length);
-    assertNotEquals(originalB, b);
+    int[][] originalBoard = horizontalMovementBoard.getBoard();
+    int[][] newBoard = nextMove.getBoard();
+    assertEquals(originalBoard.length, newBoard.length);
+    assertEquals(originalBoard[0].length, newBoard[0].length);
+    assertNotEquals(originalBoard, newBoard);
 
     nextMove = nextMove.applyMovement(main, Movement.LEFT);
     main = nextMove.getMainChip();
@@ -165,11 +168,11 @@ public class BoardTest {
     assertEquals(5, main.getEndPosition().x);
     assertEquals(1, main.getStartPosition().y);
     assertEquals(1, main.getEndPosition().y);
-    int[][] originalB = horizontalMovementBoard.getBoard();
-    int[][] b = nextMove.getBoard();
-    assertEquals(originalB.length, b.length);
-    assertEquals(originalB[0].length, b[0].length);
-    assertNotEquals(originalB, b);
+    int[][] originalBoard = horizontalMovementBoard.getBoard();
+    int[][] newBoard = nextMove.getBoard();
+    assertEquals(originalBoard.length, newBoard.length);
+    assertEquals(originalBoard[0].length, newBoard[0].length);
+    assertNotEquals(originalBoard, newBoard);
 
     nextMove = nextMove.applyMovement(main, Movement.RIGHT);
     main = nextMove.getMainChip();
