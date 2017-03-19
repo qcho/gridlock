@@ -4,7 +4,7 @@ import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import gps.api.GpsState;
 
 public class GridlockState implements GpsState {
-  private Board board;
+  public Board board;
 
   public GridlockState(Board board) {
     this.board = board;

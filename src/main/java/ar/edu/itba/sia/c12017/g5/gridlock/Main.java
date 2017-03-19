@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 public class Main {
   /**
    * Main function.
+   *
    * @param args should contain at least a board.
    */
   public static void main(String[] args) {
@@ -19,9 +20,9 @@ public class Main {
     assert (boardPath.toFile().exists());
     Board board = BoardParser.parse(boardPath);
     System.out.println(board.toString());
-  //  Create gps objects
-  //  GpsState initialState = new GridlockState(board);
-  //  GpsProblem gridlockProblem = new GridlockProblem(initialState);
-  //  GpsEngine engine = new GridlockEngine(gridlockProblem, SearchStrategy.BFS);
+    //  Create gps objects
+    //  GpsState initialState = new GridlockState(board);
+    //  GpsProblem gridlockProblem = new GridlockProblem(initialState);
+    //  GpsEngine engine = new GridlockEngine(gridlockProblem, SearchStrategy.BFS);
   }
 }

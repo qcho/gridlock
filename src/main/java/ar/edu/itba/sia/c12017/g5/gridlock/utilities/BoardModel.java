@@ -17,9 +17,9 @@ class BoardModel {
   Board toBoard() {
     Board board = new Board(size.rows, size.columns,
         exit.position.x, exit.position.y);
-    chips.forEach(c -> board.addChip(c.main,
-        c.start_position.x,c.start_position.y,
-        c.end_position.x, c.end_position.y));
+    chips.forEach(c -> board.addChip(c.isMain(),
+        c.getStartPosition().x, c.getStartPosition().y,
+        c.getEndPosition().x, c.getEndPosition().y));
     return board;
   }
 

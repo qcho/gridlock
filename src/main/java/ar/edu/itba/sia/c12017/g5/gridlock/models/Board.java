@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 /*
@@ -18,11 +19,11 @@ import java.util.stream.IntStream;
 * (y = rows, x = 1) +-----+-----+-----+ (rows, cols)
 * */
 @SuppressWarnings("checkstyle:parametername")
-public class Board {
-  private static final int MAIN_CHIP_SYMBOL = 1;
-  private static final int WALL_SYMBOL = -2;
-  private static final int EXIT_SYMBOL = -1;
-  private static final int EMPTY_SYMBOL = 0;
+public class Board implements Cloneable {
+  public static final int MAIN_CHIP_SYMBOL = 1;
+  public static final int WALL_SYMBOL = -2;
+  public static final int EXIT_SYMBOL = -1;
+  public static final int EMPTY_SYMBOL = 0;
 
   private int rows;
   private int cols;
@@ -36,8 +37,9 @@ public class Board {
 
   /**
    * Builds a board of the given dimensions with the given exit.
-   * @param rows amount of rows in the board
-   * @param cols amount of columns in the board
+   *
+   * @param rows  amount of rows in the board
+   * @param cols  amount of columns in the board
    * @param exitX exit x-position
    * @param exitY exit y-position
    */
@@ -76,6 +78,7 @@ public class Board {
 
   /**
    * Compares another object to this board.
+   *
    * @param other object to compare.
    * @return true if other is a board and with my same contents.
    */
@@ -97,28 +100,31 @@ public class Board {
 
   /**
    * Adds a new chip to the board.
+   *
    * @param main indicates if it is the main chip. Only one should exist.
-   * @param sx x-position for the beginning of the chip.
-   * @param sy y-position for the beginning of the chip.
-   * @param ex x-position for the end of the chip.
-   * @param ey y-position for the end of the chip.
+   * @param sx   x-position for the beginning of the chip.
+   * @param sy   y-position for the beginning of the chip.
+   * @param ex   x-position for the end of the chip.
+   * @param ey   y-position for the end of the chip.
    */
   public void addChip(final boolean main, final int sx, final int sy, final int ex, final int ey) {
     int symbol = main ? MAIN_CHIP_SYMBOL : nextChip;
-    Chip chip = new Chip(main, new Point(sx, sy), new Point(ex, ey));
-    if (chip.start_position.x == chip.end_position.x) {
-      assert (chip.start_position.y < chip.end_position.y);
-      // VERTICAL CHIP
-      IntStream.rangeClosed(chip.start_position.y, chip.end_position.y)
-          .forEach(y -> board[y][chip.start_position.x] = symbol);
-    } else if (chip.start_position.y == chip.end_position.y) {
-      assert (chip.start_position.x < chip.end_position.x);
-      // HORIZONTAL CHIP
-      IntStream.rangeClosed(chip.start_position.x, chip.end_position.x)
-          .forEach(x -> board[chip.start_position.y][x] = symbol);
+    Chip chip = new Chip(main, new Point(sx, sy), new Point(ex, ey), symbol);
+
+    if (chip.isVertical()) {
+      assert (chip.getStartPosition().y < chip.getEndPosition().y);
+      IntStream.rangeClosed(chip.getStartPosition().y, chip.getEndPosition().y).forEach(y -> {
+        board[y][chip.getStartPosition().x] = symbol;
+      });
+    } else if (chip.isHorizontal()) {
+      assert (chip.getStartPosition().x < chip.getEndPosition().x);
+      IntStream.rangeClosed(chip.getStartPosition().x, chip.getEndPosition().x).forEach(x -> {
+        board[chip.getStartPosition().y][x] = symbol;
+      });
     } else {
       throw new IllegalArgumentException("Cannot insert diagonal chips");
     }
+
     chips.add(chip);
     if (!main) {
       nextChip++;
@@ -135,27 +141,111 @@ public class Board {
 
   private boolean chipCanScape(Chip chip) {
     if (chip.isHorizontal()) {
-      return chip.end_position.y == exitY;
+      return chip.getEndPosition().y == exitY;
     } else {
-      return chip.end_position.x == exitX;
+      return chip.getEndPosition().x == exitX;
     }
   }
 
   /**
+   * Checks if a movement can be applied.
+   *
+   * @param chip indicates which chip to move.
+   * @param movement indicates which movement is wanted.
+   */
+  public boolean canApplyMovement(Chip chip, Movement movement) {
+    if (movement == Movement.UP || movement == Movement.DOWN) {
+      if (chip.isHorizontal()) {
+        return false;
+      }
+    } else if (movement == Movement.RIGHT || movement == Movement.LEFT) {
+      if (chip.isVertical()) {
+        return false;
+      }
+    }
+
+    Point nextPoint = nextPoint(chip, movement);
+    return board[nextPoint.y][nextPoint.x] == EMPTY_SYMBOL;
+  }
+
+  private Point nextPoint(Chip chip, Movement movement) {
+    switch (movement) {
+      case UP:
+        return new Point(chip.getStartPosition().x + movement.horizontalMovement,
+            chip.getStartPosition().y + movement.verticalMovement);
+      case DOWN:
+        return new Point(chip.getEndPosition().x + movement.horizontalMovement,
+            chip.getEndPosition().y + movement.verticalMovement);
+      case LEFT:
+        return new Point(chip.getStartPosition().x + movement.horizontalMovement,
+            chip.getStartPosition().y + movement.verticalMovement);
+      case RIGHT:
+        return new Point(chip.getEndPosition().x + movement.horizontalMovement,
+            chip.getEndPosition().y + movement.verticalMovement);
+      default:
+        return new Point(0, 0);
+    }
+  }
+
+  private Point previousPoint(Chip chip, Movement movement) {
+    if (movement == Movement.UP || movement == Movement.LEFT) {
+      return chip.getEndPosition();
+    } else {
+      return chip.getStartPosition();
+    }
+  }
+
+  /**
+   * Applies a movement. First it creates a new board.
+   *
+   * @param chip indicates which chip to move.
+   * @param movement indicates which movement is wanted.
+   */
+  public Board applyMovement(Chip chip, Movement movement) {
+    if (!canApplyMovement(chip, movement)) {
+      return null;
+    }
+    Board newBoard = clone();
+    newBoard.moveChip(chip, movement);
+    return newBoard;
+  }
+
+  private void moveChip(Chip chip, Movement movement) {
+    Point nextPoint = nextPoint(chip, movement);
+    Point previousPoint = previousPoint(chip, movement);
+
+    board[nextPoint.y][nextPoint.x] = chip.getSymbol();
+    board[previousPoint.y][previousPoint.x] = EMPTY_SYMBOL;
+
+    Point newStarting = new Point(chip.getStartPosition().x + movement.horizontalMovement,
+        chip.getStartPosition().y + movement.verticalMovement);
+    Point newEnding = new Point(chip.getEndPosition().x + movement.horizontalMovement,
+        chip.getEndPosition().y + movement.verticalMovement);
+    Optional<Chip> thisChip = chips.stream().filter(c -> {
+      return c.getSymbol() == chip.getSymbol();
+    }).findFirst();
+    thisChip.ifPresent(c -> {
+      c.setStartPosition(newStarting);
+      c.setEndPosition(newEnding);
+    });
+  }
+
+  /**
    * Indicates whether the current board configuration is a solution.
+   *
    * @return true if current board has a goal configuration.
    */
   public boolean isGoal() {
     if (mainChip.isHorizontal()) {
-      for (int x = mainChip.end_position.x; x < exitX; x++) {
-        int symbol = board[mainChip.end_position.y][x];
+      for (int x = mainChip.getEndPosition().x; x < exitX; x++) {
+        int symbol = board[mainChip.getEndPosition().y][x];
         if (symbol != MAIN_CHIP_SYMBOL && symbol != EMPTY_SYMBOL) {
           return false;
         }
       }
     } else {
-      for (int y = mainChip.end_position.y; y < exitY; y++) {
-        int symbol = board[y][mainChip.end_position.x];
+      for (int y = mainChip.getEndPosition().y; y < exitY; y++) {
+        int symbol = board[y][mainChip.getEndPosition().x];
         if (symbol != MAIN_CHIP_SYMBOL && symbol != EMPTY_SYMBOL) {
           return false;
         }
@@ -223,7 +313,7 @@ public class Board {
 
   private boolean isCorner(int x, int y) {
     return (y == 0 && x == 0) || (y == 0 && x == cols)
-            || (y == rows && x == 0) || (y == rows && x == cols);
+        || (y == rows && x == 0) || (y == rows && x == cols);
   }
 
   private boolean isVerticalWall(int x, int y) {
@@ -236,5 +326,24 @@ public class Board {
 
   public Chip getMainChip() {
     return mainChip;
+  }
+
+  @Override
+  public Board clone() {
+    try {
+      super.clone();
+    } catch (CloneNotSupportedException exception) {
+      exception.printStackTrace();
+    }
+    Board newBoard = new Board(rows - 1, cols - 1, exitX, exitY);
+    chips.stream().forEach(c -> {
+      newBoard.addChip(c.isMain(), c.getStartPosition().x, c.getStartPosition().y,
+          c.getEndPosition().x, c.getEndPosition().y);
+    });
+    return newBoard;
+  }
+
+  public int[][] getBoard() {
+    return board.clone();
   }
 }

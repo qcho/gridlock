@@ -4,12 +4,13 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 import java.awt.Point;
 
-@SuppressWarnings("checkstyle:membername")
+@SuppressWarnings({"checkstyle:membername", "checkstyle:parametername"})
 @SuppressFBWarnings
 public class Chip {
-  public Boolean main;
-  public Point start_position;
-  public Point end_position;
+  private Boolean main;
+  private Point start_position;
+  private Point end_position;
+  private Integer symbol;
 
   /**
    * Board chip
@@ -17,10 +18,11 @@ public class Chip {
    * @param startPosition indicates where the chip starts.
    * @param endPosition indicates where the chip ends.
    */
-  public Chip(Boolean main, Point startPosition, Point endPosition) {
+  public Chip(Boolean main, Point startPosition, Point endPosition, Integer symbol) {
     this.main = main;
     this.start_position = startPosition;
     this.end_position = endPosition;
+    this.symbol = symbol;
   }
 
   public boolean isVertical() {
@@ -29,5 +31,29 @@ public class Chip {
 
   public boolean isHorizontal() {
     return !isVertical();
+  }
+
+  public Boolean isMain() {
+    return main;
+  }
+
+  public Point getStartPosition() {
+    return start_position;
+  }
+
+  public Point getEndPosition() {
+    return end_position;
+  }
+
+  public Integer getSymbol() {
+    return symbol;
+  }
+
+  public void setStartPosition(Point start_position) {
+    this.start_position = start_position;
+  }
+
+  public void setEndPosition(Point end_position) {
+    this.end_position = end_position;
   }
 }
