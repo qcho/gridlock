@@ -12,6 +12,10 @@ public class Chip {
   private Point end_position;
   private Integer symbol;
 
+  /**
+   * Copy constructor.
+   * @param other Chip to copy.
+   */
   public Chip(Chip other) {
     this.main = other.isMain();
     this.start_position = other.getStartPosition();

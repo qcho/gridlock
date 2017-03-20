@@ -4,7 +4,9 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 /*
@@ -227,9 +229,9 @@ public class Board implements Cloneable {
         chip.getStartPosition().y + movement.verticalMovement);
     Point newEnding = new Point(chip.getEndPosition().x + movement.horizontalMovement,
         chip.getEndPosition().y + movement.verticalMovement);
-    Optional<Chip> thisChip = chips.stream().filter(c -> {
-      return c.getSymbol() == chip.getSymbol();
-    }).findFirst();
+    Optional<Chip> thisChip = chips.stream().filter(c ->
+        Objects.equals(c.getSymbol(), chip.getSymbol())
+    ).findFirst();
     thisChip.ifPresent(c -> {
       c.setStartPosition(newStarting);
       c.setEndPosition(newEnding);
