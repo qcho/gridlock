@@ -242,17 +242,19 @@ public class Board implements Cloneable {
    * @return true if current board has a goal configuration.
    */
   public boolean isGoal() {
+    Function<Integer, Boolean> isEmptyOrMain =
+        (symbol) -> symbol == MAIN_CHIP_SYMBOL || symbol == EMPTY_SYMBOL;
     if (mainChip.isHorizontal()) {
       for (int x = mainChip.getEndPosition().x; x < exitX; x++) {
         int symbol = board[mainChip.getEndPosition().y][x];
-        if (symbol != MAIN_CHIP_SYMBOL && symbol != EMPTY_SYMBOL) {
+        if (!isEmptyOrMain.apply(symbol)) {
           return false;
         }
       }
     } else {
       for (int y = mainChip.getEndPosition().y; y < exitY; y++) {
         int symbol = board[y][mainChip.getEndPosition().x];
-        if (symbol != MAIN_CHIP_SYMBOL && symbol != EMPTY_SYMBOL) {
+        if (!isEmptyOrMain.apply(symbol)) {
           return false;
         }
       }
