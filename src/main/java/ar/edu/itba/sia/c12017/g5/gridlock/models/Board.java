@@ -109,24 +109,30 @@ public class Board implements Cloneable {
    */
   public void addChip(final boolean main, final int sx, final int sy, final int ex, final int ey) {
     int symbol = main ? MAIN_CHIP_SYMBOL : nextChip;
-    Chip chip = new Chip(main, new Point(sx, sy), new Point(ex, ey), symbol);
+    addChip(new Chip(main, new Point(sx, sy), new Point(ex, ey), symbol));
+  }
 
+  /**
+   * Adds a new chip to the board.
+   * @param chip to add.
+   */
+  public void addChip(final Chip chip) {
     if (chip.isVertical()) {
       assert (chip.getStartPosition().y < chip.getEndPosition().y);
       IntStream.rangeClosed(chip.getStartPosition().y, chip.getEndPosition().y).forEach(y -> {
-        board[y][chip.getStartPosition().x] = symbol;
+        board[y][chip.getStartPosition().x] = chip.getSymbol();
       });
     } else if (chip.isHorizontal()) {
       assert (chip.getStartPosition().x < chip.getEndPosition().x);
       IntStream.rangeClosed(chip.getStartPosition().x, chip.getEndPosition().x).forEach(x -> {
-        board[chip.getStartPosition().y][x] = symbol;
+        board[chip.getStartPosition().y][x] = chip.getSymbol();
       });
     } else {
       throw new IllegalArgumentException("Cannot insert diagonal chips");
     }
 
     chips.add(chip);
-    if (!main) {
+    if (!chip.isMain()) {
       nextChip++;
     } else {
       if (mainChip != null) {
