@@ -12,12 +12,20 @@ public class Chip {
   private Point end_position;
   private Integer symbol;
 
+  public Chip(Chip other) {
+    this.main = other.isMain();
+    this.start_position = other.getStartPosition();
+    this.end_position = other.getEndPosition();
+    this.symbol = other.getSymbol();
+  }
+
   /**
    * Board chip
    * @param main true if the chip is the main one.
    * @param startPosition indicates where the chip starts.
    * @param endPosition indicates where the chip ends.
    */
+
   public Chip(Boolean main, Point startPosition, Point endPosition, Integer symbol) {
     this.main = main;
     this.start_position = startPosition;
