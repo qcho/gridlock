@@ -38,11 +38,11 @@ public class Chip {
   }
 
   public Point getStartPosition() {
-    return start_position;
+    return new Point(start_position);
   }
 
   public Point getEndPosition() {
-    return end_position;
+    return new Point(end_position);
   }
 
   public Integer getSymbol() {
