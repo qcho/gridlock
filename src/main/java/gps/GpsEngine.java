@@ -3,7 +3,7 @@ package gps;
 import gps.api.GpsProblem;
 import gps.api.GpsRule;
 import gps.api.GpsState;
-import gps.exception.NotApplicableException;
+import gps.exception.NotAppliableException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -96,7 +96,7 @@ public abstract class GpsEngine {
                 node.getCost() + rule.getCost());
         newNode.setParent(node);
         newCandidates.add(newNode);
-      } catch (NotApplicableException exception) {
+      } catch (NotAppliableException exception) {
         // Si no es aplicable, se saltea.
       }
     }

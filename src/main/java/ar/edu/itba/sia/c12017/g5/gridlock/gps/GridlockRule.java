@@ -5,7 +5,7 @@ import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
 import gps.api.GpsRule;
 import gps.api.GpsState;
-import gps.exception.NotApplicableException;
+import gps.exception.NotAppliableException;
 
 public class GridlockRule implements GpsRule {
   private Chip chip;
@@ -27,10 +27,10 @@ public class GridlockRule implements GpsRule {
   }
 
   @Override
-  public GpsState evalRule(GpsState state) throws NotApplicableException {
+  public GpsState evalRule(GpsState state) throws NotAppliableException {
     Board newBoard = ((GridlockState) state).board.applyMovement(chip, movement);
     if (newBoard == null) {
-      throw new NotApplicableException();
+      throw new NotAppliableException();
     }
     return new GridlockState(newBoard);
   }
