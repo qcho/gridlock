@@ -1,11 +1,11 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.gps;
 
-import gps.GpsEngine;
+import gps.GPSEngine;
 import gps.SearchStrategy;
-import gps.api.GpsProblem;
+import gps.api.GPSProblem;
 
-public class GridlockEngine extends GpsEngine {
-  public GridlockEngine(GpsProblem myProblem, SearchStrategy myStrategy) {
+public class GridlockEngine extends GPSEngine {
+  public GridlockEngine(GPSProblem myProblem, SearchStrategy myStrategy) {
     super(myProblem, myStrategy);
   }
 }

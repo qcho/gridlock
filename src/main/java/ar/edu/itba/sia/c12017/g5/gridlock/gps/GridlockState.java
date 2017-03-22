@@ -1,9 +1,9 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.gps;
 
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
-import gps.api.GpsState;
+import gps.api.GPSState;
 
-public class GridlockState implements GpsState {
+public class GridlockState implements GPSState {
   public Board board;
 
   public GridlockState(Board board) {
@@ -28,5 +28,9 @@ public class GridlockState implements GpsState {
   @Override
   public int hashCode() {
     return board.hashCode();
+  }
+
+  public Board getBoard() {
+    return board;
   }
 }

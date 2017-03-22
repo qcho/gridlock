@@ -3,11 +3,11 @@ package ar.edu.itba.sia.c12017.g5.gridlock.gps;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
-import gps.api.GpsRule;
-import gps.api.GpsState;
+import gps.api.GPSRule;
+import gps.api.GPSState;
 import gps.exception.NotAppliableException;
 
-public class GridlockRule implements GpsRule {
+public class GridlockRule implements GPSRule {
   private Chip chip;
   private Movement movement;
 
@@ -27,7 +27,7 @@ public class GridlockRule implements GpsRule {
   }
 
   @Override
-  public GpsState evalRule(GpsState state) throws NotAppliableException {
+  public GPSState evalRule(GPSState state) throws NotAppliableException {
     Board newBoard = ((GridlockState) state).board.applyMovement(chip, movement);
     if (newBoard == null) {
       throw new NotAppliableException();

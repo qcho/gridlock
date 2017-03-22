@@ -55,6 +55,6 @@ public class BoardParser {
     } catch (Exception exception) {
       Logger.error(exception);
     }
-    return null;
+    throw new IllegalArgumentException("File doesn't exist or json is invalid");
   }
 }

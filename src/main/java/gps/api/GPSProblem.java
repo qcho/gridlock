@@ -3,16 +3,16 @@ package gps.api;
 import java.util.List;
 
 /**
- * GpsProblem interface.
+ * GPSProblem interface.
  */
-public interface GpsProblem {
+public interface GPSProblem {
 
   /**
    * Provides the initial state for the GPS to start from.
    *
    * @return The initial state of the problem to be solved.
    */
-  GpsState getInitState();
+  GPSState getInitState();
 
   /**
    * Given a state, resolves if it is a solution to the problem.
@@ -20,7 +20,7 @@ public interface GpsProblem {
    * @param state The state to establish if it is a goal state.
    * @return TRUE if the state is a goal state, FALSE otherwise.
    */
-  boolean isGoal(GpsState state);
+  boolean isGoal(GPSState state);
 
   /**
    * Provides the list of all the rules that the problem involves.
@@ -28,7 +28,7 @@ public interface GpsProblem {
    *
    * @return The initial state of the problem to be solved.
    */
-  List<GpsRule> getRules();
+  List<GPSRule> getRules();
 
   /**
    * Computes the value of the Heuristic for the given state.
@@ -36,6 +36,6 @@ public interface GpsProblem {
    * @param state The state where the Heuristic should be computed.
    * @return The value of the Heuristic.
    */
-  Integer getHValue(GpsState state);
+  Integer getHValue(GPSState state);
 
 }

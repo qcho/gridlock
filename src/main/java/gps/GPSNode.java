@@ -1,29 +1,29 @@
 package gps;
 
-import gps.api.GpsState;
+import gps.api.GPSState;
 
-public class GpsNode {
+public class GPSNode {
 
-  private GpsState state;
+  private GPSState state;
 
-  private GpsNode parent;
+  private GPSNode parent;
 
   private Integer cost;
 
-  public GpsNode(GpsState state, Integer cost) {
+  public GPSNode(GPSState state, Integer cost) {
     this.state = state;
     this.cost = cost;
   }
 
-  public GpsNode getParent() {
+  public GPSNode getParent() {
     return parent;
   }
 
-  public void setParent(GpsNode parent) {
+  public void setParent(GPSNode parent) {
     this.parent = parent;
   }
 
-  public GpsState getState() {
+  public GPSState getState() {
     return state;
   }
 
@@ -58,7 +58,7 @@ public class GpsNode {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    GpsNode other = (GpsNode) obj;
+    GPSNode other = (GPSNode) obj;
     if (state == null) {
       if (other.state != null) {
         return false;
