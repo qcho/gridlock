@@ -31,7 +31,7 @@ public class Main {
     GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board));
     GPSEngine engine = new GridlockEngine(gridlockProblem, SearchStrategy.BFS);
     engine.findSolution();
-    if (engine.isFinished()) {
+    if (!engine.isFailed()) {
       GPSNode node = engine.getSolutionNode();
       System.out.println(node.getSolution());
     } else {
