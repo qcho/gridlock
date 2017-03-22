@@ -6,6 +6,7 @@ import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockState;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import ar.edu.itba.sia.c12017.g5.gridlock.utilities.BoardParser;
 import gps.GPSEngine;
+import gps.GPSNode;
 import gps.SearchStrategy;
 import gps.api.GPSProblem;
 
@@ -30,5 +31,11 @@ public class Main {
     GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board));
     GPSEngine engine = new GridlockEngine(gridlockProblem, SearchStrategy.BFS);
     engine.findSolution();
+    if (engine.isFinished()) {
+      GPSNode node = engine.getSolutionNode();
+      System.out.println(node.getSolution());
+    } else {
+      System.out.println("Could not find a solution");
+    }
   }
 }
