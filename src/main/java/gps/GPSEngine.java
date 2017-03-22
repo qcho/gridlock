@@ -7,6 +7,7 @@ import gps.api.GPSState;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
@@ -62,7 +63,8 @@ public class GPSEngine {
         }
         newCandidates = new ArrayList<>();
         addCandidates(node, newCandidates);
-        // TODO: ¿Cómo se agregan los nodos a open en BFS?
+        // TODO: Es correcto?
+        open.addAll(newCandidates);
         break;
       case DFS:
         if (bestCosts.containsKey(node.getState())) {
@@ -70,7 +72,11 @@ public class GPSEngine {
         }
         newCandidates = new ArrayList<>();
         addCandidates(node, newCandidates);
-        // TODO: ¿Cómo se agregan los nodos a open en DFS?
+        // TODO: Es correcto?
+        LinkedList<GPSNode> list = new LinkedList<>();
+        list.addAll(newCandidates);
+        list.addAll(open);
+        open = list;
         break;
       case IDDFS:
         if (bestCosts.containsKey(node.getState())) {
