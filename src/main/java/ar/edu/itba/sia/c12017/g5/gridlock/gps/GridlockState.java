@@ -1,7 +1,10 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.gps;
 
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
+import ar.edu.itba.sia.c12017.g5.gridlock.utilities.BoardParser;
 import gps.api.GPSState;
+
+import java.nio.file.Paths;
 
 public class GridlockState implements GPSState {
   public Board board;
@@ -32,5 +35,10 @@ public class GridlockState implements GPSState {
 
   public Board getBoard() {
     return board;
+  }
+
+  @Override
+  public String toString() {
+    return board.toString();
   }
 }

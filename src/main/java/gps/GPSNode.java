@@ -72,7 +72,9 @@ public class GPSNode {
   @Override
   public int hashCode() {
     int result = state.hashCode();
-    result = 31 * result + parent.hashCode();
+    if (parent != null) {
+      result = 31 * result + parent.hashCode();
+    }
     result = 31 * result + cost.hashCode();
     return result;
   }

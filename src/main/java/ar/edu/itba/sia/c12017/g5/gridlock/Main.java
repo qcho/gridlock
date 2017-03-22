@@ -1,6 +1,5 @@
 package ar.edu.itba.sia.c12017.g5.gridlock;
 
-import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockEngine;
 import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockProblem;
 import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockState;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
@@ -29,7 +28,7 @@ public class Main {
     //  System.out.println(board.toString());
     //  Create gps objects
     GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board));
-    GPSEngine engine = new GridlockEngine(gridlockProblem, SearchStrategy.BFS);
+    GPSEngine engine = new GPSEngine(gridlockProblem, SearchStrategy.BFS);
     engine.findSolution();
     if (!engine.isFailed()) {
       GPSNode node = engine.getSolutionNode();
