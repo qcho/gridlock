@@ -9,11 +9,11 @@ import gps.api.GPSState;
 import java.util.Optional;
 
 public class GridlockRule implements GPSRule {
-  private Chip chip;
+  private Integer symbol;
   private Movement movement;
 
   public GridlockRule(Chip chip, Movement movement) {
-    this.chip = chip;
+    this.symbol = chip.getSymbol();
     this.movement = movement;
   }
 
@@ -24,12 +24,12 @@ public class GridlockRule implements GPSRule {
 
   @Override
   public String getName() {
-    return String.format("Moving chip %d %s", chip.getSymbol(), movement.toString());
+    return String.format("Moving chip %d %s", symbol, movement.toString());
   }
 
   @Override
   public Optional<GPSState> evalRule(GPSState state) {
-    Board newBoard = ((GridlockState) state).board.applyMovement(chip, movement);
+    Board newBoard = ((GridlockState) state).board.applyMovement(symbol, movement);
     if (newBoard == null) {
       return Optional.empty();
     }

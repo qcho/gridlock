@@ -1,47 +1,47 @@
 package gps;
 
+import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockState;
 import gps.api.GPSProblem;
 import gps.api.GPSRule;
 import gps.api.GPSState;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Optional;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 public class GPSEngine {
 
-  Queue<GPSNode> open;
-  Map<GPSState, Integer> bestCosts;
-  GPSProblem problem;
-  long explosionCounter;
-  boolean finished;
-  boolean failed;
-  GPSNode solutionNode;
+  private final Queue<GPSNode> open;
+  private final Map<GPSState, Integer> alreadyVisited;
+  private GPSProblem problem;
+  private long explosionCounter;
+  private boolean finished;
+  private boolean failed;
+  private GPSNode solutionNode;
 
-  // Use this variable in open set order.
-  protected SearchStrategy strategy;
+  private final SearchStrategy strategy;
 
   public GPSEngine(GPSProblem myProblem, SearchStrategy myStrategy) {
-    // TODO: open = *Su queue favorito, TENIENDO EN CUENTA EL ORDEN DE LOS NODOS*
-    open = new LinkedList<>();
-    bestCosts = new HashMap<>();
-    problem = myProblem;
     strategy = myStrategy;
+    open = createQueue();
+    alreadyVisited = new HashMap<>();
+    problem = myProblem;
     explosionCounter = 0;
     finished = false;
     failed = false;
+  }
+
+  private Queue<GPSNode> createQueue() {
+    if (strategy.equals(SearchStrategy.ASTAR) || strategy.equals(SearchStrategy.GREEDY)) {
+      return new PriorityQueue<>();
+    } else {
+      return new LinkedList<>();
+    }
   }
 
   public void findSolution() {
     GPSNode rootNode = new GPSNode(problem.getInitState(), 0);
     open.add(rootNode);
     // TODO: ¿Lógica de IDDFS?
-    while (open.size() <= 0) {
+    while (open.size() > 0) {
       GPSNode currentNode = open.remove();
       if (problem.isGoal(currentNode.getState())) {
         finished = true;
@@ -59,7 +59,7 @@ public class GPSEngine {
     Collection<GPSNode> newCandidates;
     switch (strategy) {
       case BFS:
-        if (bestCosts.containsKey(node.getState())) {
+        if (alreadyVisited.containsKey(node.getState())) {
           return;
         }
         newCandidates = new ArrayList<>();
@@ -68,19 +68,19 @@ public class GPSEngine {
         open.addAll(newCandidates);
         break;
       case DFS:
-        if (bestCosts.containsKey(node.getState())) {
+        if (alreadyVisited.containsKey(node.getState())) {
           return;
         }
         newCandidates = new ArrayList<>();
         addCandidates(node, newCandidates);
-        // TODO: Es correcto?
-        LinkedList<GPSNode> list = new LinkedList<>();
-        list.addAll(newCandidates);
-        list.addAll(open);
-        open = list;
+//        // TODO: Es correcto?
+//        LinkedList<GPSNode> list = new LinkedList<>();
+//        list.addAll(newCandidates);
+//        list.addAll(open);
+//        open = list;
         break;
       case IDDFS:
-        if (bestCosts.containsKey(node.getState())) {
+        if (alreadyVisited.containsKey(node.getState())) {
           return;
         }
         newCandidates = new ArrayList<>();
@@ -106,32 +106,31 @@ public class GPSEngine {
   private void addCandidates(GPSNode node, Collection<GPSNode> candidates) {
     explosionCounter++;
     updateBest(node);
+    System.out.println(node.getState());
     for (GPSRule rule : problem.getRules()) {
       Optional<GPSState> newState = rule.evalRule(node.getState());
-      if (newState.isPresent()) {
-        GPSNode newNode = new GPSNode(newState.get(), node.getCost() + rule.getCost());
+      newState.ifPresent(state -> {
+        GPSNode newNode = new GPSNode(state, node.getCost() + rule.getCost());
         newNode.setParent(node);
         candidates.add(newNode);
-      }
+      });
     }
   }
 
   private boolean isBest(GPSState state, Integer cost) {
-    return !bestCosts.containsKey(state) || cost < bestCosts.get(state);
+    return !alreadyVisited.containsKey(state) || cost < alreadyVisited.get(state);
   }
 
   private void updateBest(GPSNode node) {
-    bestCosts.put(node.getState(), node.getCost());
+    alreadyVisited.put(node.getState(), node.hashCode());
   }
-
-  // GETTERS FOR THE PEOPLE!
 
   public Queue<GPSNode> getOpen() {
     return open;
   }
 
-  public Map<GPSState, Integer> getBestCosts() {
-    return bestCosts;
+  public Map<GPSState, Integer> getAlreadyVisited() {
+    return alreadyVisited;
   }
 
   public GPSProblem getProblem() {
