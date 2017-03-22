@@ -55,6 +55,7 @@ tasks.withType(Checkstyle) {
         xml.enabled false
         html.enabled true
     }
+    exclude '**/gps/**'
 }
 
 checkstyle {
