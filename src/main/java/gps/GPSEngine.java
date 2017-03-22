@@ -28,6 +28,7 @@ public class GPSEngine {
 
   public GPSEngine(GPSProblem myProblem, SearchStrategy myStrategy) {
     // TODO: open = *Su queue favorito, TENIENDO EN CUENTA EL ORDEN DE LOS NODOS*
+    open = new LinkedList<>();
     bestCosts = new HashMap<>();
     problem = myProblem;
     strategy = myStrategy;
