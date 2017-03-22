@@ -1,7 +1,5 @@
 package gps.api;
 
-import gps.exception.NotAppliableException;
-
 import java.util.Optional;
 
 /**
@@ -29,8 +27,6 @@ public interface GPSRule {
    * @param state
    *            The previous state of the problem.
    * @return The next state of the problem.
-   * @throws NotAppliableException
-   *             If the rule can not be applied to the received state.
    */
   Optional<GPSState> evalRule(GPSState state);
 }
