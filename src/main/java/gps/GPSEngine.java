@@ -1,11 +1,19 @@
 package gps;
 
-import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockState;
 import gps.api.GPSProblem;
 import gps.api.GPSRule;
 import gps.api.GPSState;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Optional;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class GPSEngine {
 
@@ -64,7 +72,6 @@ public class GPSEngine {
         }
         newCandidates = new ArrayList<>();
         addCandidates(node, newCandidates);
-        // TODO: Es correcto?
         open.addAll(newCandidates);
         break;
       case DFS:
@@ -73,11 +80,11 @@ public class GPSEngine {
         }
         newCandidates = new ArrayList<>();
         addCandidates(node, newCandidates);
-//        // TODO: Es correcto?
-//        LinkedList<GPSNode> list = new LinkedList<>();
-//        list.addAll(newCandidates);
-//        list.addAll(open);
-//        open = list;
+        Collections.reverse((ArrayList) newCandidates);
+        LinkedList<GPSNode> list = new LinkedList<>();
+        list.addAll(newCandidates);
+        list.addAll(open);
+        open = list;
         break;
       case IDDFS:
         if (alreadyVisited.containsKey(node.getState())) {
