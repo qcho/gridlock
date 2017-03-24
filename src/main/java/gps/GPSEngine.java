@@ -9,7 +9,7 @@ import java.util.*;
 
 public class GPSEngine {
 
-  private final Queue<GPSNode> open;
+  private Queue<GPSNode> open;
   private final Map<GPSState, Integer> alreadyVisited;
   private GPSProblem problem;
   private long explosionCounter;
