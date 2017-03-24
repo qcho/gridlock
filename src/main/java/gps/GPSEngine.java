@@ -106,7 +106,6 @@ public class GPSEngine {
   private void addCandidates(GPSNode node, Collection<GPSNode> candidates) {
     explosionCounter++;
     updateBest(node);
-    System.out.println(node.getState());
     for (GPSRule rule : problem.getRules()) {
       Optional<GPSState> newState = rule.evalRule(node.getState());
       newState.ifPresent(state -> {
