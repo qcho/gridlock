@@ -33,8 +33,19 @@ public class Main {
     if (!engine.isFailed()) {
       GPSNode node = engine.getSolutionNode();
       System.out.println(node.getSolution());
+      printStats(engine, node);
     } else {
       System.out.println("Could not find a solution");
     }
+  }
+
+  private static void printStats(GPSEngine engine, GPSNode solution) {
+    GPSNode parent = solution;
+    int count = 0;
+    while ((parent = parent.getParent()) != null) {
+      count++;
+    }
+    System.out.println("Solution found in " + count + " steps");
+    System.out.println("Tried " + engine.getExplosionCounter() + " nodes");
   }
 }
