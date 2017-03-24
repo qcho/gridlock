@@ -1,3 +1,5 @@
+import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockProblem;
+import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockState;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
@@ -17,6 +19,8 @@ import static org.junit.Assert.assertNull;
 public class BoardTest {
   private Board board1;
   private Board regularBoard;
+  private Board easyBoard;
+  private Board easyBoardWon;
   private Board verticalMovementBoard;
   private Board horizontalMovementBoard;
 
@@ -29,6 +33,8 @@ public class BoardTest {
         Paths.get(boardsFolder + "horizontal_movement_test.json"));
     board1 = BoardParser.parse(verticalBoardPath);
     regularBoard = BoardParser.parse(Paths.get("src/main/resources/boards/board1.json"));
+    easyBoard = BoardParser.parse(Paths.get("src/main/resources/boards/easyboard.json"));
+    easyBoardWon = BoardParser.parse(Paths.get(boardsFolder + "easyboard_won.json"));
   }
 
   @Test
@@ -59,6 +65,14 @@ public class BoardTest {
     assertTrue(verticalMovementBoard.isGoal());
     assertTrue(horizontalMovementBoard.isGoal());
     assertFalse(regularBoard.isGoal());
+    assertFalse(easyBoard.isGoal());
+    assertTrue(easyBoardWon.isGoal());
+
+    GridlockState state = new GridlockState(easyBoardWon);
+    GridlockState state2 = new GridlockState(verticalMovementBoard);
+    GridlockProblem problem = new GridlockProblem(state);
+    assertTrue(problem.isGoal(state));
+    assertTrue(problem.isGoal(state2));
   }
 
   @Test
@@ -69,7 +83,7 @@ public class BoardTest {
     assertEquals(3, main.getStartPosition().y);
     assertEquals(4, main.getEndPosition().y);
 
-    Board nextMove = verticalMovementBoard.applyMovement(main, Movement.UP);
+    Board nextMove = verticalMovementBoard.applyMovement(main.getSymbol(), Movement.UP);
     main = nextMove.getMainChip();
     assertEquals(1, main.getStartPosition().x);
     assertEquals(1, main.getEndPosition().x);
@@ -81,14 +95,14 @@ public class BoardTest {
     assertEquals(originalBoard[0].length, newBoard[0].length);
     assertNotEquals(originalBoard, newBoard);
 
-    nextMove = nextMove.applyMovement(main, Movement.UP);
+    nextMove = nextMove.applyMovement(main.getSymbol(), Movement.UP);
     main = nextMove.getMainChip();
     assertEquals(1, main.getStartPosition().x);
     assertEquals(1, main.getEndPosition().x);
     assertEquals(1, main.getStartPosition().y);
     assertEquals(2, main.getEndPosition().y);
 
-    nextMove = nextMove.applyMovement(main, Movement.UP);
+    nextMove = nextMove.applyMovement(main.getSymbol(), Movement.UP);
     assertNull(nextMove);
   }
 
@@ -100,7 +114,7 @@ public class BoardTest {
     assertEquals(3, main.getStartPosition().y);
     assertEquals(4, main.getEndPosition().y);
 
-    Board nextMove = verticalMovementBoard.applyMovement(main, Movement.DOWN);
+    Board nextMove = verticalMovementBoard.applyMovement(main.getSymbol(), Movement.DOWN);
     main = nextMove.getMainChip();
     assertEquals(1, main.getStartPosition().x);
     assertEquals(1, main.getEndPosition().x);
@@ -112,14 +126,14 @@ public class BoardTest {
     assertEquals(originalBoard[0].length, newBoard[0].length);
     assertNotEquals(originalBoard, newBoard);
 
-    nextMove = nextMove.applyMovement(main, Movement.DOWN);
+    nextMove = nextMove.applyMovement(main.getSymbol(), Movement.DOWN);
     main = nextMove.getMainChip();
     assertEquals(1, main.getStartPosition().x);
     assertEquals(1, main.getEndPosition().x);
     assertEquals(5, main.getStartPosition().y);
     assertEquals(6, main.getEndPosition().y);
 
-    nextMove = nextMove.applyMovement(main, Movement.DOWN);
+    nextMove = nextMove.applyMovement(main.getSymbol(), Movement.DOWN);
     assertNull(nextMove);
   }
 
@@ -131,7 +145,7 @@ public class BoardTest {
     assertEquals(1, main.getStartPosition().y);
     assertEquals(1, main.getEndPosition().y);
 
-    Board nextMove = horizontalMovementBoard.applyMovement(main, Movement.LEFT);
+    Board nextMove = horizontalMovementBoard.applyMovement(main.getSymbol(), Movement.LEFT);
     main = nextMove.getMainChip();
     assertEquals(2, main.getStartPosition().x);
     assertEquals(3, main.getEndPosition().x);
@@ -143,14 +157,14 @@ public class BoardTest {
     assertEquals(originalBoard[0].length, newBoard[0].length);
     assertNotEquals(originalBoard, newBoard);
 
-    nextMove = nextMove.applyMovement(main, Movement.LEFT);
+    nextMove = nextMove.applyMovement(main.getSymbol(), Movement.LEFT);
     main = nextMove.getMainChip();
     assertEquals(1, main.getStartPosition().x);
     assertEquals(2, main.getEndPosition().x);
     assertEquals(1, main.getStartPosition().y);
     assertEquals(1, main.getEndPosition().y);
 
-    nextMove = nextMove.applyMovement(main, Movement.LEFT);
+    nextMove = nextMove.applyMovement(main.getSymbol(), Movement.LEFT);
     assertNull(nextMove);
   }
 
@@ -162,7 +176,7 @@ public class BoardTest {
     assertEquals(1, main.getStartPosition().y);
     assertEquals(1, main.getEndPosition().y);
 
-    Board nextMove = horizontalMovementBoard.applyMovement(main, Movement.RIGHT);
+    Board nextMove = horizontalMovementBoard.applyMovement(main.getSymbol(), Movement.RIGHT);
     main = nextMove.getMainChip();
     assertEquals(4, main.getStartPosition().x);
     assertEquals(5, main.getEndPosition().x);
@@ -174,14 +188,14 @@ public class BoardTest {
     assertEquals(originalBoard[0].length, newBoard[0].length);
     assertNotEquals(originalBoard, newBoard);
 
-    nextMove = nextMove.applyMovement(main, Movement.RIGHT);
+    nextMove = nextMove.applyMovement(main.getSymbol(), Movement.RIGHT);
     main = nextMove.getMainChip();
     assertEquals(5, main.getStartPosition().x);
     assertEquals(6, main.getEndPosition().x);
     assertEquals(1, main.getStartPosition().y);
     assertEquals(1, main.getEndPosition().y);
 
-    nextMove = nextMove.applyMovement(main, Movement.RIGHT);
+    nextMove = nextMove.applyMovement(main.getSymbol(), Movement.RIGHT);
     assertNull(nextMove);
   }
 }

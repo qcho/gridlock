@@ -158,10 +158,11 @@ public class Board implements Cloneable {
   /**
    * Checks if a movement can be applied.
    *
-   * @param chip indicates which chip to move.
+   * @param symbol indicates which chip to move.
    * @param movement indicates which movement is wanted.
    */
-  public boolean canApplyMovement(Chip chip, Movement movement) {
+  public boolean canApplyMovement(Integer symbol, Movement movement) {
+    Chip chip = chips.stream().filter(c -> c.getSymbol() == symbol).findAny().get();
     if (movement == Movement.UP || movement == Movement.DOWN) {
       if (chip.isHorizontal()) {
         return false;
@@ -206,13 +207,14 @@ public class Board implements Cloneable {
   /**
    * Applies a movement. First it creates a new board.
    *
-   * @param chip indicates which chip to move.
+   * @param symbol indicates which chip to move.
    * @param movement indicates which movement is wanted.
    */
-  public Board applyMovement(Chip chip, Movement movement) {
-    if (!canApplyMovement(chip, movement)) {
+  public Board applyMovement(Integer symbol, Movement movement) {
+    if (!canApplyMovement(symbol, movement)) {
       return null;
     }
+    Chip chip = chips.stream().filter(c -> c.getSymbol() == symbol).findAny().get();
     Board newBoard = clone();
     newBoard.moveChip(chip, movement);
     return newBoard;
@@ -336,6 +338,10 @@ public class Board implements Cloneable {
 
   public Chip getMainChip() {
     return mainChip;
+  }
+
+  public List<Chip> getChips() {
+    return chips;
   }
 
   @Override
