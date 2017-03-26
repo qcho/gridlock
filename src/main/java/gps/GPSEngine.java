@@ -3,6 +3,7 @@ package gps;
 import gps.api.GPSProblem;
 import gps.api.GPSRule;
 import gps.api.GPSState;
+import gps.engines.AStarEngine;
 import gps.engines.BFSEngine;
 import gps.engines.DFSEngine;
 import gps.engines.GreedyEngine;
@@ -36,7 +37,7 @@ public abstract class GPSEngine {
       case IDDFS:
         return null;
       case ASTAR:
-        return null;
+        return new AStarEngine(problem);
       case GREEDY:
         return new GreedyEngine(problem);
       default:
@@ -81,14 +82,6 @@ public abstract class GPSEngine {
 //        newCandidates = new ArrayList<>();
 //        addCandidates(node, newCandidates);
 //        // TODO: ¿Cómo se agregan los nodos a open en IDDFS?
-//        break;
-//      case ASTAR:
-//        if (!isBest(node.getState(), node.getCost())) {
-//          return;
-//        }
-//        newCandidates = new ArrayList<>();
-//        addCandidates(node, newCandidates);
-//        // TODO: ¿Cómo se agregan los nodos a open en A*?
 //        break;
 //    }
 //  }

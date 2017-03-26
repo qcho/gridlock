@@ -31,7 +31,8 @@ public class Main {
     SearchStrategy[] strategies = {
         SearchStrategy.BFS,
         SearchStrategy.DFS,
-        SearchStrategy.GREEDY
+        SearchStrategy.GREEDY,
+        SearchStrategy.ASTAR
     };
 
     Stream.of(strategies).forEach(strategy ->
