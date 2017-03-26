@@ -3,6 +3,8 @@ package gps;
 import gps.api.GPSProblem;
 import gps.api.GPSRule;
 import gps.api.GPSState;
+import gps.engines.BFSEngine;
+import gps.engines.DFSEngine;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -15,40 +17,43 @@ import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-public class GPSEngine {
-
-  private Queue<GPSNode> open;
-  private final Map<GPSState, Integer> alreadyVisited;
+public abstract class GPSEngine {
+  protected Queue<GPSNode> open;
+  protected Map<GPSState, Integer> alreadyVisited;
   private GPSProblem problem;
   private long explosionCounter;
   private boolean finished;
   private boolean failed;
   private GPSNode solutionNode;
 
-  private final SearchStrategy strategy;
-
-  public GPSEngine(GPSProblem myProblem, SearchStrategy myStrategy) {
-    strategy = myStrategy;
-    open = createQueue();
-    alreadyVisited = new HashMap<>();
-    problem = myProblem;
-    explosionCounter = 0;
-    finished = false;
-    failed = false;
+  public static GPSEngine build(GPSProblem problem, SearchStrategy strategy) {
+    switch (strategy) {
+      case BFS:
+        return new BFSEngine(problem);
+      case DFS:
+        return new DFSEngine(problem);
+      case IDDFS:
+        return null;
+      case ASTAR:
+        return null;
+      case GREEDY:
+        return null;
+      default:
+        return null;
+    }
   }
 
-  private Queue<GPSNode> createQueue() {
-    if (strategy.equals(SearchStrategy.ASTAR) || strategy.equals(SearchStrategy.GREEDY)) {
-      return new PriorityQueue<>();
-    } else {
-      return new LinkedList<>();
-    }
+  public GPSEngine(GPSProblem problem) {
+    this.problem = problem;
+    this.alreadyVisited = new HashMap<>();
+    this.explosionCounter = 0;
+    this.finished = false;
+    this.failed = false;
   }
 
   public void findSolution() {
     GPSNode rootNode = new GPSNode(problem.getInitState(), 0);
     open.add(rootNode);
-    // TODO: ¿Lógica de IDDFS?
     while (open.size() > 0) {
       GPSNode currentNode = open.remove();
       if (problem.isGoal(currentNode.getState())) {
@@ -63,54 +68,36 @@ public class GPSEngine {
     finished = true;
   }
 
-  private void explode(GPSNode node) {
-    Collection<GPSNode> newCandidates;
-    switch (strategy) {
-      case BFS:
-        if (alreadyVisited.containsKey(node.getState())) {
-          return;
-        }
-        newCandidates = new ArrayList<>();
-        addCandidates(node, newCandidates);
-        open.addAll(newCandidates);
-        break;
-      case DFS:
-        if (alreadyVisited.containsKey(node.getState())) {
-          return;
-        }
-        newCandidates = new ArrayList<>();
-        addCandidates(node, newCandidates);
-        Collections.reverse((ArrayList) newCandidates);
-        LinkedList<GPSNode> list = new LinkedList<>();
-        list.addAll(newCandidates);
-        list.addAll(open);
-        open = list;
-        break;
-      case IDDFS:
-        if (alreadyVisited.containsKey(node.getState())) {
-          return;
-        }
-        newCandidates = new ArrayList<>();
-        addCandidates(node, newCandidates);
-        // TODO: ¿Cómo se agregan los nodos a open en IDDFS?
-        break;
-      case GREEDY:
-        newCandidates = new PriorityQueue<>(/* TODO: Comparator! */);
-        addCandidates(node, newCandidates);
-        // TODO: ¿Cómo se agregan los nodos a open en GREEDY?
-        break;
-      case ASTAR:
-        if (!isBest(node.getState(), node.getCost())) {
-          return;
-        }
-        newCandidates = new ArrayList<>();
-        addCandidates(node, newCandidates);
-        // TODO: ¿Cómo se agregan los nodos a open en A*?
-        break;
-    }
-  }
+  protected abstract void explode(GPSNode node);
 
-  private void addCandidates(GPSNode node, Collection<GPSNode> candidates) {
+//  protected void explode(GPSNode node) {
+//    Collection<GPSNode> newCandidates;
+//    switch (strategy) {
+//      case IDDFS:
+//        if (alreadyVisited.containsKey(node.getState())) {
+//          return;
+//        }
+//        newCandidates = new ArrayList<>();
+//        addCandidates(node, newCandidates);
+//        // TODO: ¿Cómo se agregan los nodos a open en IDDFS?
+//        break;
+//      case GREEDY:
+//        newCandidates = new PriorityQueue<>(/* TODO: Comparator! */);
+//        addCandidates(node, newCandidates);
+//        // TODO: ¿Cómo se agregan los nodos a open en GREEDY?
+//        break;
+//      case ASTAR:
+//        if (!isBest(node.getState(), node.getCost())) {
+//          return;
+//        }
+//        newCandidates = new ArrayList<>();
+//        addCandidates(node, newCandidates);
+//        // TODO: ¿Cómo se agregan los nodos a open en A*?
+//        break;
+//    }
+//  }
+
+  protected void addCandidates(GPSNode node, Collection<GPSNode> candidates) {
     explosionCounter++;
     updateBest(node);
     for (GPSRule rule : problem.getRules()) {
@@ -157,10 +144,6 @@ public class GPSEngine {
 
   public GPSNode getSolutionNode() {
     return solutionNode;
-  }
-
-  public SearchStrategy getStrategy() {
-    return strategy;
   }
 
 }
