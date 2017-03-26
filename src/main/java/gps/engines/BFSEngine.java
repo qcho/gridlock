@@ -5,8 +5,8 @@ import gps.GPSNode;
 import gps.api.GPSProblem;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by alebian on 3/25/17.
@@ -20,11 +20,10 @@ public class BFSEngine extends GPSEngine {
 
   @Override
   protected void explode(GPSNode node) {
-    Collection<GPSNode> newCandidates;
     if (alreadyVisited.containsKey(node.getState())) {
       return;
     }
-    newCandidates = new ArrayList<>();
+    List<GPSNode> newCandidates = new ArrayList<>();
     addCandidates(node, newCandidates);
     open.addAll(newCandidates);
   }

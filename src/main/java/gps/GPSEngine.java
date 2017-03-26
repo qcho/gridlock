@@ -5,6 +5,7 @@ import gps.api.GPSRule;
 import gps.api.GPSState;
 import gps.engines.BFSEngine;
 import gps.engines.DFSEngine;
+import gps.engines.GreedyEngine;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public abstract class GPSEngine {
       case ASTAR:
         return null;
       case GREEDY:
-        return null;
+        return new GreedyEngine(problem);
       default:
         return null;
     }
@@ -80,11 +81,6 @@ public abstract class GPSEngine {
 //        newCandidates = new ArrayList<>();
 //        addCandidates(node, newCandidates);
 //        // TODO: ¿Cómo se agregan los nodos a open en IDDFS?
-//        break;
-//      case GREEDY:
-//        newCandidates = new PriorityQueue<>(/* TODO: Comparator! */);
-//        addCandidates(node, newCandidates);
-//        // TODO: ¿Cómo se agregan los nodos a open en GREEDY?
 //        break;
 //      case ASTAR:
 //        if (!isBest(node.getState(), node.getCost())) {
