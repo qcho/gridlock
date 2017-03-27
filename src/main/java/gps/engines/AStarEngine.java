@@ -27,15 +27,11 @@ public class AStarEngine extends GPSEngine {
                 Integer n2H = getProblem().getHValue(n2.getState());
                 Integer n2G = n2.getCost();
                 Integer n2F = n2G + n2H;
-                if (!n1F.equals(n2F)) {
-                    return n1F - n2F;
-                } else {
+                if (n1F.equals(n2F)) {
                     // We return the node with the minor H
-                    if (n1H <= n2H) {
-                        return - 1;
-                    } else {
-                        return 1;
-                    }
+                    return n1H - n2H;
+                } else {
+                    return n1F - n2F;
                 }
             }
         };
