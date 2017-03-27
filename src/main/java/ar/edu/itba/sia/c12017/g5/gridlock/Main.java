@@ -26,7 +26,7 @@ public class Main {
    */
   public static void main(String[] args) {
     warmUp();
-    String board = "src/main/resources/boards/easyboard.json";
+    String board = "src/main/resources/boards/hardboard.json";
   
     // Which strategies to run
     SearchStrategy[] strategies = {
@@ -88,10 +88,9 @@ public class Main {
   }
 
   private static void warmUp() {
-    System.out.print("Warming up...");
-    IntStream.range(0, 100).forEach(t -> {
-      System.out.print(".");
-      run("src/main/resources/boards/easyboard.json", SearchStrategy.DFS, false, false);
+    System.out.println("Warming up...");
+    IntStream.range(0, 1000).forEach(t -> {
+      run("src/main/resources/boards/supereasyboard.json", SearchStrategy.DFS, false, false);
     });
     System.out.println("");
   }

@@ -32,8 +32,8 @@ public class BoardTest {
     horizontalMovementBoard = BoardParser.parse(
         Paths.get(boardsFolder + "horizontal_movement_test.json"));
     board1 = BoardParser.parse(verticalBoardPath);
-    regularBoard = BoardParser.parse(Paths.get("src/main/resources/boards/board1.json"));
-    easyBoard = BoardParser.parse(Paths.get("src/main/resources/boards/easyboard.json"));
+    regularBoard = BoardParser.parse(Paths.get("src/main/resources/boards/easyboard.json"));
+    easyBoard = BoardParser.parse(Paths.get("src/main/resources/boards/supereasyboard.json"));
     easyBoardWon = BoardParser.parse(Paths.get(boardsFolder + "easyboard_won.json"));
   }
 
