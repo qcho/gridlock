@@ -15,27 +15,7 @@ public class AStarEngine extends GPSEngine {
     public AStarEngine(GPSProblem problem) {
         super(problem);
         this.open = new LinkedList<>();
-        this.byMinorF = new Comparator<GPSNode>() {
-            @Override
-            public int compare(GPSNode n1, GPSNode n2) {
-                Integer n1H = getProblem().getHValue(n1.getState());
-                Integer n1G = n1.getCost();
-                Integer n1F = n1G + n1H;
-                Integer n2H = getProblem().getHValue(n2.getState());
-                Integer n2G = n2.getCost();
-                Integer n2F = n2G + n2H;
-                if (!n1F.equals(n2F)) {
-                    return n1F - n2F;
-                } else {
-                    // We return the node with the minor H
-                    if (n1H <= n2H) {
-                        return - 1;
-                    } else {
-                        return 1;
-                    }
-                }
-            }
-        };
+        this.byMinorF = getComparator();
     }
 
     @Override
@@ -52,5 +32,21 @@ public class AStarEngine extends GPSEngine {
         list.addAll(newCandidatesList);
         list.addAll(open);
         open = list;
+    }
+
+    private Comparator<GPSNode> getComparator() {
+        return (n1, n2) -> {
+            Integer n1H = getProblem().getHValue(n1.getState());
+            Integer n1G = n1.getCost();
+            Integer n1F = n1G + n1H;
+            Integer n2H = getProblem().getHValue(n2.getState());
+            Integer n2G = n2.getCost();
+            Integer n2F = n2G + n2H;
+            if (!n1F.equals(n2F)) {
+                return n1F - n2F;
+            }
+            // We return the node with the minor H
+            return n1H <= n2H ? -1 : 1;
+        };
     }
 }
