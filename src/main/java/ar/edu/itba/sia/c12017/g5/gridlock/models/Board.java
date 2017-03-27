@@ -362,4 +362,12 @@ public class Board implements Cloneable {
   public int[][] getBoard() {
     return board.clone();
   }
+
+  public int getExitX() {
+    return this.exitX;
+  }
+
+  public int getExitY() {
+    return this.exitY;
+  }
 }
