@@ -20,8 +20,6 @@ public class AStarEngine extends GPSEngine {
 
     @Override
     protected void explode(GPSNode node) {
-        // TODO: Once heuristics are created, remove this
-        //       because it is not theoretically needed
         if (alreadyVisited.containsKey(node.getState())) {
             return;
         }
