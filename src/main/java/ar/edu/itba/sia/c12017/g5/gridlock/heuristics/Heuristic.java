@@ -33,10 +33,11 @@ public abstract class Heuristic {
     int[][] grid = board.getBoard();
     Point startPosition = chip.getStartPosition();
     Point endPosition = chip.getEndPosition();
+    Point exitPosition = board.getExitPoint();
 
     if (chip.isVertical()) {
       if (movement.equals(Movement.UP)) {
-        if (board.getExitY() <= endPosition.y) {
+        if (isUpper(exitPosition, endPosition)) {
           for (int i = startPosition.y; i > board.getExitY(); i--) {
             int cell = grid[i][endPosition.x];
             if (isAnotherChip(cell)) {
@@ -45,7 +46,7 @@ public abstract class Heuristic {
           }
         }
       } else if (movement.equals(Movement.DOWN)) {
-        if (board.getExitY() > endPosition.y) {
+        if (isLower(exitPosition, endPosition)) {
           for (int i = endPosition.y; i < board.getExitY(); i++) {
             int cell = grid[i][endPosition.x];
             if (isAnotherChip(cell)) {
@@ -56,7 +57,7 @@ public abstract class Heuristic {
       }
     } else {
       if (movement.equals(Movement.LEFT)) {
-        if (board.getExitX() <= endPosition.x) {
+        if (isToTheLeft(exitPosition, endPosition)) {
           for (int i = startPosition.x; i > board.getExitX(); i--) {
             int cell = grid[endPosition.y][i];
             if (isAnotherChip(cell)) {
@@ -65,7 +66,7 @@ public abstract class Heuristic {
           }
         }
       } else if (movement.equals(Movement.RIGHT)) {
-        if (board.getExitX() > endPosition.x) {
+        if (isToTheRight(exitPosition, endPosition)) {
           for (int i = endPosition.x; i < board.getExitX(); i++) {
             int cell = grid[endPosition.y][i];
             if (isAnotherChip(cell)) {
@@ -76,5 +77,21 @@ public abstract class Heuristic {
       }
     }
     return answer;
+  }
+
+  protected static boolean isToTheRight(Point p1, Point p2) {
+    return p1.x > p2.x;
+  }
+
+  protected static boolean isToTheLeft(Point p1, Point p2) {
+    return p1.x <= p2.x;
+  }
+
+  protected static boolean isUpper(Point p1, Point p2) {
+    return p1.y <= p2.y;
+  }
+
+  protected static boolean isLower(Point p1, Point p2) {
+    return p1.y > p2.y;
   }
 }

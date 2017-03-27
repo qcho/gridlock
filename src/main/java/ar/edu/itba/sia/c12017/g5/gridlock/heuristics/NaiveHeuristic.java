@@ -6,6 +6,8 @@ import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
 import gps.api.GPSState;
 
+import java.awt.*;
+
 /**
  * Created by alebian on 27/03/17.
  */
@@ -18,10 +20,11 @@ public class NaiveHeuristic extends Heuristic {
     GridlockState gs = (GridlockState)state;
     Board board = gs.getBoard();
     Chip mainChip = board.getMainChip();
+    Point exitPosition = board.getExitPoint();
 
     int chipsBetweenGoal = 0;
     if (mainChip.isVertical()) {
-      if (board.getExitY() > mainChip.getEndPosition().y) {
+      if (isLower(exitPosition, mainChip.getEndPosition())) {
         // Main chip needs to move DOWN
         chipsBetweenGoal += blockingChipsFor(mainChip, board, Movement.DOWN).size();
       } else {
@@ -29,7 +32,7 @@ public class NaiveHeuristic extends Heuristic {
         chipsBetweenGoal += blockingChipsFor(mainChip, board, Movement.UP).size();
       }
     } else {
-      if (board.getExitX() > mainChip.getEndPosition().x) {
+      if (isToTheRight(exitPosition, mainChip.getEndPosition())) {
         // Main chip needs to move RIGHT
         chipsBetweenGoal += blockingChipsFor(mainChip, board, Movement.RIGHT).size();
       } else {
@@ -37,7 +40,6 @@ public class NaiveHeuristic extends Heuristic {
         chipsBetweenGoal += blockingChipsFor(mainChip, board, Movement.LEFT).size();
       }
     }
-    System.out.println(chipsBetweenGoal);
     return chipsBetweenGoal;
   }
 }

@@ -29,8 +29,7 @@ public class Board implements Cloneable {
 
   private int rows;
   private int cols;
-  private int exitX;
-  private int exitY;
+  private Point exitPoint;
   private int[][] board;
   private int nextChip = MAIN_CHIP_SYMBOL + 1;
 
@@ -48,8 +47,7 @@ public class Board implements Cloneable {
   public Board(int rows, int cols, int exitX, int exitY) {
     this.rows = rows + 1;
     this.cols = cols + 1;
-    this.exitX = exitX;
-    this.exitY = exitY;
+    this.exitPoint = new Point(exitX, exitY);
     chips = new ArrayList<>();
     createBoard();
   }
@@ -58,7 +56,7 @@ public class Board implements Cloneable {
     this.board = new int[this.rows + 1][this.cols + 1];
     fillWalls();
     fillBoard();
-    board[this.exitY][this.exitX] = EXIT_SYMBOL;
+    board[getExitY()][getExitX()] = EXIT_SYMBOL;
   }
 
   private void fillWalls() {
@@ -149,9 +147,9 @@ public class Board implements Cloneable {
 
   private boolean chipCanScape(Chip chip) {
     if (chip.isHorizontal()) {
-      return chip.getEndPosition().y == exitY;
+      return chip.getEndPosition().y == getExitY();
     } else {
-      return chip.getEndPosition().x == exitX;
+      return chip.getEndPosition().x == getExitX();
     }
   }
 
@@ -249,14 +247,14 @@ public class Board implements Cloneable {
     Function<Integer, Boolean> isEmptyOrMain =
         (symbol) -> symbol == MAIN_CHIP_SYMBOL || symbol == EMPTY_SYMBOL;
     if (mainChip.isHorizontal()) {
-      for (int x = mainChip.getEndPosition().x; x < exitX; x++) {
+      for (int x = mainChip.getEndPosition().x; x < getExitX(); x++) {
         int symbol = board[mainChip.getEndPosition().y][x];
         if (!isEmptyOrMain.apply(symbol)) {
           return false;
         }
       }
     } else {
-      for (int y = mainChip.getEndPosition().y; y < exitY; y++) {
+      for (int y = mainChip.getEndPosition().y; y < getExitY(); y++) {
         int symbol = board[y][mainChip.getEndPosition().x];
         if (!isEmptyOrMain.apply(symbol)) {
           return false;
@@ -351,7 +349,7 @@ public class Board implements Cloneable {
     } catch (CloneNotSupportedException exception) {
       exception.printStackTrace();
     }
-    Board newBoard = new Board(rows - 1, cols - 1, exitX, exitY);
+    Board newBoard = new Board(rows - 1, cols - 1, getExitX(), getExitY());
     chips.stream().forEach(c -> {
       newBoard.addChip(c.isMain(), c.getStartPosition().x, c.getStartPosition().y,
           c.getEndPosition().x, c.getEndPosition().y);
@@ -364,10 +362,14 @@ public class Board implements Cloneable {
   }
 
   public int getExitX() {
-    return this.exitX;
+    return this.exitPoint.x;
   }
 
   public int getExitY() {
-    return this.exitY;
+    return this.exitPoint.y;
+  }
+
+  public Point getExitPoint() {
+    return this.exitPoint;
   }
 }
