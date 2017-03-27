@@ -5,6 +5,7 @@ import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockState;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import ar.edu.itba.sia.c12017.g5.gridlock.utilities.BoardParser;
 import gps.GPSEngine;
+import gps.GPSEngineFactory;
 import gps.GPSNode;
 import gps.SearchStrategy;
 import gps.api.GPSProblem;
@@ -61,7 +62,7 @@ public class Main {
     //  System.out.println(board.toString());
     //  Create gps objects
     GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board));
-    GPSEngine engine = GPSEngine.build(gridlockProblem, strategy);
+    GPSEngine engine = GPSEngineFactory.build(gridlockProblem, strategy);
     engine.findSolution();
     if (!engine.isFailed()) {
       GPSNode node = engine.getSolutionNode();
@@ -87,7 +88,7 @@ public class Main {
   }
 
   private static void warmUp() {
-    System.out.print("Warming up..");
+    System.out.print("Warming up...");
     IntStream.range(0, 100).forEach(t -> {
       System.out.print(".");
       run("src/main/resources/boards/easyboard.json", SearchStrategy.DFS, false, false);

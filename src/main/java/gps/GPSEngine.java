@@ -28,23 +28,6 @@ public abstract class GPSEngine {
   private boolean failed;
   private GPSNode solutionNode;
 
-  public static GPSEngine build(GPSProblem problem, SearchStrategy strategy) {
-    switch (strategy) {
-      case BFS:
-        return new BFSEngine(problem);
-      case DFS:
-        return new DFSEngine(problem);
-      case IDDFS:
-        return null;
-      case ASTAR:
-        return new AStarEngine(problem);
-      case GREEDY:
-        return new GreedyEngine(problem);
-      default:
-        return null;
-    }
-  }
-
   public GPSEngine(GPSProblem problem) {
     this.problem = problem;
     this.alreadyVisited = new HashMap<>();
