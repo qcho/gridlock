@@ -9,9 +9,6 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by alebian on 26/03/17.
- */
 public class AStarEngine extends GPSEngine {
     private Comparator<GPSNode> byMinorF;
 

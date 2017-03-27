@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by alebian on 3/25/17.
- */
 public class BFSEngine extends GPSEngine {
   public BFSEngine(GPSProblem problem) {
     super(problem);

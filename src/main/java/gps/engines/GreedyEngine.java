@@ -6,9 +6,6 @@ import gps.api.GPSProblem;
 
 import java.util.*;
 
-/**
- * Created by alebian on 26/03/17.
- */
 public class GreedyEngine extends GPSEngine {
     private final Comparator<GPSNode> byMinorH = Comparator
             .comparingInt((GPSNode node) -> getProblem().getHValue(node.getState()))

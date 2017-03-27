@@ -9,9 +9,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by alebian on 3/25/17.
- */
 public class DFSEngine extends GPSEngine {
   public DFSEngine(GPSProblem problem) {
     super(problem);
