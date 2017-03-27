@@ -6,7 +6,7 @@ import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
 import gps.api.GPSState;
 
-import java.awt.*;
+import java.awt.Point;
 
 /**
  * Created by alebian on 27/03/17.
