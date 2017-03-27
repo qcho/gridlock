@@ -35,6 +35,13 @@ public class AStarEngine extends GPSEngine {
     }
 
     private Comparator<GPSNode> getComparator() {
+        /*
+         * n1 = First node
+         * n2 = Second node
+         * n{1,2}H = Heuristic value: Estimate cost from current position to goal.
+         * n{1,2}G = Current cost: Cost from root node to current node.
+         * n{1,2}F = Total cost: Total solution cost computed from current cost and expected remaining cost.
+         */
         return (n1, n2) -> {
             Integer n1H = getProblem().getHValue(n1.getState());
             Integer n1G = n1.getCost();
