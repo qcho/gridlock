@@ -372,4 +372,13 @@ public class Board implements Cloneable {
   public Point getExitPoint() {
     return this.exitPoint;
   }
+
+  public int getRows() {
+    return rows;
+  }
+
+  public int getCols() {
+    return cols;
+  }
+
 }
