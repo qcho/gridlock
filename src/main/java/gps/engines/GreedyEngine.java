@@ -4,16 +4,16 @@ import gps.GPSEngine;
 import gps.GPSNode;
 import gps.api.GPSProblem;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 public class GreedyEngine extends GPSEngine {
-    private final Comparator<GPSNode> byMinorH = Comparator
-            .comparingInt((GPSNode node) -> getProblem().getHValue(node.getState()))
-            .thenComparing((GPSNode node) -> getProblem().getHValue(node.getState()));
+    private final Comparator<GPSNode> byMinorH = Comparator.comparingInt(n -> getProblem().getHValue(n.getState()));
 
     public GreedyEngine(GPSProblem problem) {
         super(problem);
-        this.open = new LinkedList<>();
+        this.open = new PriorityQueue<>(byMinorH);
     }
 
     @Override
@@ -21,12 +21,6 @@ public class GreedyEngine extends GPSEngine {
         if (alreadyVisited.containsKey(node.getState())) {
             return;
         }
-        List<GPSNode> newCandidatesList = new ArrayList<>();
-        addCandidates(node, newCandidatesList);
-        newCandidatesList.sort(byMinorH);
-        LinkedList<GPSNode> list = new LinkedList<>();
-        list.addAll(newCandidatesList);
-        list.addAll(open);
-        open = list;
+        addCandidates(node, open);
     }
 }
