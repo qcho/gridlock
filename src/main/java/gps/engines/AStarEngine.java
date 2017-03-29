@@ -4,18 +4,14 @@ import gps.GPSEngine;
 import gps.GPSNode;
 import gps.api.GPSProblem;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class AStarEngine extends GPSEngine {
     private Comparator<GPSNode> byMinorF;
 
     public AStarEngine(GPSProblem problem) {
         super(problem);
-        this.open = new LinkedList<>();
-        this.byMinorF = getComparator();
+        this.open = new PriorityQueue<>(getComparator());
     }
 
     @Override
@@ -23,13 +19,7 @@ public class AStarEngine extends GPSEngine {
         if (alreadyVisited.containsKey(node.getState())) {
             return;
         }
-        List<GPSNode> newCandidatesList = new ArrayList<>();
-        addCandidates(node, newCandidatesList);
-        newCandidatesList.sort(byMinorF);
-        LinkedList<GPSNode> list = new LinkedList<>();
-        list.addAll(newCandidatesList);
-        list.addAll(open);
-        open = list;
+        addCandidates(node, open);
     }
 
     private Comparator<GPSNode> getComparator() {
