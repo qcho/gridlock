@@ -1,6 +1,7 @@
-package ar.edu.itba.sia.c12017.g5.gridlock.heuristics;
+package ar.edu.itba.sia.c12017.g5.gridlock.heuristics.admisible;
 
 import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockState;
+import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.Heuristic;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import gps.api.GPSState;
