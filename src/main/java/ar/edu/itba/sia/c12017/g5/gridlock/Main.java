@@ -9,6 +9,9 @@ import gps.GPSEngineFactory;
 import gps.GPSNode;
 import gps.SearchStrategy;
 import gps.api.GPSProblem;
+import org.pmw.tinylog.Configurator;
+import org.pmw.tinylog.Level;
+import org.pmw.tinylog.writers.FileWriter;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,6 +28,7 @@ public class Main {
    * @param args should contain at least a board.
    */
   public static void main(String[] args) {
+    initLogging();
     warmUp();
     String board = "src/main/resources/boards/hardboard.json";
   
@@ -39,6 +43,13 @@ public class Main {
     Stream.of(strategies).forEach(strategy ->
         timedRun(board, strategy, SHOW_SOLUTION, SHOW_STATS)
     );
+  }
+
+  private static void initLogging() {
+    Configurator.defaultConfig()
+        .writer(new FileWriter("log.txt"))
+        .level(Level.WARNING)
+        .activate();
   }
 
   private static void timedRun(String board, SearchStrategy strategy, boolean showSolution,
