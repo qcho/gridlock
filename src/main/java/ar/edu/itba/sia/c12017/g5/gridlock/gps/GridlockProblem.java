@@ -3,6 +3,7 @@ package ar.edu.itba.sia.c12017.g5.gridlock.gps;
 import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.BlockingChipsMovementHeuristic;
 import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.Heuristic;
 import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.NaiveHeuristic;
+import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.NotSoNaiveHeuristic;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
 import gps.api.GPSProblem;
@@ -21,7 +22,7 @@ public class GridlockProblem implements GPSProblem {
     this.rules = calculateRules();
     this.heuristics = Arrays.asList(
       new NaiveHeuristic(),
-      new BlockingChipsMovementHeuristic()
+      new NotSoNaiveHeuristic()
     );
   }
 
