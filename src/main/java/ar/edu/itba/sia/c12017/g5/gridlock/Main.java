@@ -30,7 +30,7 @@ public class Main {
   public static void main(String[] args) {
     initLogging();
     warmUp();
-    String board = "src/main/resources/boards/hardboard.json";
+    String board = "src/main/resources/boards/easyboard.json";
   
     // Which strategies to run
     SearchStrategy[] strategies = {
