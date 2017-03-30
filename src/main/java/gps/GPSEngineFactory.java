@@ -20,7 +20,7 @@ public class GPSEngineFactory {
       case GREEDY:
         return new GreedyEngine(problem);
       default:
-        return null;
+        throw new UnsupportedOperationException("Provided strategy is not supported");
     }
   }
 }
