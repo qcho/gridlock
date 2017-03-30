@@ -5,6 +5,7 @@ import gps.engines.AStarEngine;
 import gps.engines.BFSEngine;
 import gps.engines.DFSEngine;
 import gps.engines.GreedyEngine;
+import gps.engines.IterativeDeepeningDFSEngine;
 
 public class GPSEngineFactory {
   public static GPSEngine build(GPSProblem problem, SearchStrategy strategy) {
@@ -14,7 +15,7 @@ public class GPSEngineFactory {
       case DFS:
         return new DFSEngine(problem);
       case IDDFS:
-        return null;
+        return new IterativeDeepeningDFSEngine(problem);
       case ASTAR:
         return new AStarEngine(problem);
       case GREEDY:
