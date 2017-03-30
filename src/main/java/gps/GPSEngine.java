@@ -61,7 +61,11 @@ public abstract class GPSEngine {
     for (GPSRule rule : problem.getRules()) {
       Optional<GPSState> newState = rule.evalRule(node.getState());
       newState.ifPresent(state -> {
-        GPSNode newNode = new GPSNode(state, node.getCost() + rule.getCost());
+        int cost = node.getCost() + rule.getCost();
+        if (!isBest(state, cost)) {
+          return;
+        }
+        GPSNode newNode = new GPSNode(state, cost);
         newNode.setParent(node);
         candidates.add(newNode);
       });
