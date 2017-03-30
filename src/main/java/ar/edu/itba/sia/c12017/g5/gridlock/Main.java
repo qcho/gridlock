@@ -84,7 +84,7 @@ public class Main {
         printStats(engine, node);
       }
     } else {
-      System.out.println("Could not find a solution");
+      System.out.println("Could not find a solution, tried " + engine.getExplosionCounter() + " nodes");
     }
   }
 
