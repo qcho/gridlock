@@ -55,20 +55,6 @@ public abstract class GPSEngine {
 
   protected abstract void explode(GPSNode node);
 
-//  protected void explode(GPSNode node) {
-//    Collection<GPSNode> newCandidates;
-//    switch (strategy) {
-//      case IDDFS:
-//        if (alreadyVisited.containsKey(node.getState())) {
-//          return;
-//        }
-//        newCandidates = new ArrayList<>();
-//        addCandidates(node, newCandidates);
-//        // TODO: ¿Cómo se agregan los nodos a open en IDDFS?
-//        break;
-//    }
-//  }
-
   protected void addCandidates(GPSNode node, Collection<GPSNode> candidates) {
     explosionCounter++;
     updateBest(node);
