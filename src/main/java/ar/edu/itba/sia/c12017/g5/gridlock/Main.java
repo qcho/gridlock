@@ -34,10 +34,11 @@ public class Main {
   
     // Which strategies to run
     SearchStrategy[] strategies = {
-        SearchStrategy.BFS,
+//        SearchStrategy.BFS,
         SearchStrategy.DFS,
-        SearchStrategy.GREEDY,
-        SearchStrategy.ASTAR
+//        SearchStrategy.GREEDY,
+//        SearchStrategy.ASTAR,
+        SearchStrategy.IDDFS
     };
 
     Stream.of(strategies).forEach(strategy ->
