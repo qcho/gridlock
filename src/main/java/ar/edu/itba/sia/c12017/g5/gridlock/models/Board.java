@@ -29,8 +29,7 @@ public class Board implements Cloneable {
 
   private int rows;
   private int cols;
-  private int exitX;
-  private int exitY;
+  private Point exitPoint;
   private int[][] board;
   private int nextChip = MAIN_CHIP_SYMBOL + 1;
 
@@ -48,8 +47,7 @@ public class Board implements Cloneable {
   public Board(int rows, int cols, int exitX, int exitY) {
     this.rows = rows + 1;
     this.cols = cols + 1;
-    this.exitX = exitX;
-    this.exitY = exitY;
+    this.exitPoint = new Point(exitX, exitY);
     chips = new ArrayList<>();
     createBoard();
   }
@@ -58,7 +56,7 @@ public class Board implements Cloneable {
     this.board = new int[this.rows + 1][this.cols + 1];
     fillWalls();
     fillBoard();
-    board[this.exitY][this.exitX] = EXIT_SYMBOL;
+    board[getExitY()][getExitX()] = EXIT_SYMBOL;
   }
 
   private void fillWalls() {
@@ -86,13 +84,8 @@ public class Board implements Cloneable {
    */
   @Override
   public boolean equals(Object other) {
-    if (this == other) {
-      return true;
-    }
-    if (other == null || getClass() != other.getClass()) {
-      return false;
-    }
-    return Arrays.deepEquals(board, ((Board) other).board);
+    return this == other || !(other == null || getClass() != other.getClass())
+            && Arrays.deepEquals(board, ((Board) other).board);
   }
 
   @Override
@@ -118,17 +111,17 @@ public class Board implements Cloneable {
    * Adds a new chip to the board.
    * @param chip to add.
    */
-  public void addChip(final Chip chip) {
+  private void addChip(final Chip chip) {
     if (chip.isVertical()) {
       assert (chip.getStartPosition().y < chip.getEndPosition().y);
-      IntStream.rangeClosed(chip.getStartPosition().y, chip.getEndPosition().y).forEach(y -> {
-        board[y][chip.getStartPosition().x] = chip.getSymbol();
-      });
+      IntStream.rangeClosed(chip.getStartPosition().y, chip.getEndPosition().y).forEach(y ->
+          board[y][chip.getStartPosition().x] = chip.getSymbol()
+      );
     } else if (chip.isHorizontal()) {
       assert (chip.getStartPosition().x < chip.getEndPosition().x);
-      IntStream.rangeClosed(chip.getStartPosition().x, chip.getEndPosition().x).forEach(x -> {
-        board[chip.getStartPosition().y][x] = chip.getSymbol();
-      });
+      IntStream.rangeClosed(chip.getStartPosition().x, chip.getEndPosition().x).forEach(x ->
+          board[chip.getStartPosition().y][x] = chip.getSymbol()
+      );
     } else {
       throw new IllegalArgumentException("Cannot insert diagonal chips");
     }
@@ -149,9 +142,9 @@ public class Board implements Cloneable {
 
   private boolean chipCanScape(Chip chip) {
     if (chip.isHorizontal()) {
-      return chip.getEndPosition().y == exitY;
+      return chip.getEndPosition().y == getExitY();
     } else {
-      return chip.getEndPosition().x == exitX;
+      return chip.getEndPosition().x == getExitX();
     }
   }
 
@@ -161,19 +154,23 @@ public class Board implements Cloneable {
    * @param symbol indicates which chip to move.
    * @param movement indicates which movement is wanted.
    */
-  public boolean canApplyMovement(Integer symbol, Movement movement) {
-    Chip chip = chips.stream().filter(c -> c.getSymbol() == symbol).findAny().get();
+  private boolean canApplyMovement(Integer symbol, Movement movement) {
+    Optional<Chip> chip = chips.stream().filter(c -> c.getSymbol().equals(symbol)).findAny();
+    if (!chip.isPresent()) {
+      return false;
+    }
+
     if (movement == Movement.UP || movement == Movement.DOWN) {
-      if (chip.isHorizontal()) {
+      if (chip.get().isHorizontal()) {
         return false;
       }
     } else if (movement == Movement.RIGHT || movement == Movement.LEFT) {
-      if (chip.isVertical()) {
+      if (chip.get().isVertical()) {
         return false;
       }
     }
 
-    Point nextPoint = nextPoint(chip, movement);
+    Point nextPoint = nextPoint(chip.get(), movement);
     return board[nextPoint.y][nextPoint.x] == EMPTY_SYMBOL;
   }
 
@@ -211,12 +208,13 @@ public class Board implements Cloneable {
    * @param movement indicates which movement is wanted.
    */
   public Board applyMovement(Integer symbol, Movement movement) {
-    if (!canApplyMovement(symbol, movement)) {
+    Optional<Chip> chip = chips.stream().filter(c -> c.getSymbol().equals(symbol)).findAny();
+
+    if (!canApplyMovement(symbol, movement) || !chip.isPresent()) {
       return null;
     }
-    Chip chip = chips.stream().filter(c -> c.getSymbol() == symbol).findAny().get();
     Board newBoard = clone();
-    newBoard.moveChip(chip, movement);
+    newBoard.moveChip(chip.get(), movement);
     return newBoard;
   }
 
@@ -249,14 +247,14 @@ public class Board implements Cloneable {
     Function<Integer, Boolean> isEmptyOrMain =
         (symbol) -> symbol == MAIN_CHIP_SYMBOL || symbol == EMPTY_SYMBOL;
     if (mainChip.isHorizontal()) {
-      for (int x = mainChip.getEndPosition().x; x < exitX; x++) {
+      for (int x = mainChip.getEndPosition().x; x < getExitX(); x++) {
         int symbol = board[mainChip.getEndPosition().y][x];
         if (!isEmptyOrMain.apply(symbol)) {
           return false;
         }
       }
     } else {
-      for (int y = mainChip.getEndPosition().y; y < exitY; y++) {
+      for (int y = mainChip.getEndPosition().y; y < getExitY(); y++) {
         int symbol = board[y][mainChip.getEndPosition().x];
         if (!isEmptyOrMain.apply(symbol)) {
           return false;
@@ -314,13 +312,17 @@ public class Board implements Cloneable {
             sb.append(MAIN_CHIP_PRINT_SYMBOL);
             break;
           default:
-            sb.append(board[y][x]);
+            sb.append(this.getCharForNumber(board[y][x]));
         }
         sb.append(" ");
       });
       sb.append("\n");
     });
     return sb.toString();
+  }
+
+  private String getCharForNumber(int i) {
+    return i > 0 && i < 27 ? String.valueOf((char)(i + 96)) : null;
   }
 
   private boolean isCorner(int x, int y) {
@@ -351,11 +353,11 @@ public class Board implements Cloneable {
     } catch (CloneNotSupportedException exception) {
       exception.printStackTrace();
     }
-    Board newBoard = new Board(rows - 1, cols - 1, exitX, exitY);
-    chips.stream().forEach(c -> {
-      newBoard.addChip(c.isMain(), c.getStartPosition().x, c.getStartPosition().y,
-          c.getEndPosition().x, c.getEndPosition().y);
-    });
+    Board newBoard = new Board(rows - 1, cols - 1, getExitX(), getExitY());
+    chips.forEach(c ->
+        newBoard.addChip(c.isMain(), c.getStartPosition().x, c.getStartPosition().y,
+            c.getEndPosition().x, c.getEndPosition().y)
+    );
     return newBoard;
   }
 
@@ -364,10 +366,23 @@ public class Board implements Cloneable {
   }
 
   public int getExitX() {
-    return this.exitX;
+    return this.exitPoint.x;
   }
 
   public int getExitY() {
-    return this.exitY;
+    return this.exitPoint.y;
   }
+
+  public Point getExitPoint() {
+    return this.exitPoint;
+  }
+
+  public int getRows() {
+    return rows;
+  }
+
+  public int getCols() {
+    return cols;
+  }
+
 }

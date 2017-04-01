@@ -73,7 +73,7 @@ public class Main {
     Board board = BoardParser.parse(boardPath);
     //  System.out.println(board.toString());
     //  Create gps objects
-    GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board));
+    GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board), strategy);
     GPSEngine engine = GPSEngineFactory.build(gridlockProblem, strategy);
     engine.findSolution();
     if (!engine.isFailed()) {
