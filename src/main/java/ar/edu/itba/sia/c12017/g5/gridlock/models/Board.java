@@ -312,13 +312,17 @@ public class Board implements Cloneable {
             sb.append(MAIN_CHIP_PRINT_SYMBOL);
             break;
           default:
-            sb.append(board[y][x]);
+            sb.append(this.getCharForNumber(board[y][x]));
         }
         sb.append(" ");
       });
       sb.append("\n");
     });
     return sb.toString();
+  }
+
+  private String getCharForNumber(int i) {
+    return i > 0 && i < 27 ? String.valueOf((char)(i + 96)) : null;
   }
 
   private boolean isCorner(int x, int y) {
