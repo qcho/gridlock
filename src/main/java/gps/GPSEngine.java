@@ -37,7 +37,7 @@ public abstract class GPSEngine {
   }
 
   public void findSolution() {
-    GPSNode rootNode = new GPSNode(problem.getInitState(), 0);
+    GPSNode rootNode = new GPSNode(problem.getInitState(), 0, null);
     open.add(rootNode);
     while (open.size() > 0) {
       GPSNode currentNode = open.remove();
@@ -75,7 +75,7 @@ public abstract class GPSEngine {
     for (GPSRule rule : problem.getRules()) {
       Optional<GPSState> newState = rule.evalRule(node.getState());
       newState.ifPresent(state -> {
-        GPSNode newNode = new GPSNode(state, node.getCost() + rule.getCost());
+        GPSNode newNode = new GPSNode(state, node.getCost() + rule.getCost(), rule);
         newNode.setParent(node);
         candidates.add(newNode);
       });
