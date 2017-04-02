@@ -35,7 +35,7 @@ public class Main {
     // Which strategies to run
     SearchStrategy[] strategies = {
         SearchStrategy.BFS,
-//        SearchStrategy.DFS,
+        SearchStrategy.DFS,
 //        SearchStrategy.GREEDY,
 //        SearchStrategy.ASTAR,
         SearchStrategy.IDDFS
