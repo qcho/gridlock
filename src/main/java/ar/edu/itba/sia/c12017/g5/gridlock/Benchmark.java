@@ -22,18 +22,31 @@ import java.util.stream.Stream;
  * Created by alebian on 02/04/17.
  */
 public class Benchmark {
-  private static int NUMBER_OF_RUNS = 1000;
-  private static SearchStrategy CHOSEN_STRATEGY = SearchStrategy.BFS;
+  private static int NUMBER_OF_RUNS = 100;
 
   public static void main(String[] args) {
     initLogging();
     warmUp();
 
     String[] boards = {
-      "src/main/resources/boards/hardboard.json"
+            "src/main/resources/boards/371.json",
+            "src/main/resources/boards/700.json",
+            "src/main/resources/boards/800.json",
+            "src/main/resources/boards/1200.json"
     };
 
-    Stream.of(boards).forEach(board -> run(board, CHOSEN_STRATEGY));
+    SearchStrategy[] strategies = {
+            SearchStrategy.BFS,
+            SearchStrategy.DFS,
+            SearchStrategy.GREEDY,
+            SearchStrategy.ASTAR
+    };
+
+    Stream.of(boards).forEach(board ->
+            Stream.of(strategies).forEach(strategy ->
+                    run(board, strategy)
+            )
+    );
   }
 
   private static void run(String stringPath, SearchStrategy strategy) {
@@ -46,7 +59,6 @@ public class Benchmark {
     Path boardPath = Paths.get(stringPath);
     assert (boardPath.toFile().exists());
     Board board = BoardParser.parse(boardPath);
-      System.out.println(board.toString());
     //  Create gps objects
 
     GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board), strategy);;
@@ -90,8 +102,8 @@ public class Benchmark {
     System.out.println("Warming up...");
     Board board = BoardParser.parse(Paths.get("src/main/resources/boards/supereasyboard.json"));
     IntStream.range(0, 1000).forEach(t -> {
-      GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board), CHOSEN_STRATEGY);
-      GPSEngineFactory.build(gridlockProblem, CHOSEN_STRATEGY).findSolution();
+      GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board), SearchStrategy.DFS);
+      GPSEngineFactory.build(gridlockProblem, SearchStrategy.DFS).findSolution();
     });
     System.out.println("");
   }
