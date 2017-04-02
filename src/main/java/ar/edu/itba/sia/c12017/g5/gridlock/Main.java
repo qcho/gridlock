@@ -48,7 +48,7 @@ public class Main {
 
   private static void initLogging() {
     Configurator.defaultConfig()
-        .writer(new FileWriter("log.txt"))
+        .writer(new FileWriter("log2.txt"))
         .level(Level.DEBUG)
         .activate();
   }
@@ -96,7 +96,8 @@ public class Main {
       count++;
     }
     System.out.println("  * Solution found in " + count + " steps");
-    System.out.println("  * Tried " + engine.getExplosionCounter() + " nodes");
+    System.out.println("  * Exploded " + engine.getExplosionCounter() + " nodes");
+    System.out.println("  * Added " + engine.getCandidatesCounter() + " candidates");
   }
 
   private static void warmUp() {
