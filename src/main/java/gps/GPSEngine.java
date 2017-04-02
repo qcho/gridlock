@@ -3,7 +3,6 @@ package gps;
 import gps.api.GPSProblem;
 import gps.api.GPSRule;
 import gps.api.GPSState;
-import org.pmw.tinylog.Logger;
 
 import java.util.Collection;
 import java.util.HashMap;
