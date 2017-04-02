@@ -30,6 +30,7 @@ public class NotSoNaiveHeuristic extends Heuristic {
     mainChip = board.getMainChip();
     Set<Integer> blockingChipsSet;
     hValue = 0;
+  //  System.out.println(board.toString());
 
     if (mainChip.isVertical()) {
       if (board.getExitY() > mainChip.getEndPosition().y) {
@@ -42,6 +43,7 @@ public class NotSoNaiveHeuristic extends Heuristic {
       } else {
         // Main chip needs to move UP
         blockingChipsSet = blockingChipsFor(mainChip, board, Movement.UP);
+        hValue = blockingChipsSet.size();
         if (blockingChipsSet.size() != 0) {
           blockingChipsSet.forEach(y -> checkBlockers(y, Movement.UP));
         }
@@ -50,17 +52,20 @@ public class NotSoNaiveHeuristic extends Heuristic {
       if (board.getExitX() > mainChip.getEndPosition().x) {
         // Main chip needs to move RIGHT
         blockingChipsSet = blockingChipsFor(mainChip, board, Movement.RIGHT);
+        hValue = blockingChipsSet.size();
         if (blockingChipsSet.size() != 0) {
           blockingChipsSet.forEach(y -> checkBlockers(y, Movement.RIGHT));
         }
       } else {
         // Main chip needs to move LEFT
         blockingChipsSet = blockingChipsFor(mainChip, board, Movement.LEFT);
+        hValue = blockingChipsSet.size();
         if (blockingChipsSet.size() != 0) {
           blockingChipsSet.forEach(y -> checkBlockers(y, Movement.LEFT));
         }
       }
     }
+   // System.out.println("hValue = " + hValue);
     return hValue;
   }
 
@@ -68,7 +73,7 @@ public class NotSoNaiveHeuristic extends Heuristic {
    * Movement stands for the movement the main chip must do, so obstacles know what way they must move
    */
   private void checkBlockers(Integer symbol, Movement movement) {
-    int numberOfBlockers = 0;
+    int weight = 0;
     Optional<Integer> firstEffort;
     Optional<Integer> secondEffort;
 
@@ -89,15 +94,15 @@ public class NotSoNaiveHeuristic extends Heuristic {
     }
     if (firstEffort.isPresent()) {
       if (secondEffort.isPresent()) {
-        numberOfBlockers = secondEffort.get() > firstEffort.get() ? firstEffort.get() : secondEffort.get();
+        weight = secondEffort.get() > firstEffort.get() ? firstEffort.get() : secondEffort.get();
       } else {
-        firstEffort.get();
+        weight = firstEffort.get();
       }
     } else {
-      numberOfBlockers = secondEffort.get();
+      weight = secondEffort.get();
     }
 
-    hValue += numberOfBlockers;
+    hValue += weight;
     return;
   }
 
@@ -108,17 +113,20 @@ public class NotSoNaiveHeuristic extends Heuristic {
     int cell;
     int chipLength;
     int countOfObstacles = 0;
+    int movesToClear = 0;
 
     if (chip.isHorizontal()) {
-      chipLength = chip.getEndPosition().x - chip.getStartPosition().x;
+      chipLength = chip.getEndPosition().x - chip.getStartPosition().x + 1;
     } else {
-      chipLength = chip.getEndPosition().y - chip.getStartPosition().y;
+      chipLength = chip.getEndPosition().y - chip.getStartPosition().y + 1;
     }
 
     switch (movement) {
       case UP:
-        if (mainChip.getStartPosition().y - board.getRows() >= chipLength) {
-          for (int i = chip.getStartPosition().y + 1; i <= mainChip.getStartPosition().y; i++) {
+        if ((board.getRows() -1) - mainChip.getStartPosition().y  >= chipLength) {
+          int endsAtToFit = mainChip.getStartPosition().y + chipLength;
+          for (int i = chip.getEndPosition().y + 1; i <= endsAtToFit ; i++) {
+            movesToClear++;
             cell = board.getBoard()[chip.getStartPosition().x][i];
             if (cell != Board.EMPTY_SYMBOL) {
               if (!obstacles.contains(cell)) {
@@ -127,13 +135,15 @@ public class NotSoNaiveHeuristic extends Heuristic {
               }
             }
           }
-          effort = Optional.of(countOfObstacles);
+          effort = Optional.of(countOfObstacles + movesToClear);
         }
         break;
 
       case DOWN:
         if (mainChip.getStartPosition().y - 1 >= chipLength) {
-          for (int i = chip.getEndPosition().y - 1; i >= mainChip.getStartPosition().y; i--) {
+          int startToFit = mainChip.getStartPosition().y - chipLength;
+          for (int i = chip.getStartPosition().y - 1 ; i >= startToFit; i--) {
+            movesToClear++;
             cell = board.getBoard()[chip.getStartPosition().x][i];
             if (cell != Board.EMPTY_SYMBOL) {
               if (!obstacles.contains(cell)) {
@@ -142,13 +152,15 @@ public class NotSoNaiveHeuristic extends Heuristic {
               }
             }
           }
-          effort = Optional.of(countOfObstacles);
+          effort = Optional.of(countOfObstacles + movesToClear);
         }
         break;
 
       case LEFT:
         if (mainChip.getStartPosition().x - 1 >= chipLength) {
-          for (int i = chip.getEndPosition().x - 1; i < mainChip.getStartPosition().x; i--) {
+          int startToFit = mainChip.getStartPosition().x - chipLength;
+          for (int i = chip.getStartPosition().x -1; i >= startToFit; i--) {
+            movesToClear++;
             cell = board.getBoard()[i][chip.getStartPosition().y];
             if (cell != Board.EMPTY_SYMBOL) {
               if (!obstacles.contains(cell)) {
@@ -157,13 +169,15 @@ public class NotSoNaiveHeuristic extends Heuristic {
               }
             }
           }
-          effort = Optional.of(countOfObstacles);
+          effort = Optional.of(countOfObstacles + movesToClear);
         }
         break;
 
       case RIGHT:
-        if (mainChip.getStartPosition().x - board.getCols() >= chipLength) {
-          for (int i = chip.getStartPosition().x + 1; i <= mainChip.getStartPosition().x; i++) {
+        if ((board.getCols() - 1) - mainChip.getStartPosition().x >= chipLength) {
+          int endsAtToFit = mainChip.getStartPosition().x + chipLength;
+          for (int i = chip.getEndPosition().x + 1; i <= endsAtToFit; i++) {
+            movesToClear++;
             cell = board.getBoard()[i][chip.getStartPosition().y];
             if (cell != Board.EMPTY_SYMBOL) {
               if (!obstacles.contains(cell)) {
@@ -172,7 +186,7 @@ public class NotSoNaiveHeuristic extends Heuristic {
               }
             }
           }
-          effort = Optional.of(countOfObstacles);
+          effort = Optional.of(countOfObstacles + movesToClear);
         }
         break;
 
