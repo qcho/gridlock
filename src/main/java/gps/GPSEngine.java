@@ -4,21 +4,11 @@ import ar.edu.itba.sia.c12017.g5.gridlock.utilities.GraphBuilder;
 import gps.api.GPSProblem;
 import gps.api.GPSRule;
 import gps.api.GPSState;
-import gps.engines.AStarEngine;
-import gps.engines.BFSEngine;
-import gps.engines.DFSEngine;
-import gps.engines.GreedyEngine;
-
 import java.nio.file.Paths;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 public abstract class GPSEngine {
@@ -26,6 +16,7 @@ public abstract class GPSEngine {
   protected Map<GPSState, Integer> alreadyVisited;
   private GPSProblem problem;
   private long explosionCounter;
+  private long candidatesCounter;
   private boolean finished;
   private boolean failed;
   private GPSNode solutionNode;
@@ -34,6 +25,7 @@ public abstract class GPSEngine {
     this.problem = problem;
     this.alreadyVisited = new HashMap<>();
     this.explosionCounter = 0;
+    this.candidatesCounter = 0;
     this.finished = false;
     this.failed = false;
   }
@@ -75,14 +67,19 @@ public abstract class GPSEngine {
         newNode.setParent(node);
         candidates.add(newNode);
       });
+      candidatesCounter += candidates.size();
     }
   }
 
-  private boolean isBest(GPSState state, Integer cost) {
+  public long getCandidatesCounter() {
+    return candidatesCounter;
+  }
+
+  protected boolean isBest(GPSState state, Integer cost) {
     return !alreadyVisited.containsKey(state) || cost < alreadyVisited.get(state);
   }
 
-  private void updateBest(GPSNode node) {
+  protected void updateBest(GPSNode node) {
     alreadyVisited.put(node.getState(), node.hashCode());
   }
 

@@ -34,8 +34,8 @@ public class Main {
   
     // Which strategies to run
     SearchStrategy[] strategies = {
-//        SearchStrategy.BFS,
-        SearchStrategy.DFS,
+        SearchStrategy.BFS,
+//        SearchStrategy.DFS,
 //        SearchStrategy.GREEDY,
 //        SearchStrategy.ASTAR,
         SearchStrategy.IDDFS
@@ -48,8 +48,8 @@ public class Main {
 
   private static void initLogging() {
     Configurator.defaultConfig()
-        .writer(new FileWriter("log.txt"))
-        .level(Level.WARNING)
+        .writer(new FileWriter("log2.txt"))
+        .level(Level.DEBUG)
         .activate();
   }
 
@@ -96,7 +96,8 @@ public class Main {
       count++;
     }
     System.out.println("  * Solution found in " + count + " steps");
-    System.out.println("  * Tried " + engine.getExplosionCounter() + " nodes");
+    System.out.println("  * Exploded " + engine.getExplosionCounter() + " nodes");
+    System.out.println("  * Added " + engine.getCandidatesCounter() + " candidates");
   }
 
   private static void warmUp() {
