@@ -49,7 +49,7 @@ public class Main {
   private static void initLogging() {
     Configurator.defaultConfig()
         .writer(new FileWriter("log.txt"))
-        .level(Level.WARNING)
+        .level(Level.DEBUG)
         .activate();
   }
 
