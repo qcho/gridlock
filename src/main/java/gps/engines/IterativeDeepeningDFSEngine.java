@@ -16,7 +16,7 @@ public class IterativeDeepeningDFSEngine extends DFSEngine {
     if (node.getCost() >= level) {
       level += 1;
       alreadyVisited.clear();
-      open.add(new GPSNode(getProblem().getInitState(), 0));
+      open.add(new GPSNode(getProblem().getInitState(), 0, null));
     }
     super.explode(node);
   }
