@@ -33,7 +33,7 @@ public class GraphBuilder {
     @Override
     public String toString() {
         StringJoiner sj = new StringJoiner(";\n    ", "{\n    ", "}\n");
-        sj.add("graph [fontname =\"Courier\", fontsize=10]");
+        sj.add("graph [fontname =\"Courier\", fontsize=10, ordering=\"out\"]");
         sj.add("node [shape=\"plaintext\", fontname = \"Courier\", fontsize=10]");
         sj.add("edge [fontname = \"Courier\", fontsize=10]");
         AtomicInteger nodesIndex = new AtomicInteger();
@@ -69,7 +69,7 @@ public class GraphBuilder {
                         }
                 );
                 sj.add(pId + "->" + cId + "["
-                        + (inSolution ? "color=\"orange\", " : "")
+                        //+ (inSolution ? "color=\"orange\", " : "")
                         + "label=\" " + edgesIndex.incrementAndGet() + "#" + node.getGenerationRule().getName() + "\"]");
 
             }

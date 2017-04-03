@@ -268,7 +268,7 @@ public class Board implements Cloneable {
   private static final String VERTICAL_WALL_PRINT_SYMBOL = "|";
   private static final String HORIZONTAL_WALL_PRINT_SYMBOL = "-";
   private static final String CORNER_WALL_PRINT_SYMBOL = "+";
-  private static final String EXIT_PRINT_SYMBOL = " ";
+  private static final String EXIT_PRINT_SYMBOL = "";
   private static final String EMPTY_PRINT_SYMBOL = ".";
 
   @Override
