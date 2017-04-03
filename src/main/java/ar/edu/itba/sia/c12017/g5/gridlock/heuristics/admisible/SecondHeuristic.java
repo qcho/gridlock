@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 
 
-public class BlockingChipsMovementHeuristic extends Heuristic {
+public class SecondHeuristic extends Heuristic {
   /**
    * This heuristic is the next step of the naive one. After finding the blocking chips,
    * we calculate how many movements they would need to unblock the chip if the rest of

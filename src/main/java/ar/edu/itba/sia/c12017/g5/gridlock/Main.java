@@ -30,16 +30,16 @@ public class Main {
   public static void main(String[] args) {
     initLogging();
     warmUp();
-    String board = "src/main/resources/boards/700.json";
+    String board = "src/main/resources/boards/800.json";
   
     // Which strategies to run
     SearchStrategy[] strategies = {
         SearchStrategy.BFS,
         SearchStrategy.DFS,
-        SearchStrategy.GREEDY,
-        SearchStrategy.ASTAR,
         SearchStrategy.IDDFS,
-        SearchStrategy.FIDDFS
+        SearchStrategy.FIDDFS,
+        SearchStrategy.GREEDY,
+        SearchStrategy.ASTAR
     };
 
     Stream.of(strategies).forEach(strategy ->

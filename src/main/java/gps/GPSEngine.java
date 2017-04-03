@@ -40,13 +40,13 @@ public abstract class GPSEngine {
       if (problem.isGoal(currentNode.getState())) {
         finished = true;
         solutionNode = currentNode;
-        gb.writeToFile(Paths.get("/Users/cucho/solution.dot"));
+        gb.writeToFile(Paths.get("/tmp/solution.dot"));
         return;
       } else {
         explode(currentNode);
       }
     }
-    gb.writeToFile(Paths.get("/Users/cucho/solution.dot"));
+    gb.writeToFile(Paths.get("/tmp/solution.dot"));
     failed = true;
     finished = true;
   }

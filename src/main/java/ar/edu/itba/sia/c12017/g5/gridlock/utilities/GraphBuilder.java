@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GraphBuilder {
-
+    final static boolean ENABLED = false;
 
     private List<GPSNode> graph = new ArrayList<>();
     private List<GPSNode> solutionNodes = new ArrayList<>();
@@ -27,18 +28,21 @@ public class GraphBuilder {
     }
 
     public void add(GPSNode node) {
-        graph.add(node);
+        if (ENABLED) {
+            graph.add(node);
+        }
     }
 
     @Override
     public String toString() {
-        StringJoiner sj = new StringJoiner(";\n    ", "{\n    ", "}\n");
-        sj.add("graph [fontname =\"Courier\", fontsize=10, ordering=\"out\"]");
+        StringJoiner sj = new StringJoiner(";\n    ", "{\n    ", "\n}\n");
+        sj.add("graph [fontname =\"Courier\", fontsize=10, overlap=scalexy, splines=ortho, nodesep=1, ranksep=2, ordering=\"out\"]");
         sj.add("node [shape=\"plaintext\", fontname = \"Courier\", fontsize=10]");
         sj.add("edge [fontname = \"Courier\", fontsize=10]");
         AtomicInteger nodesIndex = new AtomicInteger();
         AtomicInteger edgesIndex = new AtomicInteger();
         Map<GPSState,String> added = new HashMap<>();
+        Map<Integer,List<String>> ranks = new HashMap<>();
         GPSNode sNode = engine.getSolutionNode();
         do {
             this.solutionNodes.add(sNode);
@@ -49,6 +53,7 @@ public class GraphBuilder {
                     node.getState(),
                     state -> {
                         String k = String.format("n%09d", nodesIndex.incrementAndGet());
+                        ranks.computeIfAbsent(node.getCost(), integer -> new ArrayList<>()).add(k);
                         sj.add(k + "["
                                 + (inSolution ? "shape=\"box\", fillcolor=orange, style=\"rounded,filled\", " : "")
                                 + "label=\"" + state.toString().replaceAll("(\\r|\\n|\\r\\n)+", "\\\\n")
@@ -61,6 +66,7 @@ public class GraphBuilder {
                         node.getParent().getState(),
                         state -> {
                             String k = String.format("n%09d", nodesIndex.incrementAndGet());
+                            ranks.computeIfAbsent(node.getParent().getCost(), integer -> new ArrayList<>()).add(k);
                             sj.add(k + "["
                                     + (inSolution ? "shape=\"box\", fillcolor=orange, style=\"rounded,filled\", " : "")
                                     + "label=\"" + state.toString().replaceAll("(\\r|\\n|\\r\\n)+", "\\\\n")
@@ -69,23 +75,25 @@ public class GraphBuilder {
                         }
                 );
                 sj.add(pId + "->" + cId + "["
-                        //+ (inSolution ? "color=\"orange\", " : "")
-                        + "label=\" " + edgesIndex.incrementAndGet() + "#" + node.getGenerationRule().getName() + "\"]");
-
+                        + "headlabel=\"  " + edgesIndex.incrementAndGet() + "#" + node.getGenerationRule().getName() + "  \"]");
             }
 
         });
+        ranks.forEach((rank, nodes) -> sj.add("{rank = same; " + String.join("; ", nodes) + "}"));
         return "digraph graphname " + sj.toString();
     }
 
-    public void writeToFile(Path path) {
-        try {
-            try (BufferedWriter writer = Files.newBufferedWriter(path))
-            {
-                writer.write(this.toString());
+    public void writeToFile() {
+        if (ENABLED) {
+            try {
+                try (BufferedWriter writer = Files.newBufferedWriter(
+                        Paths.get("/tmp/solution_" + engine.getClass().getSimpleName() + ".dot")
+                )) {
+                    writer.write(this.toString());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
