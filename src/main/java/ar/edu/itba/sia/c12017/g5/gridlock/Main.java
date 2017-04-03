@@ -38,7 +38,8 @@ public class Main {
         SearchStrategy.DFS,
         SearchStrategy.GREEDY,
         SearchStrategy.ASTAR,
-        SearchStrategy.IDDFS
+        SearchStrategy.IDDFS,
+        SearchStrategy.FIDDFS
     };
 
     Stream.of(strategies).forEach(strategy ->

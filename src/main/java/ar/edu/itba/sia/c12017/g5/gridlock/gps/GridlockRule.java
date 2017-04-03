@@ -24,7 +24,7 @@ public class GridlockRule implements GPSRule {
 
   @Override
   public String getName() {
-    return String.format("Moving chip %d %s", symbol, movement.toString());
+    return String.format("%s:%s", Chip.getCharForNumber(symbol), movement.toString());
   }
 
   @Override
