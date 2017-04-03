@@ -11,6 +11,8 @@ import gps.api.GPSState;
 public class EmptySpacesTop extends Heuristic {
   /**
    * This heuristic checks how many empty spaces are in the top rectangle of the board.
+   * Greedy algorithm will choose boards with the lowest H values, this means that
+   * it will try to occupy the spaces in the top of the board.
    */
   @Override
   public Integer calculate(GPSState state) {
