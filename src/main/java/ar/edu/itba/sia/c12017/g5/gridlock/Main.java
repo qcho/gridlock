@@ -30,7 +30,7 @@ public class Main {
   public static void main(String[] args) {
     initLogging();
     warmUp();
-    String board = "src/main/resources/boards/easyboard.json";
+    String board = "src/main/resources/boards/hardboard.json";
   
     // Which strategies to run
     SearchStrategy[] strategies = {
@@ -48,7 +48,7 @@ public class Main {
 
   private static void initLogging() {
     Configurator.defaultConfig()
-        .writer(new FileWriter("log2.txt"))
+        .writer(new FileWriter("log.txt"))
         .level(Level.DEBUG)
         .activate();
   }
