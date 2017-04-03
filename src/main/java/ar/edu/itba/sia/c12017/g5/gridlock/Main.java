@@ -36,8 +36,8 @@ public class Main {
     SearchStrategy[] strategies = {
         SearchStrategy.BFS,
         SearchStrategy.DFS,
-//        SearchStrategy.GREEDY,
-//        SearchStrategy.ASTAR,
+        SearchStrategy.GREEDY,
+        SearchStrategy.ASTAR,
         SearchStrategy.IDDFS
     };
 
@@ -85,7 +85,8 @@ public class Main {
         printStats(engine, node);
       }
     } else {
-      System.out.println("Could not find a solution, tried " + engine.getExplosionCounter() + " nodes");
+      System.out.println("Could not find a solution, tried "
+          + engine.getExplosionCounter() + " nodes");
     }
   }
 

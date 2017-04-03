@@ -6,7 +6,6 @@ import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
 import gps.api.GPSState;
-import org.pmw.tinylog.Logger;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -17,10 +16,11 @@ public class NotSoNaiveHeuristic extends Heuristic {
   Board board;
   Chip mainChip;
   Set<Integer> obstacles = new HashSet<>();
-  int hValue;
+  int heuristicValue;
 
   /**
-   * Checks how many obstacles are in between main and exit, and afterwards checks for each of said obstacles
+   * Checks how many obstacles are in between main and exit,
+   * and afterwards checks for each of said obstacles
    * how many obstacles they need to move to clear the path.
    */
   @Override
@@ -29,13 +29,13 @@ public class NotSoNaiveHeuristic extends Heuristic {
     board = gs.getBoard();
     mainChip = board.getMainChip();
     Set<Integer> blockingChipsSet;
-    hValue = 0;
+    heuristicValue = 0;
 
     if (mainChip.isVertical()) {
       if (board.getExitY() > mainChip.getEndPosition().y) {
         // Main chip needs to move DOWN
         blockingChipsSet = blockingChipsFor(mainChip, board, Movement.DOWN);
-        hValue = blockingChipsSet.size();
+        heuristicValue = blockingChipsSet.size();
         if (blockingChipsSet.size() != 0) {
           blockingChipsSet.forEach(y -> checkBlockers(y, Movement.DOWN));
         }
@@ -61,11 +61,12 @@ public class NotSoNaiveHeuristic extends Heuristic {
         }
       }
     }
-    return hValue;
+    return heuristicValue;
   }
 
   /**
-   * Movement stands for the movement the main chip must do, so obstacles know what way they must move
+   * Movement stands for the movement the main chip must do,
+   * so obstacles know what way they must move.
    */
   private void checkBlockers(Integer symbol, Movement movement) {
     int numberOfBlockers = 0;
@@ -89,7 +90,8 @@ public class NotSoNaiveHeuristic extends Heuristic {
     }
     if (firstEffort.isPresent()) {
       if (secondEffort.isPresent()) {
-        numberOfBlockers = secondEffort.get() > firstEffort.get() ? firstEffort.get() : secondEffort.get();
+        numberOfBlockers =
+            secondEffort.get() > firstEffort.get() ? firstEffort.get() : secondEffort.get();
       } else {
         firstEffort.get();
       }
@@ -97,7 +99,7 @@ public class NotSoNaiveHeuristic extends Heuristic {
       numberOfBlockers = secondEffort.get();
     }
 
-    hValue += numberOfBlockers;
+    heuristicValue += numberOfBlockers;
     return;
   }
 
@@ -175,7 +177,8 @@ public class NotSoNaiveHeuristic extends Heuristic {
           effort = Optional.of(countOfObstacles);
         }
         break;
-
+      default:
+        throw new IllegalArgumentException("Illegal move.");
     }
     return effort;
   }
