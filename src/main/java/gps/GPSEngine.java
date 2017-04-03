@@ -55,9 +55,6 @@ public abstract class GPSEngine {
       Optional<GPSState> newState = rule.evalRule(node.getState());
       newState.ifPresent(state -> {
         int cost = node.getCost() + rule.getCost();
-        if (!isBest(state, cost)) {
-          return;
-        }
         GPSNode newNode = new GPSNode(state, cost, rule);
         newNode.setParent(node);
         candidates.add(newNode);
