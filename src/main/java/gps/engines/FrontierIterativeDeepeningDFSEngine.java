@@ -26,8 +26,8 @@ public class FrontierIterativeDeepeningDFSEngine extends DFSEngine {
     }
     if (open.isEmpty()) {
       level += levelStep;
-      open.clear();
       open.addAll(frontier);
+      frontier.clear();
     }
   }
 }
