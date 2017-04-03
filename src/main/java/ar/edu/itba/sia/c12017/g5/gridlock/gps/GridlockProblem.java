@@ -17,7 +17,7 @@ import java.util.*;
 public class GridlockProblem implements GPSProblem {
   private GridlockState initState;
   private SearchStrategy strategy;
-  private List<GPSRule> rules;
+  protected List<GPSRule> rules;
   private List<Heuristic> nonAdmisibleHeuristics;
   private List<Heuristic> admisibleHeuristics;
   private List<Heuristic> allHeuristics;

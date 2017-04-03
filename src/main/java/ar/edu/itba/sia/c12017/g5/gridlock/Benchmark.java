@@ -2,6 +2,7 @@ package ar.edu.itba.sia.c12017.g5.gridlock;
 
 import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockProblem;
 import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockState;
+import ar.edu.itba.sia.c12017.g5.gridlock.gps.ShuffleGridlockProblem;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import ar.edu.itba.sia.c12017.g5.gridlock.utilities.BoardParser;
 import gps.GPSEngine;
@@ -15,11 +16,27 @@ import org.pmw.tinylog.writers.FileWriter;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Benchmark {
-  private static int NUMBER_OF_RUNS = 10;
+  private static int NUMBER_OF_RUNS = 100;
+
+  private static class Tuple {
+    GPSEngine engine;
+    GPSNode solution;
+
+    public Tuple(GPSEngine engine, GPSNode solution) {
+      this.engine = engine;
+      this.solution = solution;
+    }
+  }
+
+  static Map<String, List<Tuple>> results = new HashMap<>();
 
   /**
    * Benchmark main.
@@ -31,18 +48,18 @@ public class Benchmark {
 
     String[] boards = {
         "src/main/resources/boards/371.json",
-        "src/main/resources/boards/700.json",
-        "src/main/resources/boards/800.json",
-        "src/main/resources/boards/1200.json"
+//        "src/main/resources/boards/700.json",
+//        "src/main/resources/boards/800.json",
+//        "src/main/resources/boards/1200.json"
     };
 
     SearchStrategy[] strategies = {
-        SearchStrategy.BFS,
+//        SearchStrategy.BFS,
         SearchStrategy.DFS,
-        SearchStrategy.IDDFS,
-        SearchStrategy.FIDDFS,
-        SearchStrategy.GREEDY,
-        SearchStrategy.ASTAR
+//        SearchStrategy.IDDFS,
+//        SearchStrategy.FIDDFS,
+//        SearchStrategy.GREEDY,
+//        SearchStrategy.ASTAR
     };
 
     Stream.of(boards).forEach(board ->
@@ -50,13 +67,15 @@ public class Benchmark {
             run(board, strategy)
         )
     );
+
+    printManyStats();
   }
 
   @SuppressWarnings("checkstyle:variabledeclarationusagedistance")
   private static void run(String stringPath, SearchStrategy strategy) {
     String[] pathSliced = stringPath.split("/");
-    System.out.println(String.format(
-        "Starting to solve with %s for %s", strategy, pathSliced[pathSliced.length - 1]));
+//    System.out.println(String.format(
+//        "Starting to solve with %s for %s", strategy, pathSliced[pathSliced.length - 1]));
     long startTime = System.currentTimeMillis();
     long endTime;
 
@@ -66,7 +85,7 @@ public class Benchmark {
     Board board = BoardParser.parse(boardPath);
     //  Create gps objects
 
-    GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board), strategy);
+    GPSProblem gridlockProblem = new ShuffleGridlockProblem(new GridlockState(board), strategy);
     ;
     GPSEngine engine = null;
     GPSNode solution = null;
@@ -78,15 +97,18 @@ public class Benchmark {
       } else {
         solution = engine.getSolutionNode();
       }
+      results.putIfAbsent(pathSliced[pathSliced.length - 1], new ArrayList<>());
+      results.get(pathSliced[pathSliced.length - 1]).add(new Tuple(engine, solution));
     }
 
-    printStats(engine, solution);
+//    printStats(engine, solution);
     endTime = System.currentTimeMillis();
     double totalTime = (endTime - startTime) / 1000.0;
-    System.out.println(String.format(
-        "  * Total duration: %.2f seconds of %d runs", totalTime, NUMBER_OF_RUNS));
-    System.out.println(String.format(
-        "  * Each duration: %.2f seconds", totalTime / NUMBER_OF_RUNS));
+
+//    System.out.println(String.format(
+//        "  * Total duration: %.2f seconds of %d runs", totalTime, NUMBER_OF_RUNS));
+//    System.out.println(String.format(
+//        "  * Each duration: %.2f seconds", totalTime / NUMBER_OF_RUNS));
   }
 
   private static void printStats(GPSEngine engine, GPSNode solution) {
@@ -99,6 +121,26 @@ public class Benchmark {
     System.out.println("  * Tried " + engine.getExplosionCounter() + " nodes");
   }
 
+  private static void printManyStats() {
+    results.keySet().forEach(board -> {
+      System.out.println("Solutions for " + board);
+      int totalNodes = 0;
+      int explosionCounter = 0;
+
+      for (int i = 0; i < results.get(board).size(); i++) {
+        GPSNode parent = results.get(board).get(i).solution;
+        int count = 0;
+        while ((parent = parent.getParent()) != null) {
+          count++;
+          totalNodes++;
+        }
+        explosionCounter += results.get(board).get(i).engine.getExplosionCounter();
+      }
+      System.out.println("  * Average solution " + (totalNodes / NUMBER_OF_RUNS) + " steps");
+      System.out.println("  * Average tried " + (explosionCounter / NUMBER_OF_RUNS) + " nodes");
+    });
+  }
+
   private static void initLogging() {
     Configurator.defaultConfig()
         .writer(new FileWriter("log.txt"))
@@ -106,7 +148,7 @@ public class Benchmark {
         .activate();
   }
 
-  private static void warmUp() {
+  public static void warmUp() {
     System.out.println("Warming up...");
     Board board = BoardParser.parse(Paths.get("src/main/resources/boards/supereasyboard.json"));
     IntStream.range(0, 1000).forEach(t -> {

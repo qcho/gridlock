@@ -29,7 +29,7 @@ public class Main {
    */
   public static void main(String[] args) {
     initLogging();
-    warmUp();
+    Benchmark.warmUp();
     String board = "src/main/resources/boards/800.json";
   
     // Which strategies to run
@@ -100,13 +100,5 @@ public class Main {
     System.out.println("  * Solution found in " + count + " steps");
     System.out.println("  * Exploded " + engine.getExplosionCounter() + " nodes");
     System.out.println("  * Added " + engine.getCandidatesCounter() + " candidates");
-  }
-
-  private static void warmUp() {
-    System.out.println("Warming up...");
-    IntStream.range(0, 1000).forEach(t -> {
-      run("src/main/resources/boards/supereasyboard.json", SearchStrategy.DFS, false, false);
-    });
-    System.out.println("");
   }
 }
