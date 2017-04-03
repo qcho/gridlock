@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Benchmark {
-  private static int NUMBER_OF_RUNS = 100;
+  private static int NUMBER_OF_RUNS = 10;
 
   /**
    * Benchmark main.
@@ -39,6 +39,8 @@ public class Benchmark {
     SearchStrategy[] strategies = {
         SearchStrategy.BFS,
         SearchStrategy.DFS,
+        SearchStrategy.IDDFS,
+        SearchStrategy.FIDDFS,
         SearchStrategy.GREEDY,
         SearchStrategy.ASTAR
     };

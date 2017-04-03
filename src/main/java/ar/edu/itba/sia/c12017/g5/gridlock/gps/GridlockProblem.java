@@ -1,9 +1,9 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.gps;
 
 import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.Heuristic;
-import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.admisible.NaiveHeuristic;
-import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.admisible.NotSoNaiveHeuristic;
-import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.notadmisible.EmptySpacesTop;
+import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.admisible.FirstHeuristic;
+import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.admisible.SecondHeuristic;
+import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.admisible.ThirdHeuristic;
 import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.notadmisible.NonEmptySpacesTop;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
@@ -27,8 +27,9 @@ public class GridlockProblem implements GPSProblem {
     this.strategy = strategy;
     this.rules = calculateRules();
     this.admisibleHeuristics = Arrays.asList(
-            new NaiveHeuristic(),
-            new NotSoNaiveHeuristic()
+            new FirstHeuristic(),
+            new SecondHeuristic(),
+            new ThirdHeuristic()
     );
     this.nonAdmisibleHeuristics = Arrays.asList(
 //            new EmptySpacesTop(),
