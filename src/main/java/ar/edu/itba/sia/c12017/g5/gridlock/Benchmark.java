@@ -16,10 +16,7 @@ import org.pmw.tinylog.writers.FileWriter;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -27,12 +24,15 @@ public class Benchmark {
   private static int NUMBER_OF_RUNS = 100;
 
   private static class Tuple {
-    GPSEngine engine;
-    GPSNode solution;
+    long explosionCounter = 0;
+    long totalNodes = 0;
 
     public Tuple(GPSEngine engine, GPSNode solution) {
-      this.engine = engine;
-      this.solution = solution;
+      GPSNode parent = solution;
+      while ((parent = parent.getParent()) != null) {
+        totalNodes++;
+      }
+      this.explosionCounter = engine.getExplosionCounter();
     }
   }
 
@@ -47,8 +47,8 @@ public class Benchmark {
     warmUp();
 
     String[] boards = {
-        "src/main/resources/boards/371.json",
-//        "src/main/resources/boards/700.json",
+//        "src/main/resources/boards/371.json",
+        "src/main/resources/boards/700.json",
 //        "src/main/resources/boards/800.json",
 //        "src/main/resources/boards/1200.json"
     };
@@ -90,6 +90,7 @@ public class Benchmark {
     GPSEngine engine = null;
     GPSNode solution = null;
     for (int i = 0; i < NUMBER_OF_RUNS; i++) {
+      System.out.println(i + " " + (new Date()).toString());
       engine = GPSEngineFactory.build(gridlockProblem, strategy);
       engine.findSolution();
       if (engine.isFailed()) {
@@ -128,13 +129,8 @@ public class Benchmark {
       int explosionCounter = 0;
 
       for (int i = 0; i < results.get(board).size(); i++) {
-        GPSNode parent = results.get(board).get(i).solution;
-        int count = 0;
-        while ((parent = parent.getParent()) != null) {
-          count++;
-          totalNodes++;
-        }
-        explosionCounter += results.get(board).get(i).engine.getExplosionCounter();
+        totalNodes += results.get(board).get(i).totalNodes;
+        explosionCounter += results.get(board).get(i).explosionCounter;
       }
       System.out.println("  * Average solution " + (totalNodes / NUMBER_OF_RUNS) + " steps");
       System.out.println("  * Average tried " + (explosionCounter / NUMBER_OF_RUNS) + " nodes");
