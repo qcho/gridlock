@@ -32,13 +32,14 @@ public class GraphBuilder {
 
     @Override
     public String toString() {
-        StringJoiner sj = new StringJoiner(";\n    ", "{\n    ", "}\n");
-        sj.add("graph [fontname =\"Courier\", fontsize=10, ordering=\"out\"]");
+        StringJoiner sj = new StringJoiner(";\n    ", "{\n    ", "\n}\n");
+        sj.add("graph [fontname =\"Courier\", fontsize=10, overlap=scalexy, splines=ortho, nodesep=1, ranksep=2, ordering=\"out\"]");
         sj.add("node [shape=\"plaintext\", fontname = \"Courier\", fontsize=10]");
         sj.add("edge [fontname = \"Courier\", fontsize=10]");
         AtomicInteger nodesIndex = new AtomicInteger();
         AtomicInteger edgesIndex = new AtomicInteger();
         Map<GPSState,String> added = new HashMap<>();
+        Map<Integer,List<String>> ranks = new HashMap<>();
         GPSNode sNode = engine.getSolutionNode();
         do {
             this.solutionNodes.add(sNode);
@@ -49,6 +50,7 @@ public class GraphBuilder {
                     node.getState(),
                     state -> {
                         String k = String.format("n%09d", nodesIndex.incrementAndGet());
+                        ranks.computeIfAbsent(node.getCost(), integer -> new ArrayList<>()).add(k);
                         sj.add(k + "["
                                 + (inSolution ? "shape=\"box\", fillcolor=orange, style=\"rounded,filled\", " : "")
                                 + "label=\"" + state.toString().replaceAll("(\\r|\\n|\\r\\n)+", "\\\\n")
@@ -61,6 +63,7 @@ public class GraphBuilder {
                         node.getParent().getState(),
                         state -> {
                             String k = String.format("n%09d", nodesIndex.incrementAndGet());
+                            ranks.computeIfAbsent(node.getParent().getCost(), integer -> new ArrayList<>()).add(k);
                             sj.add(k + "["
                                     + (inSolution ? "shape=\"box\", fillcolor=orange, style=\"rounded,filled\", " : "")
                                     + "label=\"" + state.toString().replaceAll("(\\r|\\n|\\r\\n)+", "\\\\n")
@@ -69,12 +72,11 @@ public class GraphBuilder {
                         }
                 );
                 sj.add(pId + "->" + cId + "["
-                        //+ (inSolution ? "color=\"orange\", " : "")
-                        + "label=\" " + edgesIndex.incrementAndGet() + "#" + node.getGenerationRule().getName() + "\"]");
-
+                        + "headlabel=\"  " + edgesIndex.incrementAndGet() + "#" + node.getGenerationRule().getName() + "  \"]");
             }
 
         });
+        ranks.forEach((rank, nodes) -> sj.add("{rank = same; " + String.join("; ", nodes) + "}"));
         return "digraph graphname " + sj.toString();
     }
 
