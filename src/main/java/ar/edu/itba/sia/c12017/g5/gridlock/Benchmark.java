@@ -18,40 +18,43 @@ import java.nio.file.Paths;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-/**
- * Created by alebian on 02/04/17.
- */
 public class Benchmark {
   private static int NUMBER_OF_RUNS = 100;
 
+  /**
+   * Benchmark main.
+   * @param args none.
+   */
   public static void main(String[] args) {
     initLogging();
     warmUp();
 
     String[] boards = {
-            "src/main/resources/boards/371.json",
-            "src/main/resources/boards/700.json",
-            "src/main/resources/boards/800.json",
-            "src/main/resources/boards/1200.json"
+        "src/main/resources/boards/371.json",
+        "src/main/resources/boards/700.json",
+        "src/main/resources/boards/800.json",
+        "src/main/resources/boards/1200.json"
     };
 
     SearchStrategy[] strategies = {
-            SearchStrategy.BFS,
-            SearchStrategy.DFS,
-            SearchStrategy.GREEDY,
-            SearchStrategy.ASTAR
+        SearchStrategy.BFS,
+        SearchStrategy.DFS,
+        SearchStrategy.GREEDY,
+        SearchStrategy.ASTAR
     };
 
     Stream.of(boards).forEach(board ->
-            Stream.of(strategies).forEach(strategy ->
-                    run(board, strategy)
-            )
+        Stream.of(strategies).forEach(strategy ->
+            run(board, strategy)
+        )
     );
   }
 
+  @SuppressWarnings("checkstyle:variabledeclarationusagedistance")
   private static void run(String stringPath, SearchStrategy strategy) {
     String[] pathSliced = stringPath.split("/");
-    System.out.println(String.format("Starting to solve with %s for %s", strategy, pathSliced[pathSliced.length - 1]));
+    System.out.println(String.format(
+        "Starting to solve with %s for %s", strategy, pathSliced[pathSliced.length - 1]));
     long startTime = System.currentTimeMillis();
     long endTime;
 
@@ -61,7 +64,8 @@ public class Benchmark {
     Board board = BoardParser.parse(boardPath);
     //  Create gps objects
 
-    GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board), strategy);;
+    GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board), strategy);
+    ;
     GPSEngine engine = null;
     GPSNode solution = null;
     for (int i = 0; i < NUMBER_OF_RUNS; i++) {
@@ -77,8 +81,10 @@ public class Benchmark {
     printStats(engine, solution);
     endTime = System.currentTimeMillis();
     double totalTime = (endTime - startTime) / 1000.0;
-    System.out.println(String.format("  * Total duration: %.2f seconds of %d runs", totalTime, NUMBER_OF_RUNS));
-    System.out.println(String.format("  * Each duration: %.2f seconds", totalTime / NUMBER_OF_RUNS));
+    System.out.println(String.format(
+        "  * Total duration: %.2f seconds of %d runs", totalTime, NUMBER_OF_RUNS));
+    System.out.println(String.format(
+        "  * Each duration: %.2f seconds", totalTime / NUMBER_OF_RUNS));
   }
 
   private static void printStats(GPSEngine engine, GPSNode solution) {
@@ -93,16 +99,17 @@ public class Benchmark {
 
   private static void initLogging() {
     Configurator.defaultConfig()
-            .writer(new FileWriter("log.txt"))
-            .level(Level.WARNING)
-            .activate();
+        .writer(new FileWriter("log.txt"))
+        .level(Level.WARNING)
+        .activate();
   }
 
   private static void warmUp() {
     System.out.println("Warming up...");
     Board board = BoardParser.parse(Paths.get("src/main/resources/boards/supereasyboard.json"));
     IntStream.range(0, 1000).forEach(t -> {
-      GPSProblem gridlockProblem = new GridlockProblem(new GridlockState(board), SearchStrategy.DFS);
+      GPSProblem gridlockProblem =
+          new GridlockProblem(new GridlockState(board), SearchStrategy.DFS);
       GPSEngineFactory.build(gridlockProblem, SearchStrategy.DFS).findSolution();
     });
     System.out.println("");

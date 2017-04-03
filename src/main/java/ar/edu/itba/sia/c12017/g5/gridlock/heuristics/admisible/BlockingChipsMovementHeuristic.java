@@ -7,20 +7,19 @@ import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
 import gps.api.GPSState;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 
 public class BlockingChipsMovementHeuristic extends Heuristic {
-   /**
+  /**
    * This heuristic is the next step of the naive one. After finding the blocking chips,
    * we calculate how many movements they would need to unblock the chip if the rest of
    * the board was empty.
    */
-   Board board;
+  Board board;
   Chip mainChip;
-  int hValue;
+  int heuristicValue;
 
   @Override
   public Integer calculate(GPSState state) {
@@ -28,20 +27,20 @@ public class BlockingChipsMovementHeuristic extends Heuristic {
     board = gs.getBoard();
     mainChip = board.getMainChip();
     Set<Integer> blockingChipsSet;
-    hValue = 0;
+    heuristicValue = 0;
 
     if (mainChip.isVertical()) {
       if (board.getExitY() > mainChip.getEndPosition().y) {
         // Main chip needs to move DOWN
         blockingChipsSet = blockingChipsFor(mainChip, board, Movement.DOWN);
-        hValue = blockingChipsSet.size();
+        heuristicValue = blockingChipsSet.size();
         if (blockingChipsSet.size() != 0) {
           blockingChipsSet.forEach(y -> checkBlockers(y, Movement.DOWN));
         }
       } else {
         // Main chip needs to move UP
         blockingChipsSet = blockingChipsFor(mainChip, board, Movement.UP);
-        hValue = blockingChipsSet.size();
+        heuristicValue = blockingChipsSet.size();
         if (blockingChipsSet.size() != 0) {
           blockingChipsSet.forEach(y -> checkBlockers(y, Movement.UP));
         }
@@ -50,24 +49,25 @@ public class BlockingChipsMovementHeuristic extends Heuristic {
       if (board.getExitX() > mainChip.getEndPosition().x) {
         // Main chip needs to move RIGHT
         blockingChipsSet = blockingChipsFor(mainChip, board, Movement.RIGHT);
-        hValue = blockingChipsSet.size();
+        heuristicValue = blockingChipsSet.size();
         if (blockingChipsSet.size() != 0) {
           blockingChipsSet.forEach(y -> checkBlockers(y, Movement.RIGHT));
         }
       } else {
         // Main chip needs to move LEFT
         blockingChipsSet = blockingChipsFor(mainChip, board, Movement.LEFT);
-        hValue = blockingChipsSet.size();
+        heuristicValue = blockingChipsSet.size();
         if (blockingChipsSet.size() != 0) {
           blockingChipsSet.forEach(y -> checkBlockers(y, Movement.LEFT));
         }
       }
     }
-    return hValue;
+    return heuristicValue;
   }
 
   /**
-   * Movement stands for the movement the main chip must do, so obstacles know what way they must move
+   * Movement stands for the movement the main chip must do,
+   * so obstacles know what way they must move.
    */
   private void checkBlockers(Integer symbol, Movement movement) {
     int weight = 0;
@@ -91,7 +91,7 @@ public class BlockingChipsMovementHeuristic extends Heuristic {
       weight = secondEffort.get();
     }
 
-    hValue += weight;
+    heuristicValue += weight;
     return;
   }
 
@@ -110,9 +110,9 @@ public class BlockingChipsMovementHeuristic extends Heuristic {
 
     switch (movement) {
       case UP:
-        if ((board.getRows() -1) - mainChip.getStartPosition().y  >= chipLength) {
+        if ((board.getRows() - 1) - mainChip.getStartPosition().y >= chipLength) {
           int endsAtToFit = mainChip.getStartPosition().y + chipLength;
-          for (int i = chip.getEndPosition().y + 1; i <= endsAtToFit ; i++) {
+          for (int i = chip.getEndPosition().y + 1; i <= endsAtToFit; i++) {
             movesToClear++;
           }
           effort = Optional.of(movesToClear);
@@ -122,7 +122,7 @@ public class BlockingChipsMovementHeuristic extends Heuristic {
       case DOWN:
         if (mainChip.getStartPosition().y - 1 >= chipLength) {
           int startToFit = mainChip.getStartPosition().y - chipLength;
-          for (int i = chip.getStartPosition().y - 1 ; i >= startToFit; i--) {
+          for (int i = chip.getStartPosition().y - 1; i >= startToFit; i--) {
             movesToClear++;
 
           }
@@ -133,7 +133,7 @@ public class BlockingChipsMovementHeuristic extends Heuristic {
       case LEFT:
         if (mainChip.getStartPosition().x - 1 >= chipLength) {
           int startToFit = mainChip.getStartPosition().x - chipLength;
-          for (int i = chip.getStartPosition().x -1; i >= startToFit; i--) {
+          for (int i = chip.getStartPosition().x - 1; i >= startToFit; i--) {
             movesToClear++;
           }
           effort = Optional.of(movesToClear);
@@ -149,7 +149,8 @@ public class BlockingChipsMovementHeuristic extends Heuristic {
           effort = Optional.of(movesToClear);
         }
         break;
-
+      default:
+        throw new IllegalArgumentException("Illegal movement");
     }
     return effort;
   }

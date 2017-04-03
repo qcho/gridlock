@@ -121,7 +121,7 @@ public class NotSoNaiveHeuristic extends Heuristic {
 
     switch (movement) {
       case UP:
-        if ((board.getRows() -1) - mainChip.getStartPosition().y  >= chipLength) {
+        if ((board.getRows() - 1) - mainChip.getStartPosition().y  >= chipLength) {
           int endsAtToFit = mainChip.getStartPosition().y + chipLength;
           for (int i = chip.getEndPosition().y + 1; i <= endsAtToFit ; i++) {
             movesToClear++;
@@ -157,7 +157,7 @@ public class NotSoNaiveHeuristic extends Heuristic {
       case LEFT:
         if (mainChip.getStartPosition().x - 1 >= chipLength) {
           int startToFit = mainChip.getStartPosition().x - chipLength;
-          for (int i = chip.getStartPosition().x -1; i >= startToFit; i--) {
+          for (int i = chip.getStartPosition().x - 1; i >= startToFit; i--) {
             movesToClear++;
             cell = board.getBoard()[i][chip.getStartPosition().y];
             if (cell != Board.EMPTY_SYMBOL) {
