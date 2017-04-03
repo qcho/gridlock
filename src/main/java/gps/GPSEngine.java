@@ -33,7 +33,7 @@ public abstract class GPSEngine {
   public void findSolution() {
     GPSNode rootNode = new GPSNode(problem.getInitState(), 0, null);
     open.add(rootNode);
-    GraphBuilder gb = new GraphBuilder();
+    GraphBuilder gb = new GraphBuilder(this);
     while (open.size() > 0) {
       GPSNode currentNode = open.remove();
       gb.add(currentNode);
