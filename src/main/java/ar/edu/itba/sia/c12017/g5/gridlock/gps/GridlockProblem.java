@@ -71,7 +71,8 @@ public class GridlockProblem implements GPSProblem {
       return 0;
     }
 
-    Set<Integer> heuristicsValues = new TreeSet<>(Comparator.reverseOrder());
+    Set<Integer> heuristicsValues = setForHeuristics();
+
     if (strategy.equals(SearchStrategy.GREEDY)) {
       allHeuristics.forEach(h -> heuristicsValues.add(h.calculate(state)));
     }
@@ -79,5 +80,12 @@ public class GridlockProblem implements GPSProblem {
       admisibleHeuristics.forEach(h -> heuristicsValues.add(h.calculate(state)));
     }
     return heuristicsValues.iterator().next();
+  }
+
+  private Set<Integer> setForHeuristics() {
+    if (strategy.equals(SearchStrategy.GREEDY)) {
+      return new TreeSet<>();
+    }
+    return new TreeSet<>(Comparator.reverseOrder());
   }
 }
