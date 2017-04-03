@@ -42,6 +42,12 @@ dependencies {
     testCompile "org.mockito:mockito-core:1.+"
 }
 
+run {
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
+}
+
 tasks.withType(FindBugs) {
     reports {
         xml.enabled false
@@ -55,6 +61,7 @@ tasks.withType(Checkstyle) {
         html.enabled true
     }
     exclude '**/gps/**'
+    exclude '**/g7/**'
 }
 
 checkstyle {

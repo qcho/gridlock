@@ -1,10 +1,11 @@
 package gps;
 
+import ar.edu.itba.sia.c12017.g5.gridlock.utilities.DummyGraphBuilder;
 import ar.edu.itba.sia.c12017.g5.gridlock.utilities.GraphBuilder;
 import gps.api.GPSProblem;
 import gps.api.GPSRule;
 import gps.api.GPSState;
-import java.nio.file.Paths;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,7 @@ public abstract class GPSEngine {
   private boolean finished;
   private boolean failed;
   private GPSNode solutionNode;
+  private GraphBuilder graphBuilder;
 
   public GPSEngine(GPSProblem problem) {
     this.problem = problem;
@@ -28,25 +30,29 @@ public abstract class GPSEngine {
     this.candidatesCounter = 0;
     this.finished = false;
     this.failed = false;
+    this.graphBuilder = new DummyGraphBuilder();
+  }
+
+  public void setGraphBuilder(GraphBuilder graphBuilder) {
+    this.graphBuilder = graphBuilder;
   }
 
   public void findSolution() {
     GPSNode rootNode = new GPSNode(problem.getInitState(), 0, null);
     open.add(rootNode);
-    GraphBuilder gb = new GraphBuilder(this);
     while (open.size() > 0) {
       GPSNode currentNode = open.remove();
-      gb.add(currentNode);
+      graphBuilder.add(currentNode);
       if (problem.isGoal(currentNode.getState())) {
         finished = true;
         solutionNode = currentNode;
-        gb.writeToFile();
+        graphBuilder.writeToFile();
         return;
       } else {
         explode(currentNode);
       }
     }
-    gb.writeToFile();
+    graphBuilder.writeToFile();
     failed = true;
     finished = true;
   }

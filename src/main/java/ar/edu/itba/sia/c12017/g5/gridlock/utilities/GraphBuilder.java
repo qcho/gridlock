@@ -17,20 +17,16 @@ import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GraphBuilder {
-    final static boolean ENABLED = false;
-
     private List<GPSNode> graph = new ArrayList<>();
     private List<GPSNode> solutionNodes = new ArrayList<>();
     private GPSEngine engine;
 
     public GraphBuilder(GPSEngine engine) {
-        this.engine = engine;
+      this.engine = engine;
     }
 
     public void add(GPSNode node) {
-        if (ENABLED) {
-            graph.add(node);
-        }
+        graph.add(node);
     }
 
     @Override
@@ -84,16 +80,14 @@ public class GraphBuilder {
     }
 
     public void writeToFile() {
-        if (ENABLED) {
-            try {
-                try (BufferedWriter writer = Files.newBufferedWriter(
-                        Paths.get("/tmp/solution_" + engine.getClass().getSimpleName() + ".dot")
-                )) {
-                    writer.write(this.toString());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            try (BufferedWriter writer = Files.newBufferedWriter(
+                    Paths.get("/tmp/solution_" + engine.getClass().getSimpleName() + ".dot")
+            )) {
+                writer.write(this.toString());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
