@@ -75,7 +75,7 @@ public abstract class GPSEngine {
   }
 
   protected void updateBest(GPSNode node) {
-    alreadyVisited.put(node.getState(), node.hashCode());
+    alreadyVisited.put(node.getState(), node.getCost());
   }
 
   public Queue<GPSNode> getOpen() {
