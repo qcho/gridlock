@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GraphBuilder {
-
+    final static boolean ENABLED = false;
 
     private List<GPSNode> graph = new ArrayList<>();
     private List<GPSNode> solutionNodes = new ArrayList<>();
@@ -27,7 +28,9 @@ public class GraphBuilder {
     }
 
     public void add(GPSNode node) {
-        graph.add(node);
+        if (ENABLED) {
+            graph.add(node);
+        }
     }
 
     @Override
@@ -80,14 +83,17 @@ public class GraphBuilder {
         return "digraph graphname " + sj.toString();
     }
 
-    public void writeToFile(Path path) {
-        try {
-            try (BufferedWriter writer = Files.newBufferedWriter(path))
-            {
-                writer.write(this.toString());
+    public void writeToFile() {
+        if (ENABLED) {
+            try {
+                try (BufferedWriter writer = Files.newBufferedWriter(
+                        Paths.get("/tmp/solution_" + engine.getClass().getSimpleName() + ".dot")
+                )) {
+                    writer.write(this.toString());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
