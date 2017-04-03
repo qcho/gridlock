@@ -68,4 +68,13 @@ public class Chip {
   public void setEndPosition(Point end_position) {
     this.end_position = end_position;
   }
+
+  public static String getCharForNumber(int i) {
+    String c = i > 0 && i < 27 ? String.valueOf((char)(i + 96)) : null;
+    switch (c) {
+      case "a": return "X";
+      case "X": return "a";
+      default: return c;
+    }
+  }
 }

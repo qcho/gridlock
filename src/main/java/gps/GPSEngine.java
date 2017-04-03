@@ -1,9 +1,10 @@
 package gps;
 
+import ar.edu.itba.sia.c12017.g5.gridlock.utilities.GraphBuilder;
 import gps.api.GPSProblem;
 import gps.api.GPSRule;
 import gps.api.GPSState;
-
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,16 +33,20 @@ public abstract class GPSEngine {
   public void findSolution() {
     GPSNode rootNode = new GPSNode(problem.getInitState(), 0, null);
     open.add(rootNode);
+    GraphBuilder gb = new GraphBuilder(this);
     while (open.size() > 0) {
       GPSNode currentNode = open.remove();
+      gb.add(currentNode);
       if (problem.isGoal(currentNode.getState())) {
         finished = true;
         solutionNode = currentNode;
+        gb.writeToFile(Paths.get("/Users/cucho/solution.dot"));
         return;
       } else {
         explode(currentNode);
       }
     }
+    gb.writeToFile(Paths.get("/Users/cucho/solution.dot"));
     failed = true;
     finished = true;
   }

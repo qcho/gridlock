@@ -268,14 +268,14 @@ public class Board implements Cloneable {
   private static final String VERTICAL_WALL_PRINT_SYMBOL = "|";
   private static final String HORIZONTAL_WALL_PRINT_SYMBOL = "-";
   private static final String CORNER_WALL_PRINT_SYMBOL = "+";
-  private static final String EXIT_PRINT_SYMBOL = " ";
-  private static final String EMPTY_PRINT_SYMBOL = " ";
+  private static final String EXIT_PRINT_SYMBOL = "";
+  private static final String EMPTY_PRINT_SYMBOL = ".";
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     // Column numbers
-    IntStream.rangeClosed(0, cols).forEach(x -> {
+    IntStream.rangeClosed(1, cols).forEach(x -> {
       sb.append(x < 2 ? " " : x - 2);
       sb.append(" ");
     });
@@ -312,17 +312,13 @@ public class Board implements Cloneable {
             sb.append(MAIN_CHIP_PRINT_SYMBOL);
             break;
           default:
-            sb.append(this.getCharForNumber(board[y][x]));
+            sb.append(Chip.getCharForNumber(board[y][x]));
         }
         sb.append(" ");
       });
       sb.append("\n");
     });
     return sb.toString();
-  }
-
-  private String getCharForNumber(int i) {
-    return i > 0 && i < 27 ? String.valueOf((char)(i + 96)) : null;
   }
 
   private boolean isCorner(int x, int y) {
