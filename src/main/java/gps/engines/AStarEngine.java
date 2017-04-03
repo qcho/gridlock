@@ -7,7 +7,6 @@ import gps.api.GPSProblem;
 import java.util.*;
 
 public class AStarEngine extends GPSEngine {
-    private Comparator<GPSNode> byMinorF;
 
     public AStarEngine(GPSProblem problem) {
         super(problem);
@@ -16,7 +15,7 @@ public class AStarEngine extends GPSEngine {
 
     @Override
     protected void explode(GPSNode node) {
-        if (alreadyVisited.containsKey(node.getState())) {
+        if (!isBest(node.getState(), node.getCost())) {
             return;
         }
         addCandidates(node, open);

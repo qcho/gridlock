@@ -18,7 +18,7 @@ public class DFSEngine extends GPSEngine {
 
   @Override
   protected void explode(GPSNode node) {
-    if (alreadyVisited.containsKey(node.getState())) {
+    if (!isBest(node.getState(), node.getCost())) {
       return;
     }
     List<GPSNode> newCandidates = new ArrayList<>();

@@ -30,14 +30,14 @@ public class Main {
   public static void main(String[] args) {
     initLogging();
     warmUp();
-    String board = "src/main/resources/boards/easyboard.json";
+    String board = "src/main/resources/boards/700.json";
   
     // Which strategies to run
     SearchStrategy[] strategies = {
         SearchStrategy.BFS,
         SearchStrategy.DFS,
-//        SearchStrategy.GREEDY,
-//        SearchStrategy.ASTAR,
+        SearchStrategy.GREEDY,
+        SearchStrategy.ASTAR,
         SearchStrategy.IDDFS
     };
 
@@ -48,7 +48,7 @@ public class Main {
 
   private static void initLogging() {
     Configurator.defaultConfig()
-        .writer(new FileWriter("log2.txt"))
+        .writer(new FileWriter("log.txt"))
         .level(Level.DEBUG)
         .activate();
   }
@@ -85,7 +85,8 @@ public class Main {
         printStats(engine, node);
       }
     } else {
-      System.out.println("Could not find a solution, tried " + engine.getExplosionCounter() + " nodes");
+      System.out.println("Could not find a solution, tried "
+          + engine.getExplosionCounter() + " nodes");
     }
   }
 

@@ -4,6 +4,7 @@ import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
 import ar.edu.itba.sia.c12017.g5.gridlock.utilities.BoardParser;
+import gps.SearchStrategy;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -70,7 +71,7 @@ public class BoardTest {
 
     GridlockState state = new GridlockState(easyBoardWon);
     GridlockState state2 = new GridlockState(verticalMovementBoard);
-    GridlockProblem problem = new GridlockProblem(state);
+    GridlockProblem problem = new GridlockProblem(state, SearchStrategy.BFS);
     assertTrue(problem.isGoal(state));
     assertTrue(problem.isGoal(state2));
   }
