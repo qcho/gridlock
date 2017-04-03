@@ -15,7 +15,7 @@ public class GPSEngineFactory {
       case DFS:
         return new DFSEngine(problem);
       case IDDFS:
-        return new IterativeDeepeningDFSEngine(problem, 10);
+        return new IterativeDeepeningDFSEngine(problem, 1);
       case ASTAR:
         return new AStarEngine(problem);
       case GREEDY:
