@@ -41,7 +41,7 @@ public class GridlockProblem implements GPSProblem {
   private List<GPSRule> calculateRules() {
     List<Chip> chips = initState.getBoard().getChips();
     List<GPSRule> rules = new ArrayList<>();
-    List<Movement> movements = Arrays.asList(Movement.values());
+    List<Movement> movements = getMovements();
     chips.forEach(chip ->
       movements.forEach(movement ->
         rules.add(new GridlockRule(chip, movement))
@@ -80,6 +80,10 @@ public class GridlockProblem implements GPSProblem {
       admisibleHeuristics.forEach(h -> heuristicsValues.add(h.calculate(state)));
     }
     return heuristicsValues.iterator().next();
+  }
+
+  protected List<Movement> getMovements() {
+    return Arrays.asList(Movement.values());
   }
 
   private Set<Integer> setForHeuristics() {
