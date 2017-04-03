@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public class NotSoNaiveHeuristic extends Heuristic {
+public class ThirdHeuristic extends Heuristic {
 
   Board board;
   Chip mainChip;
