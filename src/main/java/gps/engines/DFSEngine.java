@@ -23,6 +23,8 @@ public class DFSEngine extends GPSEngine {
     }
     List<GPSNode> newCandidates = new ArrayList<>();
     addCandidates(node, newCandidates);
-    open.addAll(newCandidates);
+    for (GPSNode newNode : newCandidates) {
+      ((LinkedList<GPSNode>) open).addFirst(newNode);
+    }
   }
 }
