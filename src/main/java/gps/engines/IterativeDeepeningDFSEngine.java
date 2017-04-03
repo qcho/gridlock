@@ -15,7 +15,7 @@ public class IterativeDeepeningDFSEngine extends DFSEngine {
 
   @Override
   protected void explode(GPSNode node) {
-    if (node.getCost() <= level) {
+    if (node.getCost() < level) {
       super.explode(node);
     }
     if (open.isEmpty()) {
