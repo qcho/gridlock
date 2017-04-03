@@ -30,7 +30,6 @@ public class NotSoNaiveHeuristic extends Heuristic {
     mainChip = board.getMainChip();
     Set<Integer> blockingChipsSet;
     hValue = 0;
-  //  System.out.println(board.toString());
 
     if (mainChip.isVertical()) {
       if (board.getExitY() > mainChip.getEndPosition().y) {
@@ -65,7 +64,6 @@ public class NotSoNaiveHeuristic extends Heuristic {
         }
       }
     }
-   // System.out.println("hValue = " + hValue);
     return hValue;
   }
 
