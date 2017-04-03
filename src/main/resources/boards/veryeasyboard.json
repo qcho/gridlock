@@ -24,19 +24,19 @@
     {
       "main": false,
       "start_position": {
-        "x": 6,
-        "y": 1
+        "x": 5,
+        "y": 2
       },
       "end_position": {
-        "x": 6,
-        "y": 3
+        "x": 5,
+        "y": 4
       }
     },
     {
       "main": false,
       "start_position": {
-        "x": 4,
-        "y": 2
+        "x": 2,
+        "y": 4
       },
       "end_position": {
         "x": 4,
