@@ -9,9 +9,6 @@ import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by alebian on 27/03/17.
- */
 public abstract class Heuristic {
   public abstract Integer calculate(GPSState state);
 

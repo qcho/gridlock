@@ -5,9 +5,6 @@ import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.Heuristic;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import gps.api.GPSState;
 
-/**
- * Created by alebian on 29/03/17.
- */
 public class NonEmptySpacesTop extends Heuristic {
   /**
    * This heuristic checks how many empty spaces are in the top rectangle of the board.
