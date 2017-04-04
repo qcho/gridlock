@@ -1,7 +1,6 @@
 package ar.edu.itba.sia.c12017.g5.gridlock.heuristics.admisible;
 
 import ar.edu.itba.sia.c12017.g5.gridlock.gps.GridlockState;
-import ar.edu.itba.sia.c12017.g5.gridlock.heuristics.Heuristic;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Board;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Chip;
 import ar.edu.itba.sia.c12017.g5.gridlock.models.Movement;
@@ -11,7 +10,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-public class ThirdHeuristic extends Heuristic {
+public class ThirdHeuristic extends SecondHeuristic {
 
   Board board;
   Chip mainChip;
