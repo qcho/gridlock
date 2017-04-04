@@ -9,18 +9,23 @@ import java.util.Map;
 
 public class ProgramArguments {
 
-  private final static String LEVEL_KEY = "level";
-  private final static String STRATEGY_KEY = "strategy";
-  private static final String SHOW_SOLUTION = "showsolution";
-  private static final String SHOW_STATS = "showstats";
-  private static final String PLOT = "plot";
-
   public final String boardPath;
   public final SearchStrategy strategy;
   public final boolean showSolution;
   public final boolean showStats;
   public final boolean plot;
 
+  private static final String PLOT = "plot";
+  private static final String LEVEL_KEY = "level";
+  private static final String SHOW_STATS = "showstats";
+  private static final String STRATEGY_KEY = "strategy";
+  private static final String SHOW_SOLUTION = "showsolution";
+
+  /**
+   * Class that parses program arguments.
+   * @param args argument array.
+   * @return an instance of ProgramArguments.
+   */
   public static ProgramArguments build(String[] args) {
     List<String> arguments = Arrays.asList(args);
     Map<String, String> argMap = new HashMap<>();
@@ -63,12 +68,12 @@ public class ProgramArguments {
 
   @Override
   public String toString() {
-    return "ProgramArguments{" +
-        "boardPath='" + boardPath + '\'' +
-        ", strategy=" + strategy +
-        ", showSolution=" + showSolution +
-        ", showStats=" + showStats +
-        ", plot=" + plot +
-        '}';
+    return "ProgramArguments{"
+        + "boardPath='" + boardPath + '\''
+        + ", strategy=" + strategy
+        + ", showSolution=" + showSolution
+        + ", showStats=" + showStats
+        + ", plot=" + plot
+        + '}';
   }
 }
