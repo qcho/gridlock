@@ -16,7 +16,6 @@ import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GraphBuilder {
-  static final boolean ENABLED = false;
 
   private List<GPSNode> graph = new ArrayList<>();
   private List<GPSNode> solutionNodes = new ArrayList<>();
@@ -31,9 +30,7 @@ public class GraphBuilder {
    * @param node node
    */
   public void add(GPSNode node) {
-    if (ENABLED) {
-      graph.add(node);
-    }
+    graph.add(node);
   }
 
   @Override
@@ -103,16 +100,14 @@ public class GraphBuilder {
    * Dump dot file.
    */
   public void writeToFile() {
-    if (ENABLED) {
-      try {
-        try (BufferedWriter writer = Files.newBufferedWriter(
-            Paths.get("/tmp/solution_" + engine.getClass().getSimpleName() + ".dot")
-        )) {
-          writer.write(this.toString());
-        }
-      } catch (IOException exception) {
-        exception.printStackTrace();
+    try {
+      try (BufferedWriter writer = Files.newBufferedWriter(
+          Paths.get("/tmp/solution_" + engine.getClass().getSimpleName() + ".dot")
+      )) {
+        writer.write(this.toString());
       }
+    } catch (IOException exception) {
+      exception.printStackTrace();
     }
   }
 }

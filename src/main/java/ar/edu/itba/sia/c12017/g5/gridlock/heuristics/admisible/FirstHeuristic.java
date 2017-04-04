@@ -9,9 +9,6 @@ import gps.api.GPSState;
 
 import java.awt.Point;
 
-/**
- * Created by alebian on 27/03/17.
- */
 public class FirstHeuristic extends Heuristic {
   /**
    * Naive heuristic, it only checks how many blocks are between the main chip and exit.
