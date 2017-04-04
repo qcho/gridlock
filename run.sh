@@ -51,6 +51,7 @@ do
             echo "Unknown option $1"
             ;;
     esac
+    shift
 done
 
 ./gradlew -q run -PappArgs="['strategy=$strategy','level=$level','showstats=$showstats','showsolution=$showsolution','plot=$plot']"
