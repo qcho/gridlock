@@ -27,6 +27,9 @@ public class ProgramArguments {
    * @return an instance of ProgramArguments.
    */
   public static ProgramArguments build(String[] args) {
+    if (args == null) {
+      throw new IllegalArgumentException("Missing all arguments.");
+    }
     List<String> arguments = Arrays.asList(args);
     Map<String, String> argMap = new HashMap<>();
     arguments.forEach(arg -> {
@@ -36,16 +39,21 @@ public class ProgramArguments {
       }
       argMap.put(keyVal[0].toLowerCase(), keyVal[1].toLowerCase());
     });
-    return new ProgramArguments(
+    ProgramArguments out = new ProgramArguments(
         argMap.get(LEVEL_KEY),
         strategyFrom(argMap.get(STRATEGY_KEY)),
         Boolean.valueOf(argMap.getOrDefault(SHOW_SOLUTION, "true")),
         Boolean.valueOf(argMap.getOrDefault(SHOW_STATS, "true")),
         Boolean.valueOf(argMap.getOrDefault(PLOT, "false"))
     );
+    out.assertValid();
+    return out;
   }
 
   private static SearchStrategy strategyFrom(String strategy) {
+    if (strategy == null) {
+      throw new IllegalArgumentException("Strategy required");
+    }
     switch (strategy) {
       case "iddfs": return SearchStrategy.IDDFS;
       case "bfs": return SearchStrategy.BFS;
@@ -64,6 +72,12 @@ public class ProgramArguments {
     this.showSolution = showSolution;
     this.showStats = showStats;
     this.plot = plot;
+  }
+
+  public void assertValid() {
+    if (this.boardPath == null) {
+      throw new IllegalArgumentException("Level path is required: level=PATH");
+    }
   }
 
   @Override
