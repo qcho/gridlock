@@ -1,5 +1,8 @@
 # Gridlock
 
+## Video
+Our group's presentation video is available here: [https://www.youtube.com/watch?v=uS99tpSD3Vg](https://www.youtube.com/watch?v=uS99tpSD3Vg)
+
 ## Running the project
 There's a script that handles running the GPS.
 It supports the following parameters:
