@@ -22,6 +22,6 @@ Example usage:
     --level src/main/resources/boards/800.json \
     --strategy IDDFS
 ./run.sh \
-    -- level src/main/resources/boards/700.json \
+    --level src/main/resources/boards/700.json \
     --strategy ASTAR
 ```
