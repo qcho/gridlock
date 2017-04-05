@@ -20,6 +20,8 @@ Example usage:
 ```bash
 ./run.sh \
     --level src/main/resources/boards/800.json \
-    --strategy IDDFS \
-    --hidestats
+    --strategy IDDFS
+./run.sh \
+    -- level src/main/resources/boards/700.json \
+    --strategy ASTAR
 ```
