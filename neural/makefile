@@ -1,16 +1,17 @@
 .PHONY: install uninstall run upgrade test
+envname := venv
 install:
-	virtualenv env --python=python3
-	env/bin/pip install -r requirements.txt
+	virtualenv $(envname) --python=python3
+	$(envname)/bin/pip install -r requirements.txt
 uninstall:
-	rm -r env
+	rm -r $(envname)
 upgrade: requirements.txt
-	env/bin/pip install --upgrade
+	$(envname)/bin/pip install --upgrade
 	rm requirements.txt
-	env/bin/pip freeze > requirements.txt
+	$(envname)/bin/pip freeze > requirements.txt
 run:
-	env/bin/python src/main.py
+	$(envname)/bin/python src/main.py
 test:
-	env/bin/pytest src/ising.py
+	$(envname)/bin/pytest src/ising.py
 doc:
 	pdflatex informe/informe.tex
