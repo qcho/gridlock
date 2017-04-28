@@ -1,4 +1,4 @@
-group 'ar.edu.itba.sia.c12017.g5.preterrain'
+group 'ar.edu.itba.sia.c12017.g5.preneural'
 version '0.0.1'
 
 apply plugin: 'java'
@@ -8,7 +8,7 @@ apply plugin: 'jacoco'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 
-mainClassName = "ar.edu.itba.sia.c12017.g5.preterrain.Main"
+mainClassName = "ar.edu.itba.sia.c12017.g5.preneural.Main"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
