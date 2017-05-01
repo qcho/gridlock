@@ -1,8 +1,8 @@
 .PHONY: install uninstall run upgrade test
 envname := env
+UNAME_S := $(shell uname -s)
 install:
-	virtualenv $(envname) --python=python3
-	$(envname)/bin/pip install -r requirements.txt
+	@if [ "$(UNAME_S)" = "Darwin" ]; then python3 -m venv $(envname); else virtualenv $(envname) --python=python3; fi
 uninstall:
 	rm -r $(envname)
 upgrade: requirements.txt
