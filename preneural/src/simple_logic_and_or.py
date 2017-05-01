@@ -1,21 +1,26 @@
-from typing import List
+from typing import List, Callable
 from gen_bin_dataset import gen_bin_array
 from perceptron import Perceptron
 from numpy import asarray
 
 
-def compute_result(data: List[int], join_fn) -> int:
+def compute_result(data: List[int], join_fn: Callable[[int, int], int]) -> int:
+    """
+    This method generates a class for the given binary
+    number so that we don't have to store the whole number
+    """
     out = data[0]
     for bit in data[1:]:
         out = join_fn(out, bit)
     return out
 
 
-def or_join(x, y):
+def or_join(x: int, y: int) -> int:
+    """"Lambda function to or two bits"""
     return x | y
 
 
-def and_join(x, y):
+def and_join(x: int, y: int) -> int:
     return x & y
 
 if __name__ == '__main__':
