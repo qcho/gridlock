@@ -1,5 +1,5 @@
 .PHONY: install uninstall run upgrade test
-envname := venv
+envname := env
 install:
 	virtualenv $(envname) --python=python3
 	$(envname)/bin/pip install -r requirements.txt
