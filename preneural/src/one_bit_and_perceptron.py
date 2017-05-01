@@ -1,28 +1,21 @@
-from random import choice
-from numpy import array, dot, random
+from numpy import array
+from perceptron import Perceptron
 
 if __name__ == '__main__':
-    unit_step = lambda x: 0 if x < 0 else 1
-
     training_data = [
-        (array([0, 0, 1]), 0),
-        (array([0, 1, 1]), 1),
-        (array([1, 0, 1]), 1),
-        (array([1, 1, 1]), 1),
+        (array([0, 0]), 0),
+        (array([0, 1]), 0),
+        (array([1, 0]), 0),
+        (array([1, 1]), 1),
     ]
 
-    w = random.rand(3)
-    errors = []
-    eta = 0.2
-    n = 100
-
-    for i in range(n):
-        x, expected = choice(training_data)
-        result = dot(w, x)
-        error = expected - unit_step(result)
-        errors.append(error)
-        w += eta * error * x
-
+    data, expected = zip(*training_data)
+    # To make it easier to read, we use 0 as the negative class to better show those values that map to 0
+    perceptron = Perceptron(negative_class=0)
+    perceptron.train(array(data), array(expected))
+    print("Errors when training:", perceptron.errors_)
+    print(perceptron.weights_)
     for x, _ in training_data:
-        result = dot(x, w)
-        print("{}: {} -> {}".format(x[:2], result, unit_step(result)))
+        result = perceptron.predict(x)
+        print("{}: {} -> {} (log: {})".format(x, perceptron.net_input(x), perceptron.predict(x),
+                                              perceptron.logistic_activation(x)))
