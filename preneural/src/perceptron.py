@@ -37,12 +37,13 @@ class Perceptron:
             self.errors_.append(errors)
         return self
 
-    def _logistic(self, z):
+    @staticmethod
+    def _logistic(z):
         return 1.0 / (1.0 + np.exp(-z))
 
     def logistic_activation(self, data):
         z = self.net_input(data)
-        return self._logistic(z)
+        return Perceptron._logistic(z)
 
     def net_input(self, data):
         """Calculates the network input"""
