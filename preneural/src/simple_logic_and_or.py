@@ -16,8 +16,16 @@ def compute_result(data: List[int], join_fn: Callable[[int, int], int]) -> int:
 
 
 def or_join(x: int, y: int) -> int:
-    """"Lambda function to or two bits"""
     return x | y
+
+
+def xor_join(x: int, y: int) -> int:
+    """
+    XOR joining of two numbers.
+    Single layer networks can't predict this join since the dataset isn't
+    separable in 2 classes but 3.
+    """
+    return x ^ y
 
 
 def and_join(x: int, y: int) -> int:
