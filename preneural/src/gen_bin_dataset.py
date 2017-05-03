@@ -1,4 +1,7 @@
-def gen_bin_array(max_length=2):
+from typing import List
+
+
+def gen_bin_array(max_length=2) -> List[List[int]]:
     if max_length < 2:
         print("Minimum length is 2")
         exit(1)
