@@ -19,5 +19,9 @@ if __name__ == '__main__':
     # TODO: This network configuration is incorrect, find out why
     input_layer_length = len(dataset[0])
     output_layer_length = 1  # True/False
-    network = Network([input_layer_length, 2, output_layer_length], HyperbolicTangent(), eta=0.2)
-    network.train(dataset, results)
+    network = Network([
+        (input_layer_length, HyperbolicTangent()),
+        (2, HyperbolicTangent()),
+        (output_layer_length, HyperbolicTangent())], eta=0.2)
+    network.print_structure()
+    # network.train(dataset, results)
