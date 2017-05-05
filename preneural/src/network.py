@@ -31,11 +31,24 @@ class Neuron:
     def __init__(self, n_inputs):
         self.weights = np.zeros(1 + n_inputs)
 
+    def process(self, neuron_input):
+        return np.dot(neuron_input, self.weights[1:]) + self.weights[0]
+
 
 class NetworkLayer:
     def __init__(self, n_neurons: int, n_inputs: int, transference_function: TransferenceFunction):
         self.neurons = [Neuron(n_inputs) for _ in range(n_neurons)]
-        self.transference_function = transference_function
+        self.transference_fn = transference_function
+
+    def process(self, neuron_input):
+        V = []
+        H = []
+        for neuron in self.neurons:
+            h_i = neuron.process(neuron_input)
+            v_i = self.transference_fn.apply(h_i)
+            H.append(h_i)
+            V.append(v_i)
+        return V, H
 
 
 # TODO: Add momentum (Clase 5, 25/71)
@@ -60,24 +73,28 @@ class Network:
         return V[-1]  # TODO: Should this be processed? Since this won't return a real value
 
     def _feed_forward(self, x_i):
-        V = [x_i]
+        V = []
         H = []
-        for m in range(1, self.n_layers):
-            for i in range(len(V[-1])):  # Always use the amount of neurons of the last layer
-                H.append(_net_input(self.layer_weights[m], V[m - 1]))
-                V.append(self.transference_fn.apply(H[-1]))  # Getting last element from H
+        layer_input = x_i
+        for layer in self.layers:
+            V_m, H_m = layer.process(layer_input)
+            V.append(V_m)
+            H.append(H_m)
+            layer_input = V_m
         return V, H
 
     def _back_propagate(self, V, H, expected):
         # TODO: Error statistics
-        deltas = [self.transference_fn.apply_inverse(H[-1]) * (expected - V[-1])]
-        # Since python is 0-based, we shift by 1 upper and lower bounds
-        for m in range(self.n_layers - 1, 0, -1):
-            # deltas[0] is always "delta_m" since it is the current delta
-            g_inverse = self.transference_fn.apply_inverse(H[m - 1])
-            delta = g_inverse * np.dot(self.layer_weights[m][1:], deltas[0])
-            deltas.insert(0, delta)
-        for i in range(self.n_layers):
-            delta_w = self.eta * deltas[i]
-            self.layer_weights[i][1:] += self.eta * delta_w * V[i]
-            self.layer_weights[i][0] += delta_w
+        out_deltas = self._get_output_deltas(V, H, expected)
+        deltas = [out_deltas]
+        for m in range(len(self.layers), 1, -1):
+            pass  # TODO
+
+    def _get_output_deltas(self, V, H, expected):
+        out_layer = self.layers[-1]
+        out_deltas = []
+        out_h = H[-1]
+        out_v = V[-1]
+        for i, _ in enumerate(out_layer.neurons):
+            out_deltas.append(out_layer.transference_fn.apply_inverse(out_h[i]) * (expected[i] - out_v[i]))
+        return out_deltas
