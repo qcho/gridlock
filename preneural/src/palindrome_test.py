@@ -25,4 +25,5 @@ if __name__ == '__main__':
         (3, HyperbolicTangent()),
         (4, HyperbolicTangent()),
         (output_layer_length, HyperbolicTangent())], eta=0.2)
+    network.print_structure()
     network.train(dataset, results, 1)

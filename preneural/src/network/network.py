@@ -1,6 +1,7 @@
 from typing import List, Tuple
 import numpy as np
 
+from .network_layer import NetworkLayer
 from transference.transference_function import TransferenceFunction
 
 
@@ -25,36 +26,6 @@ def _init_layers(layer_configuration: List[Tuple[int, TransferenceFunction]]):
         last_layer_n_neurons = len(layers[-1].neurons)
         layers.append(NetworkLayer(n_neurons, last_layer_n_neurons, transference_function))
     return layers
-
-
-class Neuron:
-    def __init__(self, n_inputs):
-        self.weights = np.zeros(1 + n_inputs)
-
-    def process(self, neuron_input):
-        return np.dot(neuron_input, self.weights[1:]) + self.weights[0]
-
-    def __str__(self):
-        return "{}-input neuron"
-
-
-class NetworkLayer:
-    def __init__(self, n_neurons: int, n_inputs: int, transference_function: TransferenceFunction):
-        self.neurons = [Neuron(n_inputs) for _ in range(n_neurons)]
-        self.transference_fn = transference_function
-
-    def process(self, neuron_input):
-        V = []
-        H = []
-        for neuron in self.neurons:
-            h_i = neuron.process(neuron_input)
-            v_i = self.transference_fn.apply(h_i)
-            H.append(h_i)
-            V.append(v_i)
-        return V, H
-
-    def __str__(self):
-        return "{}-neuron layer".format(len(self.neurons))
 
 
 # TODO: Add momentum (Clase 5, 25/71)
@@ -91,13 +62,12 @@ class Network:
 
     def _back_propagate(self, V, H, expected):
         # TODO: Error statistics
-        out_deltas = self._get_output_deltas(V, H, expected)
-        deltas = [out_deltas]
-        reversed_layers = self.layers[:0:-1]  # Listing all layers reversed except the first one: M...1
-        # TODO: reversed_layers won't allow me to target the first layer.
-        # TODO(cont): Should be fixable by referencing the first layer directly with self.layers[0]
-        for i, layer in enumerate(reversed_layers):
-            print("i:{} layer:{}".format(i, layer))
+        deltas_m = self._get_output_deltas(V, H, expected)
+        self.layers[-1].set_deltas(deltas_m)
+        deltas = [deltas_m]
+        for m in range(len(self.layers) - 1, 0, -1):
+            print(self.layers[m])
+            print(H[m - 1])
         print()
 
     def _get_output_deltas(self, V, H, expected):
