@@ -15,7 +15,7 @@ def xor_output(x: List[int]):
 
 if __name__ == '__main__':
     dataset = np.asarray(gen_bin_array(2))
-    results = np.asarray([xor_output(x) for x in dataset])
+    results = np.asarray([[xor_output(x)] for x in dataset])  # Output needs to be an array
     # TODO: This network configuration is incorrect, find out why
     input_layer_length = len(dataset[0])
     output_layer_length = 1  # True/False
