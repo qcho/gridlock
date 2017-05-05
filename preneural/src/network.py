@@ -34,6 +34,9 @@ class Neuron:
     def process(self, neuron_input):
         return np.dot(neuron_input, self.weights[1:]) + self.weights[0]
 
+    def __str__(self):
+        return "{}-input neuron"
+
 
 class NetworkLayer:
     def __init__(self, n_neurons: int, n_inputs: int, transference_function: TransferenceFunction):
@@ -49,6 +52,9 @@ class NetworkLayer:
             H.append(h_i)
             V.append(v_i)
         return V, H
+
+    def __str__(self):
+        return "{}-neuron layer".format(len(self.neurons))
 
 
 # TODO: Add momentum (Clase 5, 25/71)
@@ -87,8 +93,12 @@ class Network:
         # TODO: Error statistics
         out_deltas = self._get_output_deltas(V, H, expected)
         deltas = [out_deltas]
-        for m in range(len(self.layers), 1, -1):
-            pass  # TODO
+        reversed_layers = self.layers[:0:-1]  # Listing all layers reversed except the first one: M...1
+        # TODO: reversed_layers won't allow me to target the first layer.
+        # TODO(cont): Should be fixable by referencing the first layer directly with self.layers[0]
+        for i, layer in enumerate(reversed_layers):
+            print("i:{} layer:{}".format(i, layer))
+        print()
 
     def _get_output_deltas(self, V, H, expected):
         out_layer = self.layers[-1]
