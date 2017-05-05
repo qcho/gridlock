@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 import numpy as np
 
 from transference.transference_function import TransferenceFunction
@@ -7,7 +7,8 @@ from transference.transference_function import TransferenceFunction
 def _net_input(weights, data):
     return np.dot(weights[1:], data) + weights[0]
 
-def _init_layers(layer_configuration: List[(int, TransferenceFunction)]):
+
+def _init_layers(layer_configuration: List[Tuple[int, TransferenceFunction]]):
     """
     Initialize all the network layers (input, hidden (if applicable) and output.
     We need to initialize the input layer separately from the rest since it behaves a bit differently
@@ -40,7 +41,7 @@ class NetworkLayer:
 # TODO: Add momentum (Clase 5, 25/71)
 # TODO: Add some way of initializing a trained network with weights from storage (saving/loading networks)
 class Network:
-    def __init__(self, layer_configuration: List[(int, TransferenceFunction)], eta: float):
+    def __init__(self, layer_configuration: List[Tuple[int, TransferenceFunction]], eta: float):
         self.eta = eta
         self.layers = _init_layers(layer_configuration)
 
