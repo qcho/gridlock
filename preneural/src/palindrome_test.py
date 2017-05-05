@@ -22,6 +22,7 @@ if __name__ == '__main__':
     network = Network([
         (input_layer_length, HyperbolicTangent()),
         (2, HyperbolicTangent()),
+        (3, HyperbolicTangent()),
+        (4, HyperbolicTangent()),
         (output_layer_length, HyperbolicTangent())], eta=0.2)
-    network.print_structure()
-    # network.train(dataset, results)
+    network.train(dataset, results, 1)
