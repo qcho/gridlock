@@ -9,5 +9,5 @@ class TransferenceFunction:
         raise NotImplementedError("Extend this class")
 
     @abstractmethod
-    def apply_inverse(self, value):
+    def apply_derived(self, value):
         raise NotImplementedError("Extend this class")
