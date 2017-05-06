@@ -2,7 +2,7 @@
 envname := env
 UNAME_S := $(shell uname -s)
 install:
-	@if [ "$(UNAME_S)" = "Darwin" ]; then python3 -m venv $(envname); else virtualenv $(envname) --python=python3; fi
+	python3 -m venv $(envname)
 	$(envname)/bin/pip install -r requirements.txt
 uninstall:
 	rm -r $(envname)
