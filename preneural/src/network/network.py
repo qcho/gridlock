@@ -38,47 +38,45 @@ class Network:
     def train(self, data, expected_output, iterations: int = 1000):
         for _ in range(iterations):
             for x_i, expected_i in zip(data, expected_output):
-                V, H = self._feed_forward(x_i)
-                self._back_propagate(V, H, expected_i)
+                self._feed_forward(x_i)
+                self._back_propagate(x_i, expected_i)
 
     def predict(self, value):
-        V, _ = self._feed_forward(value)
-        return V[-1]  # TODO: Should this be processed? Since this won't return a real value
+        return self._feed_forward(value)
 
     def _feed_forward(self, x_i):
-        V = []
-        H = []
-        layer_input = x_i
+        V_m = x_i
         for layer in self.layers:
-            V_m, H_m = layer.process(layer_input)
-            V.append(V_m)
-            H.append(H_m)
-            layer_input = V_m
-        return V, H
+            V_m = layer.process(V_m)
+        return V_m
 
-    def _back_propagate(self, V, H, expected):
+    def _back_propagate(self, x_i, expected):
         # TODO: Error statistics
-        self._gen_deltas(V, H, expected)
-        for m in range(len(self.layers) - 1, 0, -1):
-            self.layers[m].update_weights(self.eta, V[m - 1])
+        self._update_deltas(expected)
+        self._update_errors(x_i)
 
-    def _gen_deltas(self, V, H, expected):
-        self.layers[-1].set_deltas(self._get_exit_deltas(V, H, expected))
-        for m in range(len(self.layers) - 1, 0, -1):
-            deltas_m_1 = []
-            for i, neuron_m_1 in enumerate(self.layers[m - 1].neurons):
-                g_derived = self.layers[m - 1].transference_fn.apply_derived(H[m - 1][i])
-                sum_delta_i = 0
-                for j, neuron_m in enumerate(self.layers[m].neurons):
-                    sum_delta_i += neuron_m.weights[i] * self.layers[m].deltas[j]
-                deltas_m_1.append(g_derived * sum_delta_i)
-            self.layers[m - 1].set_deltas(deltas_m_1)
+    def _update_deltas(self, expected):
+        for i in reversed(range(len(self.layers))):
+            layer = self.layers[i]
+            errors = list()
+            if i != len(self.layers) - 1:  # Middle layers
+                for j in range(len(layer.neurons)):
+                    error = 0.0
+                    for neuron in self.layers[i + 1].neurons:
+                        error += (neuron.weights[j] * neuron.delta)
+                    errors.append(error)
+            else:  # Output layer
+                for j in range(len(layer.neurons)):
+                    neuron = layer.neurons[j]
+                    errors.append(expected[j] - neuron.output)
+            for j in range(len(layer.neurons)):
+                neuron = layer.neurons[j]
+                neuron.delta = errors[j] * layer.transference_fn.apply_derived(neuron.output)
 
-    def _get_exit_deltas(self, V, H, expected):
-        out_layer = self.layers[-1]
-        out_deltas = []
-        out_h = H[-1]
-        out_v = V[-1]
-        for i, _ in enumerate(out_layer.neurons):
-            out_deltas.append(out_layer.transference_fn.apply_derived(out_h[i]) * (expected[i] - out_v[i]))
-        return out_deltas
+    def _update_errors(self, data):
+        for i in range(len(self.layers)):
+            inputs = data if i == 0 else [neuron.output for neuron in self.layers[i - 1].neurons]
+            for neuron in self.layers[i].neurons:
+                for j in range(len(inputs)):
+                    neuron.weights[j] += self.eta * neuron.delta * inputs[j]
+                neuron.bias += self.eta * neuron.delta
