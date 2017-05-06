@@ -18,12 +18,11 @@ if __name__ == '__main__':
     results = np.asarray([[xor_output(x)] for x in dataset])  # Output needs to be an array
     # TODO: This network configuration is incorrect, find out why
     input_layer_length = len(dataset[0])
-    output_layer_length = 1  # True/False
+    output_layer_length = 1
     network = Network([
         (input_layer_length, HyperbolicTangent()),
         (2, HyperbolicTangent()),
         (3, HyperbolicTangent()),
-        (4, HyperbolicTangent()),
         (output_layer_length, HyperbolicTangent())], eta=0.2)
     network.print_structure()
     network.train(dataset, results, 1)
