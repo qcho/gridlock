@@ -1,11 +1,10 @@
-import numpy as np
 from typing import List
+
+import numpy as np
 
 from gen_bin_dataset import gen_bin_array
 from network import Network
 from transference.hyperbolic_tangent import HyperbolicTangent
-from transference.identity_function import IdentityFunction
-from transference.logistic_function import LogisticFunction
 
 
 def is_palindrome(x: List[int]):
