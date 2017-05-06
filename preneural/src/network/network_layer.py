@@ -7,6 +7,7 @@ class Neuron:
         self.weights = np.zeros(1 + n_inputs)
 
     def process(self, neuron_input):
+        # self.weights[0] is bias
         return np.dot(neuron_input, self.weights[1:]) + self.weights[0]
 
     def __str__(self):
