@@ -24,8 +24,7 @@ class NetworkLayer:
     def process(self, neuron_input):
         V = []
         for neuron in self.neurons:
-            h_i = neuron.process(neuron_input)
-            v_i = self.transference_fn.apply(h_i)
+            v_i = self.transference_fn.apply(neuron.process(neuron_input))
             neuron.output = v_i
             V.append(v_i)
         return V

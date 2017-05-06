@@ -16,7 +16,6 @@ def _init_layers(layer_configuration: List[Tuple[int, TransferenceFunction]]):
     """
     n_inputs, input_transference_function = layer_configuration[0]
     layers = [NetworkLayer(n_inputs, n_inputs, input_transference_function)]  # Input layer
-    # layers[0].set_as_input()
     for i in range(1, len(layer_configuration)):  # Hidden and output layers
         n_neurons, transference_function = layer_configuration[i]
         last_layer_n_neurons = len(layers[-1].neurons)
@@ -59,11 +58,11 @@ class Network:
         for i in reversed(range(len(self.layers))):
             layer = self.layers[i]
             errors = list()
-            if i != len(self.layers) - 1:  # Middle layers
+            if i != len(self.layers) - 1:  # Hidden layers
                 for j in range(len(layer.neurons)):
                     error = 0.0
                     for neuron in self.layers[i + 1].neurons:
-                        error += (neuron.weights[j] * neuron.delta)
+                        error += neuron.weights[j] * neuron.delta
                     errors.append(error)
             else:  # Output layer
                 for j in range(len(layer.neurons)):
