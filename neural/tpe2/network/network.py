@@ -27,9 +27,11 @@ def _init_layers(n_inputs: int, layer_configuration: List[Tuple[int, Transferenc
 # TODO: Add momentum (Clase 5, 25/71)
 # TODO: Add some way of initializing a trained network with weights from storage (saving/loading networks)
 class Network:
-    def __init__(self, n_inputs: int, layer_configuration: List[Tuple[int, TransferenceFunction]], eta: float):
+    def __init__(self, n_inputs: int, layer_configuration: List[Tuple[int, TransferenceFunction]],
+                 eta: float, momentum: float = 0):
         self.eta = eta
         self.layers = _init_layers(n_inputs, layer_configuration)
+        self.momentum = momentum
 
     def print_structure(self):
         for i, layer in enumerate(self.layers):
@@ -78,5 +80,8 @@ class Network:
             inputs = data if i == 0 else [neuron.output for neuron in self.layers[i - 1].neurons]
             for neuron in self.layers[i].neurons:
                 for j in range(len(inputs)):
-                    neuron.weights[j] += self.eta * neuron.delta * inputs[j]
+                    delta_weight = self.eta * neuron.delta * inputs[j]
+                    neuron.weights[j] += delta_weight + neuron.last_weight_deltas[j] * self.momentum
+                    neuron.last_weight_deltas[j] = delta_weight
+
                 neuron.bias += self.eta * neuron.delta

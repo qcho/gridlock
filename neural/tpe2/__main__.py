@@ -12,8 +12,8 @@ should_load_network = False
 def get_generic_network():
     return Network(n_inputs=2, layer_configuration=[
         (7, HyperbolicTangent()),
-        (7, HyperbolicTangent()),
-        (1, LinearFunction())], eta=0.2)
+        (8, HyperbolicTangent()),
+        (1, LinearFunction())], eta=0.2, momentum=0.9)
 
 
 def get_parsed_data():
