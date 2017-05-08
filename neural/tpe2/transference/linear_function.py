@@ -1,5 +1,4 @@
-from transference.transference_function import TransferenceFunction
-
+from ..transference.transference_function import TransferenceFunction
 
 class LinearFunction(TransferenceFunction):
     def apply(self, value):

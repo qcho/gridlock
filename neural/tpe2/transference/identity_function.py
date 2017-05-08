@@ -1,5 +1,4 @@
-from transference.transference_function import TransferenceFunction
-
+from ..transference.transference_function import TransferenceFunction
 
 class IdentityFunction(TransferenceFunction):
     def apply(self, value):

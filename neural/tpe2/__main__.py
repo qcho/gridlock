@@ -1,9 +1,9 @@
 from pickle import Pickler, Unpickler
 
-from data_parser import parse
-from network import Network
-from transference.hyperbolic_tangent import HyperbolicTangent
-from transference.linear_function import LinearFunction
+from .data_parser import parse
+from .network import Network
+from .transference.hyperbolic_tangent import HyperbolicTangent
+from .transference.linear_function import LinearFunction
 
 network_filename = "net.obj"
 should_load_network = False
@@ -17,7 +17,7 @@ def get_generic_network():
 
 
 def get_parsed_data():
-    data, err = parse("../data/terrain05.data")
+    data, err = parse()
     if err is not None:
         print("Error opening file:", err)
         exit(1)
@@ -33,7 +33,8 @@ def serialize_network():
     with open(network_filename, "wb") as serialized_network:
         Pickler(serialized_network, 2).dump(network)
 
-if __name__ == '__main__':
+
+def main():
     inputs, results = get_parsed_data()
     network = get_generic_network() if not should_load_network else load_network()
 
@@ -47,3 +48,7 @@ if __name__ == '__main__':
         print("For {} expecting {} got {}".format(x_i, result_i, network.predict(x_i)))
 
     serialize_network()
+
+
+if __name__ == "__main__":
+    main()
