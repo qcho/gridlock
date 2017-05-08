@@ -1,6 +1,7 @@
 from data_parser import parse
 from network import Network
 from transference.hyperbolic_tangent import HyperbolicTangent
+from transference.linear_function import LinearFunction
 
 if __name__ == '__main__':
     data, err = parse("../data/terrain05.data")
@@ -11,10 +12,10 @@ if __name__ == '__main__':
     network = Network(n_inputs=2, layer_configuration=[
         (7, HyperbolicTangent()),
         (7, HyperbolicTangent()),
-        (1, HyperbolicTangent())], eta=0.2)
+        (1, LinearFunction())], eta=0.2)
     network.print_structure()
     print("---------TRAINING---------")
-    network.train(inputs, results, 20000)
+    network.train(inputs, results, 50000)
     print("---------TRAINED---------")
     network.print_structure()
     for x_i, result_i in zip(inputs, results):
