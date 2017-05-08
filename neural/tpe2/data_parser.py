@@ -1,6 +1,6 @@
 import pkg_resources
 
-def parse(data_path):
+def parse():
     """
     Parse a terrain file, skipping the first line. Expects file to exist
     :param data_path: Path to the data file.
