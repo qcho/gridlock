@@ -5,7 +5,7 @@ from .network import Network
 from .transference.hyperbolic_tangent import HyperbolicTangent
 from .transference.linear_function import LinearFunction
 
-network_filename = "tpe2/network_dumps/net.obj"
+network_filename = "network_dumps/net.obj"
 should_load_network = False
 
 
