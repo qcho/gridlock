@@ -1,7 +1,6 @@
 from data_parser import parse
 from network import Network
 from transference.hyperbolic_tangent import HyperbolicTangent
-from transference.logistic_function import LogisticFunction
 
 if __name__ == '__main__':
     data, err = parse("../data/terrain05.data")
@@ -9,13 +8,13 @@ if __name__ == '__main__':
         print("Error opening file:", err)
         exit(1)
     inputs, results = zip(*[((x[0], x[1]), [x[2]]) for x in data[:20]])
-    network = Network([
-        (2, HyperbolicTangent()),
-        (4, HyperbolicTangent()),
-        (1, LogisticFunction())], eta=0.2)
+    network = Network(n_inputs=2, layer_configuration=[
+        (7, HyperbolicTangent()),
+        (7, HyperbolicTangent()),
+        (1, HyperbolicTangent())], eta=0.2)
     network.print_structure()
     print("---------TRAINING---------")
-    network.train(inputs, results, 10000)
+    network.train(inputs, results, 20000)
     print("---------TRAINED---------")
     network.print_structure()
     for x_i, result_i in zip(inputs, results):

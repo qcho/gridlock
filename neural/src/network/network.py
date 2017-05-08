@@ -4,7 +4,7 @@ from .network_layer import NetworkLayer
 from transference.transference_function import TransferenceFunction
 
 
-def _init_layers(layer_configuration: List[Tuple[int, TransferenceFunction]]):
+def _init_layers(n_inputs: int, layer_configuration: List[Tuple[int, TransferenceFunction]]):
     """
     Initialize all the network layers (input, hidden (if applicable) and output.
     We need to initialize the input layer separately from the rest since it behaves a bit differently
@@ -14,8 +14,8 @@ def _init_layers(layer_configuration: List[Tuple[int, TransferenceFunction]]):
      contains and the transference function that should be used.
     :return: a list of layers
     """
-    n_inputs, input_transference_function = layer_configuration[0]
-    layers = [NetworkLayer(n_inputs, n_inputs, input_transference_function)]  # Input layer
+    n_input_neurons, input_transference_function = layer_configuration[0]
+    layers = [NetworkLayer(n_input_neurons, n_inputs, input_transference_function)]  # Input layer
     # layers[0].set_as_input()
     for i in range(1, len(layer_configuration)):  # Hidden and output layers
         n_neurons, transference_function = layer_configuration[i]
@@ -27,9 +27,9 @@ def _init_layers(layer_configuration: List[Tuple[int, TransferenceFunction]]):
 # TODO: Add momentum (Clase 5, 25/71)
 # TODO: Add some way of initializing a trained network with weights from storage (saving/loading networks)
 class Network:
-    def __init__(self, layer_configuration: List[Tuple[int, TransferenceFunction]], eta: float):
+    def __init__(self, n_inputs: int, layer_configuration: List[Tuple[int, TransferenceFunction]], eta: float):
         self.eta = eta
-        self.layers = _init_layers(layer_configuration)
+        self.layers = _init_layers(n_inputs, layer_configuration)
 
     def print_structure(self):
         for i, layer in enumerate(self.layers):
