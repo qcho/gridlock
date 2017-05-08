@@ -1,4 +1,4 @@
-envname := env
+envname := venv
 root_module := tpe2
 
 install_env:
