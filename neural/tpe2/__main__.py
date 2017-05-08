@@ -5,7 +5,7 @@ from .network import Network
 from .transference.hyperbolic_tangent import HyperbolicTangent
 from .transference.linear_function import LinearFunction
 
-network_filename = "net.obj"
+network_filename = "tpe2/network_dumps/net.obj"
 should_load_network = False
 
 
@@ -29,7 +29,7 @@ def load_network():
         return Unpickler(fh).load()
 
 
-def serialize_network():
+def serialize_network(network: Network):
     with open(network_filename, "wb") as serialized_network:
         Pickler(serialized_network, 2).dump(network)
 
@@ -47,7 +47,7 @@ def main():
     for x_i, result_i in zip(inputs, results):
         print("For {} expecting {} got {}".format(x_i, result_i, network.predict(x_i)))
 
-    serialize_network()
+    serialize_network(network)
 
 
 if __name__ == "__main__":
