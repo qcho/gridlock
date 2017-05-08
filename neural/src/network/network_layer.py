@@ -4,7 +4,7 @@ import numpy as np
 
 class Neuron:
     def __init__(self, n_inputs):
-        self.weights = np.random.rand(n_inputs)
+        self.weights = np.random.rand(n_inputs) - 0.5
         self.bias = 0
         self.output = 0
         self.delta = 0
