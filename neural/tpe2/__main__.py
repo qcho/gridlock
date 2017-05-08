@@ -1,9 +1,10 @@
-from data_parser import parse
-from network import Network
-from transference.hyperbolic_tangent import HyperbolicTangent
-from transference.linear_function import LinearFunction
+from .data_parser import parse
+from .network import Network
+from .transference.hyperbolic_tangent import HyperbolicTangent
+from .transference.linear_function import LinearFunction
 
-if __name__ == '__main__':
+
+def main():
     data, err = parse("../data/terrain05.data")
     if err is not None:
         print("Error opening file:", err)
@@ -21,4 +22,5 @@ if __name__ == '__main__':
     for x_i, result_i in zip(inputs, results):
         print("For {} expecting {} got {}".format(x_i, result_i, network.predict(x_i)))
 
-
+if __name__ == "__main__":
+    main()

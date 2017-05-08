@@ -1,4 +1,4 @@
-from transference.transference_function import TransferenceFunction
+from ..transference.transference_function import TransferenceFunction
 import numpy as np
 
 

@@ -1,7 +1,5 @@
 import numpy as np
-
-from transference.transference_function import TransferenceFunction
-
+from ..transference.transference_function import TransferenceFunction
 
 class LogisticFunction(TransferenceFunction):
 

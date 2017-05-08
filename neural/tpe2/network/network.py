@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 from .network_layer import NetworkLayer
-from transference.transference_function import TransferenceFunction
+from ..transference.transference_function import TransferenceFunction
 
 
 def _init_layers(n_inputs: int, layer_configuration: List[Tuple[int, TransferenceFunction]]):
