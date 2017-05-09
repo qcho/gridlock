@@ -49,12 +49,12 @@ class Network:
     def _feed_forward(self, x_i):
         V_m = x_i
         for layer in self.layers:
-            V_m = layer.process(V_m)
+            V_m = layer.process(V_m) # Each neuron saves it's output after this
         return V_m
 
     def _back_propagate(self, x_i, expected):
         # TODO: Error statistics
-        self._update_deltas(expected)
+        self._update_deltas(expected) # Each neuron saves it's delta after this
         self._update_errors(x_i)
 
     def _update_deltas(self, expected):

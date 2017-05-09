@@ -3,11 +3,12 @@ from ..transference.transference_function import TransferenceFunction
 
 class HyperbolicTangent(TransferenceFunction):
 
-    def __init__(self, beta: float = 0.5):
+    def __init__(self, beta: float = 2/3, a: float = 1.7159):
         self.beta = beta
+        self.a = a
 
     def apply(self, value):
-        return np.tanh(self.beta * value)
+        return self.a * np.tanh(self.beta * value)
 
     def apply_derived(self, value):
-        return self.beta * (1 - np.power(self.apply(value), 2))
+        return self.a * self.beta * (1 - np.power(np.tanh(self.beta * value), 2))
