@@ -28,7 +28,7 @@ def _init_layers(n_inputs: int, layer_configuration: List[Tuple[int, Transferenc
 # TODO: Add some way of initializing a trained network with weights from storage (saving/loading networks)
 class Network:
     def __init__(self, n_inputs: int, layer_configuration: List[Tuple[int, TransferenceFunction]],
-                 eta: float, momentum: float = 0):
+                 eta: float, momentum: float = 1):
         self.eta = eta
         self.layers = _init_layers(n_inputs, layer_configuration)
         self.momentum = momentum
