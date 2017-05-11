@@ -32,7 +32,8 @@ class NetworkLayer:
         return V
 
     def __str__(self):
-        out_val = "{}-neuron layer:".format(len(self.neurons))
-        for i, neuron in enumerate(self.neurons):
-            out_val += "\nneuron {} has {} weights: {} and bias {}".format(i, len(neuron.weights), neuron.weights, neuron.bias)
-        return out_val
+        # out_val = "{}-neuron layer:".format(len(self.neurons))
+        # for i, neuron in enumerate(self.neurons):
+        #     out_val += "\nneuron {} has {} weights: {} and bias {}".format(i, len(neuron.weights), neuron.weights, neuron.bias)
+        # return out_val
+        return '{} N {} beta {}'.format(len(self.neurons), self.transference_fn.__str__(), round(self.transference_fn.beta, 2))

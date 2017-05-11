@@ -12,3 +12,6 @@ class HyperbolicTangent(TransferenceFunction):
 
     def apply_derived(self, value):
         return self.a * self.beta * (1 - np.power(np.tanh(self.beta * value), 2))
+
+    def __str__(self):
+        return 'tanh'

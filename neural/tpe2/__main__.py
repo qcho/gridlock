@@ -2,7 +2,7 @@ import numpy as np
 from pickle import Pickler, Unpickler
 import matplotlib.pyplot as plt
 
-from .data_parser import parse
+from .data import Parser
 from .network import Network
 from .transference.hyperbolic_tangent import HyperbolicTangent
 from .transference.linear_function import LinearFunction
@@ -17,21 +17,13 @@ def get_generic_network():
     return Network(
         n_inputs=2,
         layer_configuration=[
-            (8, HyperbolicTangent(beta=1, a=1)),
-            (8, HyperbolicTangent(beta=1, a=1)),
+            (7, HyperbolicTangent(a=1)),
+            (7, HyperbolicTangent(a=1)),
             (1, LinearFunction())
         ],
-        eta=0.01,
+        eta=0.1,
         # momentum=0.9
     )
-
-
-def get_parsed_data(to_, from_: int = 0):
-    data, err = parse()
-    if err is not None:
-        print("Error opening file:", err)
-        exit(1)
-    return zip(*[((x[0], x[1]), [x[2]]) for x in data[from_:to_]])
 
 
 def load_network(filename):
@@ -63,7 +55,7 @@ def mean_squared_error(network, inputs, results):
     return ans
 
 
-def plot_errors(training_errors, test_errors):
+def plot_errors(network, training_errors, test_errors, expected_error):
     colors = ['r', 'b']
     markers = ['x', 'o']
 
@@ -76,23 +68,27 @@ def plot_errors(training_errors, test_errors):
     plt.ylabel('Error')
     plt.xlabel('Epochs')
     plt.ylim([0, 0.1])
+
+    hidden_layers = 2
+    title = '{} HLayers: {}, eta: {}, err: {}'.format(hidden_layers, [x.__str__() for x in network.layers[:hidden_layers]], network.eta, expected_error)
+    plt.title(title)
     plt.show()
 
 
 def train_and_print(network, training_inputs, training_results, test_inputs, test_results):
     epochs = 0
-    epochs_limit = 1000
+    epochs_limit = 5000
 
-    expected_error = 1e-8
+    expected_error = 1e-4
     error_limit = np.sqrt(2 * expected_error)
 
-    training_error = 9999999
+    training_error = mean_squared_error(network, training_inputs, training_results)
     prev_training_error = None
-    test_error = training_error
+    test_error = mean_squared_error(network, test_inputs, test_results)
     prev_test_error = None
 
-    training_errors = []
-    test_errors = []
+    training_errors = [training_error]
+    test_errors = [test_error]
 
     pr = False
     prints = 0
@@ -120,17 +116,20 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
                 print('    Training {} Test'.format('>' if training_error > test_error else '<'))
                 print('    Expected {}'.format(error_limit))
             prints += 1
+        else:
+            print(epochs)
 
-    print('* Training error: {}'.format(training_error))
-    print('* Test     error: {}'.format(test_error))
-    plot_errors(training_errors, test_errors)
+    print('* Training error: {}'.format(mean_squared_error(network, training_inputs, training_results)))
+    print('* Test     error: {}'.format(mean_squared_error(network, test_inputs, test_results)))
+    plot_errors(network, training_errors, test_errors, expected_error)
 
 
 def maintain_same_weights():
-    load = False
+    load = True
     filename = 'network_dumps/weights_test.obj'
-    training_inputs, training_results = get_parsed_data(to_=220)
-    test_inputs, test_results = get_parsed_data(from_=220, to_=441)
+    parser = Parser()
+    training_inputs, training_results = parser.get_half_data()
+    test_inputs, test_results = parser.get_half_data(half='last')
 
     if load:
         network = load_network(filename)
@@ -138,13 +137,14 @@ def maintain_same_weights():
         network = get_generic_network()
         serialize_network_layers(network, filename)
 
-    network.print_structure()
+    # network.print_structure()
     print("---------TRAINING---------")
     train_and_print(network, training_inputs, training_results, test_inputs, test_results)
 
 
 def main():
-    inputs, results = get_parsed_data(20)
+    parser = Parser()
+    inputs, results = parser.get_data(20)
     network = get_generic_network() if not should_load_network else load_network(network_filename)
 
     network.print_structure()
