@@ -3,6 +3,7 @@ from .transference_function import TransferenceFunction
 
 
 class LogisticFunction(TransferenceFunction):
+    TYPE = "logistic"
 
     @classmethod
     def from_json_value(cls, json_value):

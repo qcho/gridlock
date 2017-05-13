@@ -2,6 +2,7 @@ from .transference_function import TransferenceFunction
 
 
 class LinearFunction(TransferenceFunction):
+    TYPE = "linear"
 
     @classmethod
     def from_json_value(cls, _):

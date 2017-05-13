@@ -3,6 +3,7 @@ from .transference_function import TransferenceFunction
 
 
 class SignFunction(TransferenceFunction):
+    TYPE = "sign"
 
     @classmethod
     def from_json_value(cls, _):

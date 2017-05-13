@@ -2,6 +2,7 @@ from .transference_function import TransferenceFunction
 
 
 class StepFunction(TransferenceFunction):
+    TYPE = "step"
 
     @classmethod
     def from_json_value(cls, _):

@@ -2,11 +2,11 @@ from transference import *
 
 
 factory_map = {
-    'htan': HyperbolicTangent.from_json_value,
-    'logistic': LogisticFunction.from_json_value,
-    'linear': LinearFunction.from_json_value,
-    'sign': SignFunction.from_json_value,
-    'step': StepFunction.from_json_value
+    HyperbolicTangent.TYPE: HyperbolicTangent.from_json_value,
+    LogisticFunction.TYPE: LogisticFunction.from_json_value,
+    LinearFunction.TYPE: LinearFunction.from_json_value,
+    SignFunction.TYPE: SignFunction.from_json_value,
+    StepFunction.TYPE: StepFunction.from_json_value
 }
 
 
