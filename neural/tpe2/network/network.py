@@ -56,6 +56,7 @@ class Network:
         self._adaptive_a = adaptive_a
         self._adaptive_b = adaptive_b
         self._adaptive_annealing_k = adaptive_annealing
+        self._previous_layers = None
 
     def print_structure(self):
         print("============ Neural Network ============")
