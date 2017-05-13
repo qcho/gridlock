@@ -18,12 +18,12 @@ def get_generic_network():
     return Network(
         n_inputs=2,
         layer_configuration=[
-            (8, HyperbolicTangent()),
-            (8, HyperbolicTangent()),
+            (8, HyperbolicTangent(a=1)),
+            (8, HyperbolicTangent(a=1)),
             (1, LinearFunction())
         ],
-        eta=0.1,
-        momentum=0.9
+        eta=0.04,
+        # momentum=0.9
     )
 
 
@@ -47,16 +47,9 @@ def serialize_network_layers(network: Network, filename):
 
 
 def mean_squared_error(network, inputs, results):
-    errors = []
-
-    for x_i, o_i in zip(inputs, results):
-        prediction = network.predict(x_i)
-        errors.append((o_i[0] - prediction[0])**2)
-
-    ans = np.sum(errors)
-    ans /= len(errors)
-
-    return ans
+    predicted_values = np.array(list(map(lambda x: network.predict(x), inputs)))
+    errors = (results - predicted_values) ** 2
+    return np.sum(errors) * 0.5 / len(errors)
 
 
 def plot_errors(network, training_errors, test_errors):
@@ -156,7 +149,7 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
 
 def maintain_same_weights():
-    load = False
+    load = True
     filename = 'network_dumps/weights_test.obj'
     parser = Parser()
     training_inputs, training_results = parser.get_half_data()
@@ -219,6 +212,6 @@ def xor():
 if __name__ == "__main__":
     # main()
     # xor()
-    # maintain_same_weights()
+    maintain_same_weights()
     # test_plot_terrain()
-    test_network_terrain()
+    # test_network_terrain()

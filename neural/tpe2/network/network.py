@@ -74,7 +74,7 @@ class Network:
             for j in range(len(layer.neurons)):
                 neuron = layer.neurons[j]
                 d = layer.transference_fn.apply_derived(neuron.output)
-                if d - 0.01 < 0:
+                if abs(d) < 0.01:
                     print('Neuron {} saturated in layer {}: derivative {}'.format(j, i, d))
                 neuron.delta = errors[j] * d
 
