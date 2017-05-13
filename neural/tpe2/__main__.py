@@ -5,7 +5,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from .data import Parser
 from .network import Network
-
+from .config import Config
 from .transference import HyperbolicTangent
 from .transference import LinearFunction
 from .transference import StepFunction
@@ -18,9 +18,9 @@ def get_generic_network():
     return Network(
         n_inputs=2,
         layer_configuration=[
-            (8, HyperbolicTangent()),
-            (8, HyperbolicTangent()),
-            (1, LinearFunction())
+            (8, HyperbolicTangent(), None),
+            (8, HyperbolicTangent(), None),
+            (1, LinearFunction(), None)
         ],
         eta=0.1,
         momentum=0.9
@@ -190,14 +190,16 @@ def test_network_terrain():
 
 def xor():
     if not should_load_network:
-        network = Network(
-            n_inputs=2,
-            layer_configuration=[
-                (2, HyperbolicTangent()),
-                (1, StepFunction())
-            ],
-            eta=0.01
-        )
+        config = Config("data/config.json")
+        network, err = config.parse_network()
+        # network = Network(
+        #     n_inputs=2,
+        #     layer_configuration = [
+        #         (2, HyperbolicTangent(), None),
+        #         (1, StepFunction(), None)
+        #     ],
+        #     eta=0.01
+        # )
     else:
         network = load_network('network_dumps/xor_net.obj')
 
@@ -218,7 +220,7 @@ def xor():
 
 if __name__ == "__main__":
     # main()
-    # xor()
+    xor()
     # maintain_same_weights()
     # test_plot_terrain()
-    test_network_terrain()
+    # test_network_terrain()

@@ -1,17 +1,16 @@
-from ..transference.transference_function import TransferenceFunction
+from typing import List, Optional, Dict
+
+from transference.transference_function import TransferenceFunction
 import numpy as np
 
 
 class Neuron:
     def __init__(self, n_inputs):
-        self._init_weights(n_inputs)
         self.bias = -1
         self.output = 0
         self.delta = 0
-
-    @property
-    def weights(self):
-        return self._weights
+        self.weights = np.random.rand(n_inputs) - 0.5
+        self.last_weight_deltas = np.zeros(n_inputs)
 
     def process(self, neuron_input):
         return np.dot(neuron_input, self.weights) + self.bias
@@ -19,17 +18,28 @@ class Neuron:
     def __str__(self):
         return "{}-input neuron"
 
-    def _init_weights(self, n_inputs):
-        self._weights = np.random.rand(n_inputs)
-        for i, weight in enumerate(self._weights):
-            self._weights[i] = self._weights[i] - 0.5
-        self.last_weight_deltas = np.zeros(n_inputs)
-
 
 class NetworkLayer:
-    def __init__(self, n_neurons: int, n_inputs: int, transference_function: TransferenceFunction):
+    def __init__(self, n_neurons: int, n_inputs: int, transference_function: TransferenceFunction,
+                 weights: Optional[List[Dict[str, List[float]]]]):
         self.neurons = [Neuron(n_inputs) for _ in range(n_neurons)]
         self.transference_fn = transference_function
+        if weights is not None and len(weights) > 0:
+            self._init_weights(weights)
+
+    def _init_weights(self, weights):
+        if len(weights) != len(self.neurons):
+            raise ValueError("Invalid amount of neuron weights received."
+                             "Got {}, expected {}".format(len(weights), len(self.neurons)))
+        if len(weights) == 0:
+            return
+        print(weights)
+        for neuron, weights in zip(self.neurons, weights):
+            if len(weights["weights"]) != len(neuron.weights):
+                raise ValueError("Invalid amount of input weights received."
+                                 "Got {}, expected {}".format(len(weights), len(neuron.weights)))
+            neuron.weights = weights["weights"]
+            neuron.bias = weights["bias"]
 
     def process(self, neuron_input):
         V = []
@@ -41,10 +51,13 @@ class NetworkLayer:
         return V
 
     def __str__(self):
-        out_val = "{}-neuron layer:".format(len(self.neurons))
+        out_val = "Properties:\n"
+        out_val += "    neurons: {}\n    inputs: {}\n    activation: {}"\
+            .format(len(self.neurons), len(self.neurons[0].weights), self.transference_fn)
+        out_val += "\nNeurons:"
         for i, neuron in enumerate(self.neurons):
-            out_val += "\nneuron {} has {} weights:" \
-                       "{} and bias {}".format(i, len(neuron.weights), neuron.weights, neuron.bias)
+            out_val += "\n- neuron {} has {} weights: " \
+                       "{}; bias {}".format(i, len(neuron.weights), neuron.weights, neuron.bias)
         return out_val
 
     def reduced_description(self):

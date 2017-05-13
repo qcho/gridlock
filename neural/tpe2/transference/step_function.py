@@ -15,3 +15,6 @@ class StepFunction(TransferenceFunction):
 
     def apply_derived(self, value):
         return 1
+
+    def __str__(self):
+        return 'step (-1 or 1)'
