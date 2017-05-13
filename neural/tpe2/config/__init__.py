@@ -1,7 +1,10 @@
 import json
 from typing import Optional, Tuple
 
-from network import Network
+import pkg_resources
+
+from ..network import Network
+from ..data import __data_pkg__
 
 
 class Config:
@@ -15,8 +18,8 @@ class Config:
             return None, err
 
     def _parse(self):
-        with open(self._file_path, 'r') as fh:
-            json_obj = json.load(fh)
+        with pkg_resources.resource_stream(__data_pkg__, self._file_path) as stream:
+            json_obj = json.load(stream)
             if 'network' not in json_obj:
                 raise ValueError("Missing network configuration parameters")
             return Network.create_from_json(json_obj['network'])

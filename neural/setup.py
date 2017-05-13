@@ -51,7 +51,7 @@ setup(
     },
 
     package_data={
-        'tpe2': ['terrain05.data'],
+        'tpe2': ['data/terrain05.data', 'data/*.json'],
     },
 
     # To provide executable scripts, use entry points in preference to the

@@ -1,6 +1,7 @@
 import pkg_resources
 from math import floor
 from random import sample
+from ..data import __data_pkg__
 
 
 class Parser:
@@ -15,7 +16,7 @@ class Parser:
         :return: array of [x1, x2, z]
         """
         try:
-            with open(pkg_resources.resource_filename(__name__, self.file_name)) as file_handler:
+            with open(pkg_resources.resource_filename(__data_pkg__, self.file_name)) as file_handler:
                 next(file_handler)
                 return [[float(x) for x in line.split(" ") if len(x) > 0] for line in file_handler], None
         except IOError as err:

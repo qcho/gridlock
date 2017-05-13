@@ -1,8 +1,8 @@
 from typing import List, Tuple, Optional, Dict
 
 from .network_layer import NetworkLayer
-from transference import TransferenceFunction
-from transference import factory as activation_factory
+from ..transference import TransferenceFunction
+from ..transference import factory as activation_factory
 
 
 def _parse_layers(json_value):
