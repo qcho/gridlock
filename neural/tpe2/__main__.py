@@ -12,6 +12,7 @@ from .transference import StepFunction
 
 network_filename = "network_dumps/net.obj"
 should_load_network = False
+config = Config("data/config.json")
 
 
 def get_generic_network():
@@ -183,7 +184,6 @@ def test_network_terrain():
 
 def xor():
     if not should_load_network:
-        config = Config("data/config.json")
         network, err = config.parse_network()
     else:
         network = load_network('network_dumps/xor_net.obj')
