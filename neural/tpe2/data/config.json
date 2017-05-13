@@ -8,16 +8,30 @@
         "neurons": 2,
         "activation_function": {
           "type": "htan",
-          "beta": 0.3
+          "beta": 0.666666667
         },
-        "weights": []
+        "neuron_weights": [
+          {
+            "weights": [-0.18679615, -0.25479379],
+            "bias": -1
+          },
+          {
+            "weights": [0.09827654, 0.00787809],
+            "bias": -1
+          }
+        ]
       },
       {
         "neurons": 1,
         "activation_function": {
           "type": "step"
         },
-        "neuron_weights": []
+        "neuron_weights": [
+          {
+            "weights": [-0.40476551, 0.28765505],
+            "bias": -1
+          }
+        ]
       }
     ]
   }
