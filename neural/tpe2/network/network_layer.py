@@ -62,3 +62,9 @@ class NetworkLayer:
 
     def reduced_description(self):
         return '{} N {}'.format(len(self.neurons), self.transference_fn)
+
+    def to_json(self):
+        return {
+            "neurons": len(self.neurons),
+            "activation_function": self.transference_fn.to_json()
+        }

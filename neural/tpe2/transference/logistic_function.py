@@ -5,6 +5,12 @@ from .transference_function import TransferenceFunction
 class LogisticFunction(TransferenceFunction):
     TYPE = "logistic"
 
+    def to_json(self):
+        return {
+            "type": LogisticFunction.TYPE,
+            "a": self.a
+        }
+
     @classmethod
     def from_json_value(cls, json_value):
         out_val = LogisticFunction()

@@ -5,6 +5,11 @@ from .transference_function import TransferenceFunction
 class SignFunction(TransferenceFunction):
     TYPE = "sign"
 
+    def to_json(self):
+        return {
+            "type": SignFunction.TYPE
+        }
+
     @classmethod
     def from_json_value(cls, _):
         return SignFunction()

@@ -4,6 +4,11 @@ from .transference_function import TransferenceFunction
 class StepFunction(TransferenceFunction):
     TYPE = "step"
 
+    def to_json(self):
+        return {
+            "type": StepFunction.TYPE
+        }
+
     @classmethod
     def from_json_value(cls, _):
         return StepFunction()

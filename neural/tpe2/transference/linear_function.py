@@ -4,6 +4,11 @@ from .transference_function import TransferenceFunction
 class LinearFunction(TransferenceFunction):
     TYPE = "linear"
 
+    def to_json(self):
+        return {
+            "type": LinearFunction.TYPE
+        }
+
     @classmethod
     def from_json_value(cls, _):
         return LinearFunction()

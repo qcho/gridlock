@@ -47,6 +47,7 @@ class Network:
                  eta: float, momentum: float = 0):
         self.eta = eta
         self.layers = _init_layers(n_inputs, layer_configuration)
+        self.n_inputs = n_inputs
         self.momentum = momentum
 
     def print_structure(self):
@@ -121,3 +122,12 @@ class Network:
         network_configuration = _parse_layers(json_value["layers"])
         return Network(json_value['inputs'], network_configuration, json_value['eta'], json_value['momentum'])
 
+    def to_json(self):
+        return {
+            "network": {
+                "inputs": self.n_inputs,
+                "eta": self.eta,
+                "momentum": self.momentum,
+                "layers": [layer.to_json() for layer in self.layers]
+            }
+        }

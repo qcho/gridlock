@@ -20,3 +20,7 @@ class Config:
             if 'network' not in json_obj:
                 raise ValueError("Missing network configuration parameters")
             return Network.create_from_json(json_obj['network'])
+
+    def write_network(self, network: Network):
+        with open(self._file_path, 'r') as fh:
+            json.dump(network.to_json(), fh)
