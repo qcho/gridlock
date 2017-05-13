@@ -4,8 +4,7 @@ import numpy as np
 
 class Neuron:
     def __init__(self, n_inputs):
-        self.weights = np.random.rand(n_inputs) - 0.5
-        self.last_weight_deltas = np.zeros(n_inputs)
+        self._init_weights(n_inputs)
         self.bias = -1
         self.output = 0
         self.delta = 0
@@ -19,6 +18,12 @@ class Neuron:
 
     def __str__(self):
         return "{}-input neuron"
+
+    def _init_weights(self, n_inputs):
+        self._weights = np.random.rand(n_inputs)
+        for i, weight in enumerate(self._weights):
+            self._weights[i] = self._weights[i] - 0.5
+        self.last_weight_deltas = np.zeros(n_inputs)
 
 
 class NetworkLayer:
