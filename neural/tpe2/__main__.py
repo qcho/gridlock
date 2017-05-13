@@ -32,7 +32,7 @@ def get_generic_network():
     )
 
 
-def load_network(filename):
+def load_network(filename) -> Network:
     """Deprecated: Do not use"""
     with open(filename, "rb") as fh:
         old_network = Unpickler(fh).load()
