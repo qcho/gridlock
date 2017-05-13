@@ -10,6 +10,10 @@ class Neuron:
         self.output = 0
         self.delta = 0
 
+    @property
+    def weights(self):
+        return self._weights
+
     def process(self, neuron_input):
         return np.dot(neuron_input, self.weights) + self.bias
 
