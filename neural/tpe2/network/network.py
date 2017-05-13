@@ -161,24 +161,6 @@ class Network:
             }
         }
 
-
-    def _parse_layers(cls, json_value):
-        out_val = []
-        for i, layer in enumerate(json_value):
-            if 'activation_function' not in layer:
-                raise ValueError("Missing 'activation_function' key from layers[{}]".format(i))
-            activation_function = activation_factory.create_from_json(layer["activation_function"])
-            if 'neurons' not in layer or not isinstance(layer['neurons'], int):
-                raise ValueError("Missing  or invalid 'neurons' key from layers[{}]".format(i))
-            out_val.append((
-                layer["neurons"],
-                activation_function,
-                layer["neuron_weights"] if 'neuron_weights' in layer and isinstance(layer["neuron_weights"], list) else None
-            ))
-        return out_val
-
-
-
     def _adapt_eta_bold(self, data, expected_output, previous_errors):
         if len(previous_errors) > 0:
             a = 0.005
