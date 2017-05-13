@@ -1,7 +1,12 @@
 import numpy as np
-from ..transference.transference_function import TransferenceFunction
+from .transference_function import TransferenceFunction
+
 
 class SignFunction(TransferenceFunction):
+
+    @classmethod
+    def from_json_value(cls, _):
+        return SignFunction()
 
     def apply(self, value):
         return np.sign(value)

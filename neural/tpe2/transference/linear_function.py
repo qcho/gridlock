@@ -1,9 +1,11 @@
-from ..transference.transference_function import TransferenceFunction
+from .transference_function import TransferenceFunction
 
 
 class LinearFunction(TransferenceFunction):
-    def __init__(self):
-        self.beta = 0
+
+    @classmethod
+    def from_json_value(cls, _):
+        return LinearFunction()
 
     def apply(self, value):
         return value

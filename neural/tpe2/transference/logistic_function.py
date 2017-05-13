@@ -1,8 +1,15 @@
 import numpy as np
-from ..transference.transference_function import TransferenceFunction
+from .transference_function import TransferenceFunction
 
 
 class LogisticFunction(TransferenceFunction):
+
+    @classmethod
+    def from_json_value(cls, json_value):
+        out_val = LogisticFunction()
+        if 'a' in json_value and isinstance(json_value['a'], float):
+            out_val.a = json_value['a']
+        return out_val
 
     def __init__(self, a: float = 1.7159):
         self.a = a
