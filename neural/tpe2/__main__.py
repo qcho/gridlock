@@ -79,18 +79,31 @@ def plot_errors(network, training_errors, test_errors):
     plt.show()
 
 
-def plot_terrain(inputs, outputs):
-    get_first = lambda x: x[0]
-    get_second = lambda x: x[1]
-    X = list(map(get_first, inputs))
-    Y = list(map(get_second, inputs))
-    Z = list(map(get_first, outputs))
-    # X, Y = np.meshgrid(x, y)
-    # Z = z.reshape(X.shape)
+def plot_terrain(X, Y, Z):
     fig = plt.figure()
     ax = Axes3D(fig)
     ax.scatter(X, Y, Z)
     plt.show()
+
+
+def network_plot_complete_terrain(network):
+    resolution = 0.05
+    parser = Parser()
+    inputs, outputs = parser.get_all()
+    x = [x[0] for x in inputs]
+    y = [x[1] for x in inputs]
+    min_x = np.floor(min(x))
+    max_x = np.ceil(max(x))
+    min_y = np.floor(min(y))
+    max_y = np.ceil(max(y))
+    x = np.arange(min_x, max_x, resolution)
+    y = np.arange(min_y, max_y, resolution)
+    X, Y = np.meshgrid(x, y)
+    Z = []
+    for x_i, y_i in zip(X, Y):
+        for x_j, y_j in zip(x_i, y_i):
+            Z.append(network.predict([x_j, y_j]))
+    plot_terrain(X, Y, Z)
 
 
 def train_and_print(network, training_inputs, training_results, test_inputs, test_results):
@@ -164,7 +177,15 @@ def maintain_same_weights():
 def test_plot_terrain():
     parser = Parser()
     inputs, outputs = parser.get_all()
-    plot_terrain(inputs, outputs)
+    X = [x[0] for x in inputs]
+    Y = [x[1] for x in inputs]
+    Z = [x[0] for x in outputs]
+    plot_terrain(X, Y, Z)
+
+
+def test_network_terrain():
+    network = load_network('network_dumps/weights_test.obj')
+    network_plot_complete_terrain(network)
 
 
 def xor():
@@ -199,4 +220,5 @@ if __name__ == "__main__":
     # main()
     # xor()
     # maintain_same_weights()
-    test_plot_terrain()
+    # test_plot_terrain()
+    test_network_terrain()
