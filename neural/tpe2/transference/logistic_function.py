@@ -1,6 +1,7 @@
 import numpy as np
 from ..transference.transference_function import TransferenceFunction
 
+
 class LogisticFunction(TransferenceFunction):
 
     def __init__(self, a: float = 1.7159):

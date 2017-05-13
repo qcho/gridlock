@@ -43,7 +43,8 @@ class NetworkLayer:
     def __str__(self):
         out_val = "{}-neuron layer:".format(len(self.neurons))
         for i, neuron in enumerate(self.neurons):
-            out_val += "\nneuron {} has {} weights: {} and bias {}".format(i, len(neuron.weights), neuron.weights, neuron.bias)
+            out_val += "\nneuron {} has {} weights:" \
+                       "{} and bias {}".format(i, len(neuron.weights), neuron.weights, neuron.bias)
         return out_val
 
     def reduced_description(self):
