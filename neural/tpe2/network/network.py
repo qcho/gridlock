@@ -67,12 +67,11 @@ class Network:
         for i, layer in enumerate(self.layers):
             print("> Layer {}:\n{}".format(i, layer))
 
-
-    """
-    This method trains the network one epoch
-    @:param previous_error is used for the eta adaptation
-    """
-    def train(self, data, expected_output, previous_errors: List = []):
+    def train(self, data, expected_output, previous_errors: List=list()):
+        """
+            This method trains the network one epoch
+            @:param previous_error is used for the eta adaptation
+        """
         if self._do_adaptive_bold:
             self._previous_layers = deepcopy(self.layers)
 
