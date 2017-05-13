@@ -10,9 +10,9 @@ from .transference import HyperbolicTangent
 from .transference import LinearFunction
 from .transference import StepFunction
 
-network_filename = "network_dumps/net.obj"
+network_filename = "tpe2/network_dumps/net.obj"
 should_load_network = False
-config = Config("data/config.json")
+config = Config("tpe2/data/config.json")
 
 
 def get_generic_network():
@@ -151,7 +151,7 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
 def maintain_same_weights():
     load = True
-    filename = 'network_dumps/weights_test.obj'
+    filename = 'tpe2/network_dumps/weights_test.obj'
     parser = Parser()
     training_inputs, training_results = parser.get_half_data()
     test_inputs, test_results = parser.get_half_data(half='last')
@@ -178,7 +178,7 @@ def test_plot_terrain():
 
 
 def test_network_terrain():
-    network = load_network('network_dumps/weights_test.obj')
+    network = load_network('tpe2/network_dumps/weights_test.obj')
     network_plot_complete_terrain(network)
 
 
@@ -186,7 +186,7 @@ def xor():
     if not should_load_network:
         network, err = config.parse_network()
     else:
-        network = load_network('network_dumps/xor_net.obj')
+        network = load_network('tpe2/network_dumps/xor_net.obj')
 
     inputs = [[0, 0], [0, 1], [1, 0], [1, 1]]
     results = [[-1], [1], [1], [-1]]
@@ -200,7 +200,7 @@ def xor():
     for x_i, result_i in zip(inputs, results):
         print("For {} expecting {} got {}".format(x_i, result_i, network.predict(x_i)))
 
-    serialize_network_layers(network, 'network_dumps/xor_net.obj')
+    serialize_network_layers(network, 'tpe2/network_dumps/xor_net.obj')
 
 
 if __name__ == "__main__":
