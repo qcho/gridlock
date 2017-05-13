@@ -192,14 +192,6 @@ def xor():
     if not should_load_network:
         config = Config("data/config.json")
         network, err = config.parse_network()
-        # network = Network(
-        #     n_inputs=2,
-        #     layer_configuration = [
-        #         (2, HyperbolicTangent(), None),
-        #         (1, StepFunction(), None)
-        #     ],
-        #     eta=0.01
-        # )
     else:
         network = load_network('network_dumps/xor_net.obj')
 
