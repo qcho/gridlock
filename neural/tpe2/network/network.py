@@ -152,9 +152,6 @@ class Network:
 
     def _adapt_eta_bold(self, data, expected_output, previous_errors):
         if len(previous_errors) > 0:
-            a = 0.005
-            b = 0.1
-
             current_error = calculate_mean_squared_error(self, data, expected_output)
 
             if (current_error - previous_errors[-1]) > 0:
