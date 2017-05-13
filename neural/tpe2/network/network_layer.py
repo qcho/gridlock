@@ -1,6 +1,6 @@
 from typing import List, Optional, Dict
 
-from transference.transference_function import TransferenceFunction
+from ..transference import TransferenceFunction
 import numpy as np
 
 

@@ -3,16 +3,15 @@ from pickle import Pickler, Unpickler
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from .data import Parser
+from .util import Parser
 from .network import Network
 from .config import Config
 from .transference import HyperbolicTangent
 from .transference import LinearFunction
-from .transference import StepFunction
 
 network_filename = "tpe2/network_dumps/net.obj"
 should_load_network = False
-config = Config("tpe2/data/config.json")
+config = Config("config.json")
 
 
 def get_generic_network():

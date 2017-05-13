@@ -1,4 +1,4 @@
-from transference import *
+from ..transference import HyperbolicTangent, LogisticFunction, LinearFunction, SignFunction, StepFunction
 
 
 factory_map = {
