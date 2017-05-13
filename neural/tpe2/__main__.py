@@ -5,10 +5,10 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from .data import Parser
 from .network import Network
-from .transference.hyperbolic_tangent import HyperbolicTangent
-from .transference.linear_function import LinearFunction
-from .transference.step_function import StepFunction
 
+from .transference import HyperbolicTangent
+from .transference import LinearFunction
+from .transference import StepFunction
 
 network_filename = "network_dumps/net.obj"
 should_load_network = False
