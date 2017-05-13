@@ -83,7 +83,7 @@ class Network:
         if self._do_adaptive_bold:
             self._adapt_eta_bold(data, expected_output, previous_errors)
         if self._do_adaptive_annealing():
-            self._adapt_eta_annealing(data, expected_output, previous_errors)
+            self._adapt_eta_annealing(previous_errors)
 
     def predict(self, value):
         return self._feed_forward(value)
@@ -175,8 +175,7 @@ class Network:
                 self.eta += self._adaptive_a
                 # self.eta *= (1 + self._adaptive_a)
 
-
-    def _adapt_eta_annealing(self, data, expected_output, previous_errors):
+    def _adapt_eta_annealing(self, previous_errors):
         if len(previous_errors) >= self._adaptive_annealing_k:
             self.eta = self._original_eta / (1 + ((len(previous_errors) - 1) / self._adaptive_annealing_k))
 
