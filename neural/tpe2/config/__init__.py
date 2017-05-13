@@ -11,14 +11,14 @@ class Config:
     def __init__(self, file_path):
         self._file_path = file_path
 
-    def parse_network(self) -> Tuple[Optional[Network], Optional[IOError]]:
+    def parse_network(self, path=None) -> Tuple[Optional[Network], Optional[IOError]]:
         try:
-            return self._parse(), None
+            return self._parse(path), None
         except IOError as err:
             return None, err
 
-    def _parse(self):
-        with pkg_resources.resource_stream(__data_pkg__, self._file_path) as stream:
+    def _parse(self, path):
+        with pkg_resources.resource_stream(__data_pkg__, path if path is not None else self._file_path) as stream:
             json_obj = json.load(stream)
             if 'network' not in json_obj:
                 raise ValueError("Missing network configuration parameters")
