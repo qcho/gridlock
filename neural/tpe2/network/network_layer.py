@@ -42,4 +42,4 @@ class NetworkLayer:
         return out_val
 
     def reduced_description(self):
-        return '{} N {} beta {}'.format(len(self.neurons), self.transference_fn.__str__(), round(self.transference_fn.beta, 2))
+        return '{} N {}'.format(len(self.neurons), self.transference_fn)
