@@ -1,0 +1,24 @@
+{
+  "network": {
+    "inputs": 2,
+    "eta": 0.01,
+    "momentum": 0,
+    "layers": [
+      {
+        "neurons": 2,
+        "activation_function": {
+          "type": "htan",
+          "beta": 0.3
+        },
+        "weights": []
+      },
+      {
+        "neurons": 1,
+        "activation_function": {
+          "type": "step"
+        },
+        "neuron_weights": []
+      }
+    ]
+  }
+}
