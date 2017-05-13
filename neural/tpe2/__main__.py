@@ -1,15 +1,15 @@
-import numpy as np
-from pickle import Pickler, Unpickler
+from pickle import Unpickler
+
 import matplotlib.pyplot as plt
+import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
-from .util import Parser
-from .network import Network
 from .config import Config
+from .mean_squared_error import calculate_mean_squared_error
+from .network import Network
 from .transference import HyperbolicTangent
 from .transference import LinearFunction
-from .transference import StepFunction
-from .mean_squared_error import calculate_mean_squared_error
+from .util import Parser
 
 network_filename = "tpe2/network_dumps/net.obj"
 should_load_network = False
@@ -27,9 +27,7 @@ def get_generic_network():
         ],
         eta=0.5,
         # momentum=0.9,
-        adaptive_bold=True,
-        adaptive_a=0.01,
-        adaptive_b=0.1,
+        adaptive_bold={"a":0.01, "b":0.1},
         # adaptive_annealing=adaptive_k
     )
 
@@ -43,7 +41,7 @@ def load_network(filename):
     for old_layer, new_layer in zip(old_network.layers, new_network.layers):
         old_layer.transference_fn = new_layer.transference_fn
 
-    if adaptive_k == None:
+    if adaptive_k is None:
         old_network.eta = new_network.eta
         old_network.adaptive_k = 0
     else:
