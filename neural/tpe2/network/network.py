@@ -46,8 +46,8 @@ def _init_layers(n_inputs: int,
 class Network:
     def __init__(self, n_inputs: int,
                  layer_configuration: List[Tuple[int, TransferenceFunction, Optional[List[float]]]],
-                 eta: float, momentum: float = 0.0, adaptive_annealing: int = 0,
-                 adaptive_bold: Dict[str, float] = (0.001, 0.1)):
+                 eta: float, momentum: float = 0.0, adaptive_annealing: int = None,
+                 adaptive_bold: Dict[str, float] = None):
         self.eta = eta
         self._original_eta = eta
         self.layers = _init_layers(n_inputs, layer_configuration)
@@ -140,14 +140,22 @@ class Network:
         if 'layers' not in json_value:
             raise ValueError("Missing 'layers' key in network json")
         network_configuration = _parse_layers(json_value["layers"])
-        return Network(json_value['inputs'], network_configuration, json_value['eta'], json_value['momentum'])
+        return Network(
+            n_inputs=json_value['inputs'],
+            layer_configuration=network_configuration,
+            eta=json_value['eta'],
+            momentum=json_value['momentum'],
+            adaptive_annealing=json_value['adaptive_annealing'] if 'adaptive_annealing' in json_value else None,
+            adaptive_bold=json_value['adaptive_bold'] if 'adaptive_bold' in json_value else None)
 
     def to_json(self):
         return {
             "network": {
-                "inputs": self.n_inputs,
+                "inputs": len(self.layers[0].neurons[0].weights),
                 "eta": self.eta,
                 "momentum": self.momentum,
+                "adaptive_bold": self._adaptive_bold,
+                "adaptive_annealing": self._adaptive_annealing_k,
                 "layers": [layer.to_json() for layer in self.layers]
             }
         }
@@ -171,7 +179,7 @@ class Network:
             self.eta = self._original_eta / (1 + ((len(previous_errors) - 1) / self._adaptive_annealing_k))
 
     def _do_adaptive_annealing(self):
-        return self._adaptive_annealing_k > 0
+        return self._adaptive_annealing_k is not None
 
     def _do_adaptive_bold(self):
         return self._adaptive_bold is not None

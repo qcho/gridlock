@@ -18,3 +18,6 @@ class LinearFunction(TransferenceFunction):
 
     def apply_derived(self, value):
         return 1
+
+    def __str__(self):
+        return "linear"
