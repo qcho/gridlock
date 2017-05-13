@@ -27,6 +27,10 @@ class Parser:
         return self._zip(self.data[from_:to_])
 
 
+    def get_all(self):
+        return self.get_data(to_=self.data_size)
+
+
     def _zip(self, data):
         return zip(*[((x[0], x[1]), [x[2]]) for x in data])
 

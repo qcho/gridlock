@@ -28,7 +28,7 @@ def _init_layers(n_inputs: int, layer_configuration: List[Tuple[int, Transferenc
 # TODO: Add some way of initializing a trained network with weights from storage (saving/loading networks)
 class Network:
     def __init__(self, n_inputs: int, layer_configuration: List[Tuple[int, TransferenceFunction]],
-                 eta: float, momentum: float = 1):
+                 eta: float, momentum: float = 0):
         self.eta = eta
         self.layers = _init_layers(n_inputs, layer_configuration)
         self.momentum = momentum
@@ -73,7 +73,10 @@ class Network:
                     errors.append(expected[j] - neuron.output)
             for j in range(len(layer.neurons)):
                 neuron = layer.neurons[j]
-                neuron.delta = errors[j] * layer.transference_fn.apply_derived(neuron.output)
+                d = layer.transference_fn.apply_derived(neuron.output)
+                if d - 0.01 < 0:
+                    print('Neuron {} saturated in layer {}: derivative {}'.format(j, i, d))
+                neuron.delta = errors[j] * d
 
     def _update_errors(self, data):
         for i in range(len(self.layers)):

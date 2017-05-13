@@ -1,6 +1,7 @@
 import numpy as np
 from pickle import Pickler, Unpickler
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 from .data import Parser
 from .network import Network
@@ -17,12 +18,12 @@ def get_generic_network():
     return Network(
         n_inputs=2,
         layer_configuration=[
-            (7, HyperbolicTangent(a=1)),
-            (7, HyperbolicTangent(a=1)),
+            (8, HyperbolicTangent()),
+            (8, HyperbolicTangent()),
             (1, LinearFunction())
         ],
         eta=0.1,
-        # momentum=0.9
+        momentum=0.9
     )
 
 
@@ -33,6 +34,9 @@ def load_network(filename):
     new_network = get_generic_network()
     for old_layer, new_layer in zip(old_network.layers, new_network.layers):
         old_layer.transference_fn = new_layer.transference_fn
+
+    old_network.eta = new_network.eta
+    old_network.momentum = new_network.momentum
 
     return old_network
 
@@ -55,7 +59,7 @@ def mean_squared_error(network, inputs, results):
     return ans
 
 
-def plot_errors(network, training_errors, test_errors, expected_error):
+def plot_errors(network, training_errors, test_errors):
     colors = ['r', 'b']
     markers = ['x', 'o']
 
@@ -70,8 +74,22 @@ def plot_errors(network, training_errors, test_errors, expected_error):
     plt.ylim([0, 0.1])
 
     hidden_layers = 2
-    title = '{} HLayers: {}, eta: {}, err: {}'.format(hidden_layers, [x.__str__() for x in network.layers[:hidden_layers]], network.eta, expected_error)
+    title = '{} HLayers: {}, eta: {}'.format(hidden_layers, [x.reduced_description() for x in network.layers[:hidden_layers]], network.eta)
     plt.title(title)
+    plt.show()
+
+
+def plot_terrain(inputs, outputs):
+    get_first = lambda x: x[0]
+    get_second = lambda x: x[1]
+    X = list(map(get_first, inputs))
+    Y = list(map(get_second, inputs))
+    Z = list(map(get_first, outputs))
+    # X, Y = np.meshgrid(x, y)
+    # Z = z.reshape(X.shape)
+    fig = plt.figure()
+    ax = Axes3D(fig)
+    ax.scatter(X, Y, Z)
     plt.show()
 
 
@@ -79,8 +97,8 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
     epochs = 0
     epochs_limit = 5000
 
-    expected_error = 1e-4
-    error_limit = np.sqrt(2 * expected_error)
+    expected_error = 1e-3
+    error_limit = (expected_error ** 2) / 2
 
     training_error = mean_squared_error(network, training_inputs, training_results)
     prev_training_error = None
@@ -90,12 +108,12 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
     training_errors = [training_error]
     test_errors = [test_error]
 
-    pr = False
+    pr = True
     prints = 0
     training_step = 1
-    print_every = 1
+    print_every = 10
 
-    while training_error > error_limit and epochs < epochs_limit:
+    while test_error > error_limit and epochs < epochs_limit:
         network.train(training_inputs, training_results, training_step)
         epochs += training_step
 
@@ -121,11 +139,11 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
     print('* Training error: {}'.format(mean_squared_error(network, training_inputs, training_results)))
     print('* Test     error: {}'.format(mean_squared_error(network, test_inputs, test_results)))
-    plot_errors(network, training_errors, test_errors, expected_error)
+    plot_errors(network, training_errors, test_errors)
 
 
 def maintain_same_weights():
-    load = True
+    load = False
     filename = 'network_dumps/weights_test.obj'
     parser = Parser()
     training_inputs, training_results = parser.get_half_data()
@@ -135,24 +153,18 @@ def maintain_same_weights():
         network = load_network(filename)
     else:
         network = get_generic_network()
-        serialize_network_layers(network, filename)
-
-    # network.print_structure()
-    print("---------TRAINING---------")
-    train_and_print(network, training_inputs, training_results, test_inputs, test_results)
-
-
-def main():
-    parser = Parser()
-    inputs, results = parser.get_data(20)
-    network = get_generic_network() if not should_load_network else load_network(network_filename)
+        # serialize_network_layers(network, filename)
 
     network.print_structure()
     print("---------TRAINING---------")
+    train_and_print(network, training_inputs, training_results, test_inputs, test_results)
+    serialize_network_layers(network, filename)
 
-    train_and_print(network, inputs, results)
 
-    serialize_network_layers(network, network_filename)
+def test_plot_terrain():
+    parser = Parser()
+    inputs, outputs = parser.get_all()
+    plot_terrain(inputs, outputs)
 
 
 def xor():
@@ -186,4 +198,5 @@ def xor():
 if __name__ == "__main__":
     # main()
     # xor()
-    maintain_same_weights()
+    # maintain_same_weights()
+    test_plot_terrain()
