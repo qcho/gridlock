@@ -5,6 +5,22 @@ from transference import TransferenceFunction
 from transference import factory as activation_factory
 
 
+def _parse_layers(json_value):
+    out_val = []
+    for i, layer in enumerate(json_value):
+        if 'activation_function' not in layer:
+            raise ValueError("Missing 'activation_function' key from layers[{}]".format(i))
+        activation_function = activation_factory.create_from_json(layer["activation_function"])
+        if 'neurons' not in layer or not isinstance(layer['neurons'], int):
+            raise ValueError("Missing  or invalid 'neurons' key from layers[{}]".format(i))
+        out_val.append((
+            layer["neurons"],
+            activation_function,
+            layer["neuron_weights"] if 'neuron_weights' in layer and isinstance(layer["neuron_weights"], list) else None
+        ))
+    return out_val
+
+
 def _init_layers(n_inputs: int,
                  layer_configuration: List[Tuple[int, TransferenceFunction, Optional[List[Dict[str, List[float]]]]]]):
     """
@@ -105,18 +121,3 @@ class Network:
         network_configuration = _parse_layers(json_value["layers"])
         return Network(json_value['inputs'], network_configuration, json_value['eta'], json_value['momentum'])
 
-
-def _parse_layers(json_value):
-    out_val = []
-    for i, layer in enumerate(json_value):
-        if 'activation_function' not in layer:
-            raise ValueError("Missing 'activation_function' key from layers[{}]".format(i))
-        activation_function = activation_factory.create_from_json(layer["activation_function"])
-        if 'neurons' not in layer or not isinstance(layer['neurons'], int):
-            raise ValueError("Missing  or invalid 'neurons' key from layers[{}]".format(i))
-        out_val.append((
-            layer["neurons"],
-            activation_function,
-            layer["neuron_weights"] if 'neuron_weights' in layer and isinstance(layer["neuron_weights"], list) else None
-        ))
-    return out_val
