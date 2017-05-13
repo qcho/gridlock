@@ -18,6 +18,12 @@ class Neuron:
     def __str__(self):
         return "{}-input neuron"
 
+    def to_json(self):
+        return {
+            "bias": self.bias,
+            "weights": self.weights
+        }
+
 
 class NetworkLayer:
     def __init__(self, n_neurons: int, n_inputs: int, transference_function: TransferenceFunction,
@@ -66,5 +72,6 @@ class NetworkLayer:
     def to_json(self):
         return {
             "neurons": len(self.neurons),
-            "activation_function": self.transference_fn.to_json()
+            "activation_function": self.transference_fn.to_json(),
+            "neuron_weights": [neuron.to_json() for neuron in self.neurons]
         }
