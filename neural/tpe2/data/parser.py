@@ -12,7 +12,6 @@ class Parser:
     def _parse(self):
         """
         Parse a terrain file, skipping the first line. Expects file to exist
-        :param data_path: Path to the data file.
         :return: array of [x1, x2, z]
         """
         try:
