@@ -57,7 +57,6 @@ class Network:
         self._adaptive_b = adaptive_b
         self._adaptive_annealing_k = adaptive_annealing
 
-
     def print_structure(self):
         print("============ Neural Network ============")
         print("Properties:")
@@ -79,7 +78,6 @@ class Network:
             self._feed_forward(x_i)
             self._back_propagate(x_i, expected_i)
 
-
         if self._do_adaptive_bold:
             self._adapt_eta_bold(data, expected_output, previous_errors)
         if self._do_adaptive_annealing():
@@ -88,19 +86,16 @@ class Network:
     def predict(self, value):
         return self._feed_forward(value)
 
-
     def _feed_forward(self, x_i):
         V_m = x_i
         for layer in self.layers:
             V_m = layer.process(V_m)  # Each neuron saves it's output after this
         return V_m
 
-
     def _back_propagate(self, x_i, expected):
         # TODO: Error statistics
         self._update_deltas(expected)  # Each neuron saves it's delta after this
         self._update_errors(x_i)
-
 
     def _update_deltas(self, expected):
         for i in reversed(range(len(self.layers))):
@@ -123,7 +118,6 @@ class Network:
                     print('Neuron {} saturated in layer {}: derivative {}'.format(j, i, d))
                 neuron.delta = errors[j] * d
 
-
     def _update_errors(self, data):
         for i in range(len(self.layers)):
             inputs = data if i == 0 else [neuron.output for neuron in self.layers[i - 1].neurons]
@@ -135,7 +129,6 @@ class Network:
 
                 neuron.bias += self.eta * neuron.delta
 
-
     @classmethod
     def create_from_json(cls, json_value):
         if 'eta' not in json_value:
@@ -146,7 +139,6 @@ class Network:
             raise ValueError("Missing 'layers' key in network json")
         network_configuration = _parse_layers(json_value["layers"])
         return Network(json_value['inputs'], network_configuration, json_value['eta'], json_value['momentum'])
-
 
     def to_json(self):
         return {

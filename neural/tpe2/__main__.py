@@ -16,6 +16,7 @@ should_load_network = False
 config = Config("config.json")
 adaptive_k = 100
 
+
 def get_generic_network():
     return Network(
         n_inputs=2,
