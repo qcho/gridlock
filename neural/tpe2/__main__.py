@@ -28,6 +28,7 @@ def get_generic_network():
 
 
 def load_network(filename):
+    """Deprecated: Do not use"""
     with open(filename, "rb") as fh:
         old_network = Unpickler(fh).load()
 
@@ -39,11 +40,6 @@ def load_network(filename):
     old_network.momentum = new_network.momentum
 
     return old_network
-
-
-def serialize_network_layers(network: Network, filename):
-    with open(filename, "wb") as serialized_network:
-        Pickler(serialized_network, 2).dump(network)
 
 
 def mean_squared_error(network, inputs, results):
@@ -159,12 +155,12 @@ def maintain_same_weights():
         network = load_network(filename)
     else:
         network = get_generic_network()
-        # serialize_network_layers(network, filename)
+        # config.write_network(network, filename)
 
     network.print_structure()
     print("---------TRAINING---------")
     train_and_print(network, training_inputs, training_results, test_inputs, test_results)
-    serialize_network_layers(network, filename)
+    config.write_network(network, filename)
 
 
 def test_plot_terrain():
@@ -199,7 +195,7 @@ def xor():
     for x_i, result_i in zip(inputs, results):
         print("For {} expecting {} got {}".format(x_i, result_i, network.predict(x_i)))
 
-    serialize_network_layers(network, 'tpe2/network_dumps/xor_net.obj')
+    config.write_network(network)
 
 
 if __name__ == "__main__":
