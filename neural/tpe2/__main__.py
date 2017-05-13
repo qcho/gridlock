@@ -27,7 +27,7 @@ def get_generic_network():
         ],
         eta=0.5,
         # momentum=0.9,
-        adaptive_bold={"a":0.01, "b":0.1},
+        adaptive_bold={"a": 0.01, "b": 0.1},
         # adaptive_annealing=adaptive_k
     )
 
