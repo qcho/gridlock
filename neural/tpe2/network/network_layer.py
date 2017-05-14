@@ -39,7 +39,6 @@ class NetworkLayer:
                              "Got {}, expected {}".format(len(weights), len(self.neurons)))
         if len(weights) == 0:
             return
-        print(weights)
         for neuron, weights in zip(self.neurons, weights):
             if len(weights["weights"]) != len(neuron.weights):
                 raise ValueError("Invalid amount of input weights received."
