@@ -7,7 +7,7 @@
     "adaptive_bold": {
       "a": 0.001,
       "b": 0.01,
-      "k": 1
+      "k": 3
     },
     "adaptive_annealing": null,
     "layers": [
