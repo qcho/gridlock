@@ -1,8 +1,10 @@
 from typing import List, Tuple, Optional, Dict
+from copy import deepcopy
 
 from .network_layer import NetworkLayer
 from ..transference import TransferenceFunction
 from ..transference import factory as activation_factory
+from ..mean_squared_error import calculate_mean_squared_error
 
 
 def _parse_layers(json_value):
@@ -44,26 +46,44 @@ def _init_layers(n_inputs: int,
 class Network:
     def __init__(self, n_inputs: int,
                  layer_configuration: List[Tuple[int, TransferenceFunction, Optional[List[float]]]],
-                 eta: float, momentum: float = 0):
+                 eta: float, momentum: float = 0.0, adaptive_annealing: int = 0,
+                 adaptive_bold: Dict[str, float] = (0.001, 0.1)):
         self.eta = eta
+        self._original_eta = eta
         self.layers = _init_layers(n_inputs, layer_configuration)
         self.n_inputs = n_inputs
         self.momentum = momentum
+        self._adaptive_bold = adaptive_bold
+        self._adaptive_annealing_k = adaptive_annealing
+        self._previous_layers = None
 
     def print_structure(self):
         print("============ Neural Network ============")
         print("Properties:")
         print("    η: {}".format(self.eta))
         print("    momentum (α): {}".format(self.momentum))
+        print("    adaptive_bold: {}".format(self._do_adaptive_bold()))
+        print("    adaptive_annealing: {}".format(self._adaptive_annealing_k))
         print("Layers:")
         for i, layer in enumerate(self.layers):
             print("> Layer {}:\n{}".format(i, layer))
 
-    def train(self, data, expected_output, iterations: int = 1000):
-        for _ in range(iterations):
-            for x_i, expected_i in zip(data, expected_output):
-                self._feed_forward(x_i)
-                self._back_propagate(x_i, expected_i)
+    def train(self, data, expected_output, previous_errors: List=list()):
+        """
+            This method trains the network one epoch
+            @:param previous_error is used for the eta adaptation
+        """
+        if self._do_adaptive_bold():
+            self._previous_layers = deepcopy(self.layers)
+
+        for x_i, expected_i in zip(data, expected_output):
+            self._feed_forward(x_i)
+            self._back_propagate(x_i, expected_i)
+
+        if self._do_adaptive_bold():
+            self._adapt_eta_bold(data, expected_output, previous_errors)
+        if self._do_adaptive_annealing():
+            self._adapt_eta_annealing(previous_errors)
 
     def predict(self, value):
         return self._feed_forward(value)
@@ -131,3 +151,27 @@ class Network:
                 "layers": [layer.to_json() for layer in self.layers]
             }
         }
+
+    def _adapt_eta_bold(self, data, expected_output, previous_errors):
+        if len(previous_errors) > 0:
+            current_error = calculate_mean_squared_error(self, data, expected_output)
+
+            if (current_error - previous_errors[-1]) > 0:
+                self.eta -= self._adaptive_bold["b"] * self.eta  # b
+                # self.eta *= 0.5
+                # self.eta *= (1 - self._adaptive_b)
+
+                self.layers = self._previous_layers
+            elif (current_error - previous_errors[-1]) < 0:
+                self.eta += self._adaptive_bold["a"]
+                # self.eta *= (1 + self._adaptive_a)
+
+    def _adapt_eta_annealing(self, previous_errors):
+        if len(previous_errors) >= self._adaptive_annealing_k:
+            self.eta = self._original_eta / (1 + ((len(previous_errors) - 1) / self._adaptive_annealing_k))
+
+    def _do_adaptive_annealing(self):
+        return self._adaptive_annealing_k > 0
+
+    def _do_adaptive_bold(self):
+        return self._adaptive_bold is not None

@@ -24,6 +24,7 @@ class Config:
                 raise ValueError("Missing network configuration parameters")
             return Network.create_from_json(json_obj['network'])
 
-    def write_network(self, network: Network):
-        with open(self._file_path, 'r') as fh:
-            json.dump(network.to_json(), fh)
+    def write_network(self, network: Network, file_path=None):
+        file_path = file_path if file_path is not None else self._file_path
+        with open(pkg_resources.resource_filename(__data_pkg__, file_path), 'w') as fh:
+            json.dump(network.to_json(), fh, indent=2)

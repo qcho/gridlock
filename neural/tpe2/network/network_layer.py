@@ -12,11 +12,19 @@ class Neuron:
         self.weights = np.random.rand(n_inputs) - 0.5
         self.last_weight_deltas = np.zeros(n_inputs)
 
+
     def process(self, neuron_input):
         return np.dot(neuron_input, self.weights) + self.bias
 
+
     def __str__(self):
         return "{}-input neuron"
+
+    def to_json(self):
+        return {
+            "bias": self.bias,
+            "weights": self.weights
+        }
 
 
 class NetworkLayer:
@@ -41,6 +49,7 @@ class NetworkLayer:
             neuron.weights = weights["weights"]
             neuron.bias = weights["bias"]
 
+
     def process(self, neuron_input):
         V = []
         for neuron in self.neurons:
@@ -49,6 +58,7 @@ class NetworkLayer:
             neuron.output = v_i
             V.append(v_i)
         return V
+
 
     def __str__(self):
         out_val = "Properties:\n"
@@ -60,11 +70,13 @@ class NetworkLayer:
                        "{}; bias {}".format(i, len(neuron.weights), neuron.weights, neuron.bias)
         return out_val
 
+
     def reduced_description(self):
         return '{} N {}'.format(len(self.neurons), self.transference_fn)
 
     def to_json(self):
         return {
             "neurons": len(self.neurons),
-            "activation_function": self.transference_fn.to_json()
+            "activation_function": self.transference_fn.to_json(),
+            "neuron_weights": [neuron.to_json() for neuron in self.neurons]
         }
