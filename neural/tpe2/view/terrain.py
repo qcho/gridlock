@@ -16,17 +16,14 @@ class TerrainPlot:
         ax.scatter(X, Y, Z, s=2, c=(0, 0, 1, 1))
         plt.show()
 
-
     @classmethod
     def _original_data(cls):
         parser = Parser()
         return parser.get()
 
-
     @classmethod
     def _get_min_max(cls, array):
-        return (np.floor(min(array)), np.ceil(max(array)))
-
+        return np.floor(min(array)), np.ceil(max(array))
 
     @classmethod
     def _get_meshgrid(cls, x, y, resolution):
@@ -35,7 +32,6 @@ class TerrainPlot:
         x = np.arange(min_x, max_x, resolution)
         y = np.arange(min_y, max_y, resolution)
         return np.meshgrid(x, y)
-
 
     @classmethod
     def only_network(cls, network, resolution: float = 0.05):
@@ -48,7 +44,6 @@ class TerrainPlot:
             for x_j, y_j in zip(x_i, y_i):
                 Z.append(network.predict([x_j, y_j]))
         cls._basic(X, Y, Z)
-
 
     @classmethod
     def network_and_original(cls, network_and_resolution: Optional[Tuple[Network, float]]):
