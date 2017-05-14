@@ -179,16 +179,18 @@ class Network:
     def _adapt_eta_bold(self, data, expected_output, previous_errors):
         if len(previous_errors) > 0:
             current_error = calculate_mean_squared_error(self, data, expected_output)
-
             if (current_error - previous_errors[-1]) > 0:
-                self.eta -= self._adaptive_bold["b"] * self.eta  # b
-                # self.eta *= 0.5
-                # self.eta *= (1 - self._adaptive_b)
-
-                self.layers = self._previous_layers
-            elif (current_error - previous_errors[-1]) < 0:
-                self.eta += self._adaptive_bold["a"]
-                # self.eta *= (1 + self._adaptive_a)
+                print("reversed! old:{}, delta:{}".format(self.eta, self._adaptive_bold.b * self.eta))
+                self.eta -= self._adaptive_bold.b * self.eta
+                # self.layers = self._previous_layers
+                return
+            if len(previous_errors) >= self._adaptive_bold.k:
+                consistent = True
+                for error in previous_errors[-self._adaptive_bold.k:]:
+                    consistent = consistent and current_error - error < 0
+                if consistent:
+                    self.eta += self._adaptive_bold.a
+                    print("---consistent!", self.eta)
 
     def _adapt_eta_annealing(self, previous_errors):
         if len(previous_errors) >= self._adaptive_annealing_k:
