@@ -8,9 +8,9 @@ class HyperbolicTangent(TransferenceFunction):
     @classmethod
     def from_json_value(cls, json_value):
         out_val = HyperbolicTangent()
-        if 'beta' in json_value and isinstance(json_value['beta'], float):
+        if 'beta' in json_value:
             out_val.beta = json_value['beta']
-        if 'a' in json_value and isinstance(json_value['a'], float):
+        if 'a' in json_value:
             out_val.a = json_value['a']
         return out_val
 

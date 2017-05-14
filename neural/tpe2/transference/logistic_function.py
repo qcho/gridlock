@@ -14,7 +14,7 @@ class LogisticFunction(TransferenceFunction):
     @classmethod
     def from_json_value(cls, json_value):
         out_val = LogisticFunction()
-        if 'a' in json_value and isinstance(json_value['a'], float):
+        if 'a' in json_value:
             out_val.a = json_value['a']
         return out_val
 
