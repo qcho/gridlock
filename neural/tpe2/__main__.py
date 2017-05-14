@@ -94,6 +94,7 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
         if pr:
             if prints % print_every == 0:
+                print("Epoch: {}".format(epochs))
                 string = '[-]' if training_error < prev_training_error else '[+]'
                 print('{} Training error: {}'.format(string, training_error))
                 string = '[-]' if test_error < prev_test_error else '[+]'
