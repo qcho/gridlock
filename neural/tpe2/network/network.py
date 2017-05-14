@@ -10,11 +10,7 @@ from ..transference import factory as activation_factory
 def _parse_layers(json_value):
     out_val = []
     for i, layer in enumerate(json_value):
-        if 'activation_function' not in layer:
-            raise ValueError("Missing 'activation_function' key from layers[{}]".format(i))
         activation_function = activation_factory.create_from_json(layer["activation_function"])
-        if 'neurons' not in layer or not isinstance(layer['neurons'], int):
-            raise ValueError("Missing  or invalid 'neurons' key from layers[{}]".format(i))
         out_val.append((
             layer["neurons"],
             activation_function,
@@ -136,12 +132,6 @@ class Network:
 
     @classmethod
     def create_from_json(cls, json_value):
-        if 'eta' not in json_value:
-            raise ValueError("Missing 'eta' key in network json")
-        if 'inputs' not in json_value:
-            raise ValueError("Missing 'inputs' key in network json")
-        if 'layers' not in json_value:
-            raise ValueError("Missing 'layers' key in network json")
         network_configuration = _parse_layers(json_value["layers"])
         return Network(
             n_inputs=json_value['inputs'],

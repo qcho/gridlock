@@ -11,8 +11,4 @@ factory_map = {
 
 
 def create_from_json(json_value):
-    if 'type' not in json_value:
-        raise ValueError("Missing 'type' key from activation_function json")
-    if json_value['type'] not in factory_map.keys():
-        raise ValueError("Invalid type: {}".format(json_value['type']))
     return factory_map[json_value['type']](json_value)
