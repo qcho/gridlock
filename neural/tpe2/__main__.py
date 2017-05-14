@@ -4,13 +4,21 @@ from time import time
 
 from .view import Charts
 from .view import TerrainPlot
+
 from .config import Config
+
 from .mean_squared_error import calculate_mean_squared_error
+
 from .network import Network
+
 from .transference import HyperbolicTangent
 from .transference import LinearFunction
+
 from .util import Parser
 from .util.data_filters import half as filter_half
+from .util.data_filters import skipping
+from .util.data_filters import z_ordered
+from .util.data_filters import random
 
 network_filename = "tpe2/network_dumps/net.obj"
 should_load_network = False
@@ -29,7 +37,7 @@ def get_generic_network():
         eta=0.25,
         # momentum=0.9,
         # adaptive_bold={"a": 0.01, "b": 0.1},
-        adaptive_annealing=adaptive_k
+        # adaptive_annealing=adaptive_k
     )
 
 
@@ -53,9 +61,16 @@ def load_network(filename) -> Network:
     return old_network
 
 
+def ordered_alternate_training_and_test_data():
+    parser = Parser()
+    training_inputs, training_results = parser.get(filter_fn=skipping(amount=1, offset=0), order_fn=z_ordered(ascending=True))
+    test_inputs, test_results = parser.get(filter_fn=skipping(amount=1, offset=1), order_fn=z_ordered(ascending=True))
+    return (training_inputs, training_results, test_inputs, test_results)
+
+
 def train_and_print(network, training_inputs, training_results, test_inputs, test_results):
     epochs = 0
-    epochs_limit = 10000
+    epochs_limit = 100
 
     expected_error = 1e-3
     error_limit = (expected_error ** 2) / 2
@@ -97,15 +112,16 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
     print('* Training error: {}'.format(calculate_mean_squared_error(network, training_inputs, training_results)))
     print('* Test     error: {}'.format(calculate_mean_squared_error(network, test_inputs, test_results)))
-    TerrainPlot.only_network(network)
+    Charts.training_errors(network, training_errors, test_errors)
+    # TerrainPlot.only_network(network)
 
 
 def maintain_same_weights():
     load = True
     filename = 'weights_test.json'
-    parser = Parser()
-    training_inputs, training_results = parser.get(filter_fn=filter_half())
-    test_inputs, test_results = parser.get(filter_fn=filter_half(False))
+    # training_inputs, training_results, test_inputs, test_results = ordered_alternate_training_and_test_data()
+    training_inputs, training_results = Parser().get(filter_fn=filter_half(first_half=True))
+    test_inputs, test_results = Parser().get()
 
     if load:
         network, err = config.parse_network(filename)
@@ -117,13 +133,10 @@ def maintain_same_weights():
     print("---------TRAINING---------")
     train_and_print(network, training_inputs, training_results, test_inputs, test_results)
     print(network.print_structure())
-    TerrainPlot.only_network(network)
     config.write_network(network, filename)
 
 
-def test_plot_terrain():
-    parser = Parser()
-    inputs, outputs = parser.get()
+def test_plot_terrain(inputs, outputs):
     x = [x[0] for x in inputs]
     y = [x[1] for x in inputs]
     z = [x[0] for x in outputs]
@@ -131,17 +144,15 @@ def test_plot_terrain():
 
 
 def test_network_terrain():
-    # network = load_network('tpe2/network_dumps/weights_test copy.obj')
     network, err = config.parse_network("weights_test.json")
-    # config.write_network(network, "weight_test.json")
-    print(network.print_structure())
-    # TerrainPlot.only_network(network)
+    # print(network.print_structure())
+    TerrainPlot.only_network(network)
 
 
 def architecture_selection():
     parser = Parser()
-    training_inputs, training_results = parser.get_half_data()
-    test_inputs, test_results = parser.get_half_data(half='last')
+    training_inputs, training_results = parser.get(filter_fn=filter_half())
+    test_inputs, test_results = parser.get(filter_fn=filter_half(False))
 
     min_training_errors = []
     min_test_errors = []
@@ -172,9 +183,7 @@ def architecture_selection():
         error_limit = (expected_error ** 2) / 2
 
         training_error = calculate_mean_squared_error(network, training_inputs, training_results)
-        prev_training_error = None
         test_error = calculate_mean_squared_error(network, test_inputs, test_results)
-        prev_test_error = None
 
         training_errors = [training_error]
         test_errors = [test_error]
@@ -187,8 +196,6 @@ def architecture_selection():
             training_time += time() - st
             epochs += 1
 
-            prev_training_error = training_error
-            prev_test_error = test_error
             training_error = calculate_mean_squared_error(network, training_inputs, training_results)
             test_error = calculate_mean_squared_error(network, test_inputs, test_results)
 
@@ -226,5 +233,6 @@ def xor():
 if __name__ == "__main__":
     # xor()
     maintain_same_weights()
-    # test_plot_terrain()
+    # inputs, outputs = Parser().get()
+    # test_plot_terrain(inputs, outputs)
     # test_network_terrain()

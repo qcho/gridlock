@@ -159,15 +159,28 @@ class Network:
         if len(previous_errors) > 0:
             current_error = calculate_mean_squared_error(self, data, expected_output)
 
-            if (current_error - previous_errors[-1]) > 0:
-                self.eta -= self._adaptive_bold["b"] * self.eta  # b
+            if self._error_increased(current_error, previous_errors):
+                self.eta -= self._adaptive_bold["b"] * self.eta
                 # self.eta *= 0.5
                 # self.eta *= (1 - self._adaptive_b)
-
                 self.layers = self._previous_layers
-            elif (current_error - previous_errors[-1]) < 0:
+
+            elif self._error_decreased(current_error, previous_errors):
                 self.eta += self._adaptive_bold["a"]
                 # self.eta *= (1 + self._adaptive_a)
+
+
+    def _error_increased(self, current_error, previous_errors):
+        percentage_change = (current_error - previous_errors[-1]) / previous_errors[-1] * 100
+        return percentage_change > 5
+        return (current_error - previous_errors[-1]) > 0
+
+
+    def _error_decreased(self, current_error, previous_errors):
+        percentage_change = (current_error - previous_errors[-1]) / previous_errors[-1] * 100
+        return percentage_change < 5
+        return (current_error - previous_errors[-1]) < 0
+
 
     def _adapt_eta_annealing(self, previous_errors):
         if len(previous_errors) >= self._adaptive_annealing_k:
