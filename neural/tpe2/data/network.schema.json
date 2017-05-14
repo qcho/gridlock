@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "",
+  "type": "object",
+  "required": ["inputs", "eta", "layers"],
+  "properties": {
+    "inputs": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "eta": {
+      "type": "number",
+      "minimum": 0
+    },
+    "momentum": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "default": 0
+    },
+    "epochs": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "adaptive_bold": {
+      "type": ["object", "null"],
+      "required": ["a", "b"],
+      "properties": {
+        "a": {
+          "type": "number"
+        },
+        "b": {
+          "type": "number"
+        }
+      }
+    },
+    "adaptive_annealing": {
+      "type": ["integer", "null"]
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["neurons", "activation_function"],
+        "properties": {
+          "neurons": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "activation_function": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "enum": ["htan", "logistic", "linear", "sign", "step"]
+              },
+              "a": {
+                "type": "number"
+              },
+              "beta": {
+                "type": "number"
+              }
+            }
+          },
+          "neuron_weights": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["bias"],
+              "properties": {
+                "bias": {
+                  "type": "number"
+                },
+                "weights": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

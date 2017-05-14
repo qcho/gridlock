@@ -7,6 +7,7 @@
 cycler==0.10.0            # via matplotlib
 matplotlib==2.0.2
 numpy==1.12.1
+jsonschema==2.6.0
 pyparsing==2.2.0          # via matplotlib
 python-dateutil==2.6.0    # via matplotlib
 pytz==2017.2              # via matplotlib
