@@ -25,9 +25,9 @@ def get_generic_network():
             (8, HyperbolicTangent(a=1), None),
             (1, LinearFunction(), None)
         ],
-        eta=0.5,
+        eta=0.05,
         # momentum=0.9,
-        adaptive_bold={"a": 0.01, "b": 0.1},
+        # adaptive_bold={"a": 0.01, "b": 0.1},
         # adaptive_annealing=adaptive_k
     )
 
