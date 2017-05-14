@@ -15,3 +15,5 @@ pyparsing==2.2.0          # via matplotlib
 python-dateutil==2.6.0    # via matplotlib
 pytz==2017.2              # via matplotlib
 six==1.10.0               # via cycler, matplotlib, pip-tools, python-dateutil
+scipy==0.19.0
+scikit-learn==0.18.1

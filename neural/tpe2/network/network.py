@@ -1,4 +1,6 @@
 from typing import List, Tuple, Optional, Dict
+from sklearn import linear_model
+import numpy as np
 
 from .network_layer import NetworkLayer
 from ..transference import TransferenceFunction
@@ -204,3 +206,14 @@ class Network:
 
     def _do_adaptive_bold(self):
         return self._adaptive_bold is not None
+
+    def _calculate_error_slope(self, previous_errors, k):
+        regression = linear_model.LinearRegression()
+        regression.fit(np.transpose(np.matrix(range(k))), np.transpose(np.matrix(previous_errors[-k:])))
+        return (regression.predict(k - 1) - regression.predict(0)) / (k - 1)
+
+    def _consistent_increase(self, previous_errors, k, err = 0.01):
+        return self._calculate_error_slope(previous_errors, k) > err
+
+    def _consistent_decrease(self, previous_errors, k, err = 0.01):
+        return self._calculate_error_slope(previous_errors, k) < err
