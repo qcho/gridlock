@@ -68,6 +68,7 @@ class AdaptiveBold:
                     consistent = consistent and current_error - error < 0
                 if consistent:
                     return self.a
+        return 0
 
     def __str__(self):
         return "AdaptiveBold(a:{}, b:{}, k:{})".format(self.a, self.b, self.k)
@@ -85,7 +86,6 @@ class Network:
         self.momentum = momentum
         self._adaptive_bold = adaptive_bold
         self._adaptive_annealing_k = adaptive_annealing
-        self._previous_layers = None
         self._epochs = epochs
 
     def print_structure(self):
@@ -105,9 +105,6 @@ class Network:
             This method trains the network one epoch
             @:param previous_error is used for the eta adaptation
         """
-        if self._do_adaptive_bold():
-            self._previous_layers = deepcopy(self.layers)
-
         for x_i, expected_i in zip(data, expected_output):
             self._feed_forward(x_i)
             self._back_propagate(x_i, expected_i)
@@ -191,8 +188,6 @@ class Network:
 
     def _adapt_eta_bold(self, data, expected_output, previous_errors):
         delta_eta = self._adaptive_bold.delta_eta(self, data, expected_output, previous_errors)
-        if delta_eta < 0:
-            self.layers = self._previous_layers
         self.eta += delta_eta
 
     def _adapt_eta_annealing(self, previous_errors):
