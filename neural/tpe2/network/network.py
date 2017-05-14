@@ -56,12 +56,12 @@ class AdaptiveBold:
             "k": self.k
         }
 
-    def delta_eta(self, eta, data, expected_output, previous_errors):
+    def delta_eta(self, network, data, expected_output, previous_errors):
         if len(previous_errors) > 0:
-            current_error = calculate_mean_squared_error(self, data, expected_output)
+            current_error = calculate_mean_squared_error(network, data, expected_output)
             if (current_error - previous_errors[-1]) > 0:
-                print("reversed! old:{}, delta:{}".format(eta, self.b * eta))
-                return -(self.b * eta)
+                print("reversed! old:{}, delta:{}".format(network.eta, self.b * network.eta))
+                return -(self.b * network.eta)
             if len(previous_errors) >= self.k:
                 consistent = True
                 for error in previous_errors[-self.k:]:
@@ -190,7 +190,7 @@ class Network:
         }
 
     def _adapt_eta_bold(self, data, expected_output, previous_errors):
-        delta_eta = self._adaptive_bold.delta_eta(self.eta, data, expected_output, previous_errors)
+        delta_eta = self._adaptive_bold.delta_eta(self, data, expected_output, previous_errors)
         if delta_eta < 0:
             self.layers = self._previous_layers
         self.eta += delta_eta

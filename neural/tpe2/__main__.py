@@ -119,7 +119,7 @@ def maintain_same_weights():
     test_inputs, test_results = Parser().get()
 
     if load:
-        network, err = config.parse_network(filename)
+        network, err = config.parse_network("adaptative_net_4_4.json")
         if err is not None:
             print("Error: ", err)
             raise err
