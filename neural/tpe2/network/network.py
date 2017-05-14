@@ -56,6 +56,19 @@ class AdaptiveBold:
             "k": self.k
         }
 
+    def delta_eta(self, eta, data, expected_output, previous_errors):
+        if len(previous_errors) > 0:
+            current_error = calculate_mean_squared_error(self, data, expected_output)
+            if (current_error - previous_errors[-1]) > 0:
+                print("reversed! old:{}, delta:{}".format(eta, self.b * eta))
+                return -(self.b * eta)
+            if len(previous_errors) >= self.k:
+                consistent = True
+                for error in previous_errors[-self.k:]:
+                    consistent = consistent and current_error - error < 0
+                if consistent:
+                    return self.a
+
     def __str__(self):
         return "AdaptiveBold(a:{}, b:{}, k:{})".format(self.a, self.b, self.k)
 
@@ -177,22 +190,10 @@ class Network:
         }
 
     def _adapt_eta_bold(self, data, expected_output, previous_errors):
-        if len(previous_errors) > 0:
-            current_error = calculate_mean_squared_error(self, data, expected_output)
-            if self._error_increased(current_error, previous_errors):
-                self.eta -= self._adaptive_bold.b * self.eta
-                self.layers = self._previous_layers
-
-            elif self._error_decreased(current_error, previous_errors):
-                self.eta += self._adaptive_bold.a
-
-    def _error_increased(self, current_error, previous_errors):
-        percentage_change = (current_error - previous_errors[-1]) / previous_errors[-1] * 100
-        return percentage_change > 5
-
-    def _error_decreased(self, current_error, previous_errors):
-        percentage_change = (current_error - previous_errors[-1]) / previous_errors[-1] * 100
-        return percentage_change < 5
+        delta_eta = self._adaptive_bold.delta_eta(self.eta, data, expected_output, previous_errors)
+        if delta_eta < 0:
+            self.layers = self._previous_layers
+        self.eta += delta_eta
 
     def _adapt_eta_annealing(self, previous_errors):
         if len(previous_errors) >= self._adaptive_annealing_k:
