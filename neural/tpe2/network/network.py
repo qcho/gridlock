@@ -47,7 +47,7 @@ class AdaptiveBold:
 
     @classmethod
     def from_json(cls, json_value):
-        return AdaptiveBold(json_value["a"], json_value["b"], json_value["k"])
+        return None if json_value is None else AdaptiveBold(json_value["a"], json_value["b"], json_value["k"])
 
     def to_json(self):
         return {
