@@ -1,24 +1,19 @@
-import numpy as np
 from pickle import Unpickler
 from time import time
 
-from .view import Charts
-from .view import TerrainPlot
+import numpy as np
 
 from .config import Config
-
-from .util.mean_squared_error import calculate_mean_squared_error
-
 from .network import Network
-
 from .transference import HyperbolicTangent
 from .transference import LinearFunction
-
 from .util import Parser
 from .util.data_filters import half as filter_half
 from .util.data_filters import skipping
 from .util.data_filters import z_ordered
-from .util.data_filters import random
+from .util.mean_squared_error import calculate_mean_squared_error
+from .view import Charts
+from .view import TerrainPlot
 
 network_filename = "tpe2/network_dumps/net.obj"
 should_load_network = False
