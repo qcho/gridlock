@@ -17,9 +17,9 @@ def random(amount: int):
     return filter_fn
 
 
-def skipping(amount: int=1):
+def skipping(amount: int=0, offset: int=0):
     def filter_fn(to_filter):
-        return [item for i, item in enumerate(to_filter) if i % amount == 0]
+        return [item for i, item in enumerate(to_filter) if (i + offset) % (amount + 1) == 0]
     return filter_fn
 
 
