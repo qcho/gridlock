@@ -25,8 +25,12 @@
     },
     "adaptive_bold": {
       "type": ["object", "null"],
-      "required": ["a", "b"],
+      "required": ["a", "b", "k"],
       "properties": {
+        "k": {
+          "type": "integer",
+          "minimum": 1
+        },
         "a": {
           "type": "number"
         },

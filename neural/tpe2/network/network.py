@@ -39,11 +39,32 @@ def _init_layers(n_inputs: int,
     return layers
 
 
+class AdaptiveBold:
+    def __init__(self, a: float, b: float, k: int):
+        self.a = a
+        self.b = b
+        self.k = k
+
+    @classmethod
+    def from_json(cls, json_value):
+        return AdaptiveBold(json_value["a"], json_value["b"], json_value["k"])
+
+    def to_json(self):
+        return {
+            "a": self.a,
+            "b": self.b,
+            "k": self.k
+        }
+
+    def __str__(self):
+        return "AdaptiveBold(a:{}, b:{}, k:{})".format(self.a, self.b, self.k)
+
+
 class Network:
     def __init__(self, n_inputs: int,
                  layer_configuration: List[Tuple[int, TransferenceFunction, Optional[List[float]]]],
                  eta: float, momentum: float = 0.0, adaptive_annealing: int = None,
-                 adaptive_bold: Dict[str, float] = None, epochs: int=0):
+                 adaptive_bold: AdaptiveBold = None, epochs: int=0):
         self.eta = eta
         self._original_eta = eta
         self.layers = _init_layers(n_inputs, layer_configuration)
@@ -59,7 +80,7 @@ class Network:
         print("Properties:")
         print("    η: {}".format(self.eta))
         print("    momentum (α): {}".format(self.momentum))
-        print("    adaptive_bold: {}".format(self._do_adaptive_bold()))
+        print("    adaptive_bold: {}".format(self._adaptive_bold))
         print("    adaptive_annealing: {}".format(self._adaptive_annealing_k))
         print("    epochs: {}".format(self._epochs))
         print("Layers:")
@@ -139,7 +160,7 @@ class Network:
             eta=json_value['eta'],
             momentum=json_value['momentum'],
             adaptive_annealing=json_value['adaptive_annealing'] if 'adaptive_annealing' in json_value else None,
-            adaptive_bold=json_value['adaptive_bold'] if 'adaptive_bold' in json_value else None,
+            adaptive_bold=AdaptiveBold.from_json(json_value['adaptive_bold']) if 'adaptive_bold' in json_value else None,
             epochs=json_value['epochs'] if 'epochs' in json_value else 0)
 
     def to_json(self):
@@ -149,7 +170,7 @@ class Network:
                 "inputs": len(self.layers[0].neurons[0].weights),
                 "eta": self.eta,
                 "momentum": self.momentum,
-                "adaptive_bold": self._adaptive_bold,
+                "adaptive_bold": self._adaptive_bold.to_json(),
                 "adaptive_annealing": self._adaptive_annealing_k,
                 "layers": [layer.to_json() for layer in self.layers]
             }
