@@ -64,7 +64,6 @@ class AdaptiveBold:
             if not self._enabled:
                 return 0
             if delta_error > 0:
-                print("reversed! old:{}, delta:{}".format(eta, self.b * eta))
                 self._enabled = False
                 return -(self.b * eta)
             if len(previous_errors) >= self.k:
@@ -72,7 +71,6 @@ class AdaptiveBold:
                 for error in previous_errors[-self.k:]:
                     consistent = consistent and current_error - error < 0
                 if consistent:
-                    print("Consistent!!!")
                     return self.a
         return 0
 
