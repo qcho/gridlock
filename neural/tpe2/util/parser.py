@@ -36,14 +36,3 @@ class Parser:
         if order_fn is not None:
             data = order_fn(data)
         return _zip(data)
-
-    def get_z_ordered(self):
-        pass
-
-    def get_alternate(self, amount=None, pair=True):
-        to = self.data_size if amount is None else amount * 2
-        ans = []
-        r = range(0, to, 2) if pair else range(1, to, 2)
-        for i in r:
-            ans.append(self.data[i])
-        return _zip(ans)
