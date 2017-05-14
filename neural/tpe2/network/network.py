@@ -170,7 +170,7 @@ class Network:
                 "inputs": len(self.layers[0].neurons[0].weights),
                 "eta": self.eta,
                 "momentum": self.momentum,
-                "adaptive_bold": self._adaptive_bold.to_json(),
+                "adaptive_bold": self._adaptive_bold.to_json() if self._adaptive_bold is not None else None,
                 "adaptive_annealing": self._adaptive_annealing_k,
                 "layers": [layer.to_json() for layer in self.layers]
             }
