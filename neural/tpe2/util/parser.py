@@ -1,7 +1,12 @@
+from typing import Tuple, Optional, List, Callable, Any
+
 import pkg_resources
-from math import floor
-from random import sample
+
 from ..data import __data_pkg__
+
+
+def _zip(data):
+    return zip(*[((x[0], x[1]), [x[2]]) for x in data])
 
 
 class Parser:
@@ -10,7 +15,7 @@ class Parser:
         self.data, self.err = self._parse()
         self.data_size = len(list(self.data))
 
-    def _parse(self):
+    def _parse(self) -> Tuple[Optional[List[List[float]]], Optional[IOError]]:
         """
         Parse a terrain file, skipping the first line. Expects file to exist
         :return: array of [x1, x2, z]
@@ -22,21 +27,17 @@ class Parser:
         except IOError as err:
             return None, err
 
-    def get_data(self, to_, from_: int = 0):
-        return self._zip(self.data[from_:to_])
+    def get(self, filter_fn: Callable[List[Any], Any]=None,
+            order_fn: Optional[Callable[List[Any], Any]]=None):
+        data = self.data
+        if filter_fn is not None:
+            data = filter_fn(data)
+        if order_fn is not None:
+            data = order_fn(data)
+        return _zip(data)
 
-    def get_all(self):
-        return self.get_data(to_=self.data_size)
-
-    def _zip(self, data):
-        return zip(*[((x[0], x[1]), [x[2]]) for x in data])
-
-    def get_half_data(self, half = 'first'):
-        size = floor(self.data_size / 2)
-        return (self.get_data(to_=size) if half == 'first' else self.get_data(from_=size, to_=self.data_size))
-
-    def get_random_data(self, amount):
-        return self._zip(sample(self.data, amount))
+    def get_z_ordered(self):
+        pass
 
     def get_alternate(self, amount=None, pair=True):
         to = self.data_size if amount is None else amount * 2
@@ -44,4 +45,4 @@ class Parser:
         r = range(0, to, 2) if pair else range(1, to, 2)
         for i in r:
             ans.append(self.data[i])
-        return self._zip(ans)
+        return _zip(ans)

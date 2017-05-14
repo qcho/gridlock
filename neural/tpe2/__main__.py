@@ -10,6 +10,7 @@ from .network import Network
 from .transference import HyperbolicTangent
 from .transference import LinearFunction
 from .util import Parser
+from .util.data_filters import half as filter_half
 
 network_filename = "tpe2/network_dumps/net.obj"
 should_load_network = False
@@ -82,7 +83,7 @@ def plot_terrain(X, Y, Z):
 def network_plot_complete_terrain(network):
     resolution = 0.05
     parser = Parser()
-    inputs, outputs = parser.get_all()
+    inputs, outputs = parser.get()
     x = [x[0] for x in inputs]
     y = [x[1] for x in inputs]
     min_x = np.floor(min(x))
@@ -150,8 +151,8 @@ def maintain_same_weights():
     load = True
     filename = 'weights_test.json'
     parser = Parser()
-    training_inputs, training_results = parser.get_half_data()
-    test_inputs, test_results = parser.get_half_data(half='last')
+    training_inputs, training_results = parser.get(filter_fn=filter_half())
+    test_inputs, test_results = parser.get(filter_fn=filter_half(False))
 
     if load:
         network, err = config.parse_network(filename)
@@ -169,7 +170,7 @@ def maintain_same_weights():
 
 def test_plot_terrain():
     parser = Parser()
-    inputs, outputs = parser.get_all()
+    inputs, outputs = parser.get()
     X = [x[0] for x in inputs]
     Y = [x[1] for x in inputs]
     Z = [x[0] for x in outputs]

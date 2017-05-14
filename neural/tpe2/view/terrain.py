@@ -10,7 +10,7 @@ from ..util import Parser
 
 def plot_terrain(network_and_resolution: Optional[Tuple[Network, float]]):
     parser = Parser()
-    inputs, outputs = parser.get_all()
+    inputs, outputs = parser.get()
     x = [x[0] for x in inputs]
     y = [x[1] for x in inputs]
     z = [x[0] for x in outputs]
