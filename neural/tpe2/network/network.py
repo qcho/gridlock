@@ -58,6 +58,7 @@ class Network:
         self._previous_layers = None
         self._epochs = epochs
 
+
     def print_structure(self):
         print("============ Neural Network ============")
         print("Properties:")
@@ -69,6 +70,7 @@ class Network:
         print("Layers:")
         for i, layer in enumerate(self.layers):
             print("> Layer {}:\n{}".format(i, layer))
+
 
     def train(self, data, expected_output, previous_errors: List=list()):
         """
@@ -88,8 +90,10 @@ class Network:
             self._adapt_eta_annealing(previous_errors)
         self._epochs += 1
 
+
     def predict(self, value):
         return self._feed_forward(value)
+
 
     def _feed_forward(self, x_i):
         V_m = x_i
@@ -97,10 +101,12 @@ class Network:
             V_m = layer.process(V_m)  # Each neuron saves it's output after this
         return V_m
 
+
     def _back_propagate(self, x_i, expected):
         # TODO: Error statistics
         self._update_deltas(expected)  # Each neuron saves it's delta after this
         self._update_errors(x_i)
+
 
     def _update_deltas(self, expected):
         for i in reversed(range(len(self.layers))):
@@ -123,6 +129,7 @@ class Network:
                     print('Neuron {} saturated in layer {}: derivative {}'.format(j, i, d))
                 neuron.delta = errors[j] * d
 
+
     def _update_errors(self, data):
         for i in range(len(self.layers)):
             inputs = data if i == 0 else [neuron.output for neuron in self.layers[i - 1].neurons]
@@ -133,6 +140,7 @@ class Network:
                     neuron.last_weight_deltas[j] = delta_weight
 
                 neuron.bias += self.eta * neuron.delta
+
 
     @classmethod
     def create_from_json(cls, json_value):
@@ -152,6 +160,7 @@ class Network:
             adaptive_bold=json_value['adaptive_bold'] if 'adaptive_bold' in json_value else None,
             epochs=json_value['epochs'] if 'epochs' in json_value else 0)
 
+
     def to_json(self):
         return {
             "network": {
@@ -164,6 +173,7 @@ class Network:
                 "layers": [layer.to_json() for layer in self.layers]
             }
         }
+
 
     def _adapt_eta_bold(self, data, expected_output, previous_errors):
         if len(previous_errors) > 0:
@@ -179,12 +189,15 @@ class Network:
                 self.eta += self._adaptive_bold["a"]
                 # self.eta *= (1 + self._adaptive_a)
 
+
     def _adapt_eta_annealing(self, previous_errors):
         if len(previous_errors) >= self._adaptive_annealing_k:
             self.eta = self._original_eta / (1 + ((len(previous_errors) - 1) / self._adaptive_annealing_k))
 
+
     def _do_adaptive_annealing(self):
         return self._adaptive_annealing_k is not None
+
 
     def _do_adaptive_bold(self):
         return self._adaptive_bold is not None
