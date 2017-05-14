@@ -65,7 +65,7 @@ def ordered_alternate_training_and_test_data():
 
 def train_and_print(network, training_inputs, training_results, test_inputs, test_results):
     epochs = 0
-    epochs_limit = 5000
+    epochs_limit = 10000
 
     expected_error = 1e-3
     error_limit = (expected_error ** 2) / 2
@@ -78,7 +78,7 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
     pr = True
     prints = 0
-    print_every = 10
+    print_every = 100
 
     while test_error > error_limit and epochs < epochs_limit:
         network.train(training_inputs, training_results, test_errors)
