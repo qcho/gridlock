@@ -1,6 +1,6 @@
 # Checklist
 
-- [ ] Archivo de configuración
+- [x] Archivo de configuración
 - [ ] Exponencial vs Hiperbólica como función de activación
 - [ ] Exponencial vs Hiperbólica: comparar
 - [ ] Distintas arquitecturas de red
