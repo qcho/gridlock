@@ -194,7 +194,7 @@ class Network:
 
     def _adapt_eta_bold(self, data, expected_output, previous_errors):
         current_error = calculate_mean_squared_error(self, data, expected_output)
-        delta_eta = self._adaptive_bold.delta_eta(self, self.eta, current_error, previous_errors)
+        delta_eta = self._adaptive_bold.delta_eta(self.eta, current_error, previous_errors)
         self.eta += delta_eta
 
     def _adapt_eta_annealing(self, previous_errors):
