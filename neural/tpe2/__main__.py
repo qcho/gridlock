@@ -109,6 +109,9 @@ def maintain_same_weights():
 
     if load:
         network, err = config.parse_network(filename)
+        if err is not None:
+            print("Error: ", err)
+            raise err
     else:
         network = get_generic_network()
         # config.write_network(network, filename)
