@@ -47,7 +47,7 @@ class Network:
     def __init__(self, n_inputs: int,
                  layer_configuration: List[Tuple[int, TransferenceFunction, Optional[List[float]]]],
                  eta: float, momentum: float = 0.0, adaptive_annealing: int = None,
-                 adaptive_bold: Dict[str, float] = None):
+                 adaptive_bold: Dict[str, float] = None, epochs: int=0):
         self.eta = eta
         self._original_eta = eta
         self.layers = _init_layers(n_inputs, layer_configuration)
@@ -56,6 +56,7 @@ class Network:
         self._adaptive_bold = adaptive_bold
         self._adaptive_annealing_k = adaptive_annealing
         self._previous_layers = None
+        self._epochs = epochs
 
     def print_structure(self):
         print("============ Neural Network ============")
@@ -64,6 +65,7 @@ class Network:
         print("    momentum (α): {}".format(self.momentum))
         print("    adaptive_bold: {}".format(self._do_adaptive_bold()))
         print("    adaptive_annealing: {}".format(self._adaptive_annealing_k))
+        print("    epochs: {}".format(self._epochs))
         print("Layers:")
         for i, layer in enumerate(self.layers):
             print("> Layer {}:\n{}".format(i, layer))
@@ -84,6 +86,7 @@ class Network:
             self._adapt_eta_bold(data, expected_output, previous_errors)
         if self._do_adaptive_annealing():
             self._adapt_eta_annealing(previous_errors)
+        self._epochs += 1
 
     def predict(self, value):
         return self._feed_forward(value)
@@ -146,11 +149,13 @@ class Network:
             eta=json_value['eta'],
             momentum=json_value['momentum'],
             adaptive_annealing=json_value['adaptive_annealing'] if 'adaptive_annealing' in json_value else None,
-            adaptive_bold=json_value['adaptive_bold'] if 'adaptive_bold' in json_value else None)
+            adaptive_bold=json_value['adaptive_bold'] if 'adaptive_bold' in json_value else None,
+            epochs=json_value['epochs'] if 'epochs' in json_value else 0)
 
     def to_json(self):
         return {
             "network": {
+                "epochs": self._epochs,
                 "inputs": len(self.layers[0].neurons[0].weights),
                 "eta": self.eta,
                 "momentum": self.momentum,
