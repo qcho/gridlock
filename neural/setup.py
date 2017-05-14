@@ -38,7 +38,8 @@ setup(
 
     install_requires=[
         'numpy',
-        'matplotlib'
+        'matplotlib',
+        'jsonschema'
     ],
 
     # List additional groups of dependencies here (e.g. development
