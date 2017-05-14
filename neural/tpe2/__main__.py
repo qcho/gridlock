@@ -1,13 +1,13 @@
 import numpy as np
 from pickle import Pickler, Unpickler
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 from .util import Parser
 from .network import Network
 from .config import Config
 from .transference import HyperbolicTangent
 from .transference import LinearFunction
+from .view.training import plot_errors
+from .view.terrain import plot_terrain
 
 network_filename = "tpe2/network_dumps/net.obj"
 should_load_network = False
@@ -50,53 +50,6 @@ def mean_squared_error(network, inputs, results):
     predicted_values = np.array(list(map(lambda x: network.predict(x), inputs)))
     errors = (results - predicted_values) ** 2
     return np.sum(errors) * 0.5 / len(errors)
-
-
-def plot_errors(network, training_errors, test_errors):
-    colors = ['r', 'b']
-    markers = ['x', 'o']
-
-    training_size = len(training_errors)
-    plt.scatter(range(training_size), training_errors, c=colors[0], marker=markers[0])
-
-    test_size = len(test_errors)
-    plt.scatter(range(test_size), test_errors, c=colors[1], marker=markers[1])
-
-    plt.ylabel('Error')
-    plt.xlabel('Epochs')
-    plt.ylim([0, 0.1])
-
-    hidden_layers = 2
-    title = '{} HLayers: {}, eta: {}'.format(hidden_layers, [x.reduced_description() for x in network.layers[:hidden_layers]], network.eta)
-    plt.title(title)
-    plt.show()
-
-
-def plot_terrain(X, Y, Z):
-    fig = plt.figure()
-    ax = Axes3D(fig)
-    ax.scatter(X, Y, Z)
-    plt.show()
-
-
-def network_plot_complete_terrain(network):
-    resolution = 0.05
-    parser = Parser()
-    inputs, outputs = parser.get_all()
-    x = [x[0] for x in inputs]
-    y = [x[1] for x in inputs]
-    min_x = np.floor(min(x))
-    max_x = np.ceil(max(x))
-    min_y = np.floor(min(y))
-    max_y = np.ceil(max(y))
-    x = np.arange(min_x, max_x, resolution)
-    y = np.arange(min_y, max_y, resolution)
-    X, Y = np.meshgrid(x, y)
-    Z = []
-    for x_i, y_i in zip(X, Y):
-        for x_j, y_j in zip(x_i, y_i):
-            Z.append(network.predict([x_j, y_j]))
-    plot_terrain(X, Y, Z)
 
 
 def train_and_print(network, training_inputs, training_results, test_inputs, test_results):
@@ -167,18 +120,9 @@ def maintain_same_weights():
     serialize_network_layers(network, filename)
 
 
-def test_plot_terrain():
-    parser = Parser()
-    inputs, outputs = parser.get_all()
-    X = [x[0] for x in inputs]
-    Y = [x[1] for x in inputs]
-    Z = [x[0] for x in outputs]
-    plot_terrain(X, Y, Z)
-
-
 def test_network_terrain():
-    network = load_network('tpe2/network_dumps/weights_test.obj')
-    network_plot_complete_terrain(network)
+    network = load_network('tpe2/network_dumps/weights_test_2.obj')
+    plot_terrain((network, 0.2))
 
 
 def xor():
@@ -204,7 +148,7 @@ def xor():
 
 if __name__ == "__main__":
     # main()
-    xor()
+    # xor()
     # maintain_same_weights()
-    # test_plot_terrain()
-    # test_network_terrain()
+    #plot_terrain(None)
+    test_network_terrain()
