@@ -65,7 +65,7 @@ def ordered_alternate_training_and_test_data():
 
 def train_and_print(network, training_inputs, training_results, test_inputs, test_results):
     epochs = 0
-    epochs_limit = 100
+    epochs_limit = 5000
 
     expected_error = 1e-3
     error_limit = (expected_error ** 2) / 2
@@ -108,7 +108,7 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
     print('* Training error: {}'.format(calculate_mean_squared_error(network, training_inputs, training_results)))
     print('* Test     error: {}'.format(calculate_mean_squared_error(network, test_inputs, test_results)))
     Charts.training_errors(network, training_errors, test_errors)
-    # TerrainPlot.only_network(network)
+    TerrainPlot.only_network(network)
 
 
 def maintain_same_weights():
