@@ -1,10 +1,9 @@
-from copy import deepcopy
 from typing import List, Tuple, Optional, Dict
 
 from .network_layer import NetworkLayer
-from ..util.mean_squared_error import calculate_mean_squared_error
 from ..transference import TransferenceFunction
 from ..transference import factory as activation_factory
+from ..util.mean_squared_error import calculate_mean_squared_error
 
 
 def _parse_layers(json_value):
@@ -44,6 +43,7 @@ class AdaptiveBold:
         self.a = a
         self.b = b
         self.k = k
+        self._enabled = True
 
     @classmethod
     def from_json(cls, json_value):
@@ -56,17 +56,23 @@ class AdaptiveBold:
             "k": self.k
         }
 
-    def delta_eta(self, network, data, expected_output, previous_errors):
+    def delta_eta(self, eta, current_error, previous_errors):
         if len(previous_errors) > 0:
-            current_error = calculate_mean_squared_error(network, data, expected_output)
-            if (current_error - previous_errors[-1]) > 0:
-                print("reversed! old:{}, delta:{}".format(network.eta, self.b * network.eta))
-                return -(self.b * network.eta)
+            delta_error = (current_error - previous_errors[-1])
+            if delta_error <= 0:
+                self._enabled = True
+            if not self._enabled:
+                return 0
+            if delta_error > 0:
+                print("reversed! old:{}, delta:{}".format(eta, self.b * eta))
+                self._enabled = False
+                return -(self.b * eta)
             if len(previous_errors) >= self.k:
                 consistent = True
                 for error in previous_errors[-self.k:]:
                     consistent = consistent and current_error - error < 0
                 if consistent:
+                    print("Consistent!!!")
                     return self.a
         return 0
 
@@ -187,7 +193,8 @@ class Network:
         }
 
     def _adapt_eta_bold(self, data, expected_output, previous_errors):
-        delta_eta = self._adaptive_bold.delta_eta(self, data, expected_output, previous_errors)
+        current_error = calculate_mean_squared_error(self, data, expected_output)
+        delta_eta = self._adaptive_bold.delta_eta(self, self.eta, current_error, previous_errors)
         self.eta += delta_eta
 
     def _adapt_eta_annealing(self, previous_errors):
