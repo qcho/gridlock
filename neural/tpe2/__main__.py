@@ -25,10 +25,10 @@ def get_generic_network():
             (8, HyperbolicTangent(a=1), None),
             (1, LinearFunction(), None)
         ],
-        eta=0.05,
+        eta=0.25,
         # momentum=0.9,
         # adaptive_bold={"a": 0.01, "b": 0.1},
-        # adaptive_annealing=adaptive_k
+        adaptive_annealing=adaptive_k
     )
 
 
@@ -101,15 +101,13 @@ def network_plot_complete_terrain(network):
 
 def train_and_print(network, training_inputs, training_results, test_inputs, test_results):
     epochs = 0
-    epochs_limit = 5000
+    epochs_limit = 10000
 
     expected_error = 1e-3
     error_limit = (expected_error ** 2) / 2
 
     training_error = calculate_mean_squared_error(network, training_inputs, training_results)
-    prev_training_error = None
     test_error = calculate_mean_squared_error(network, test_inputs, test_results)
-    prev_test_error = None
 
     training_errors = [training_error]
     test_errors = [test_error]
@@ -145,18 +143,18 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
     print('* Training error: {}'.format(calculate_mean_squared_error(network, training_inputs, training_results)))
     print('* Test     error: {}'.format(calculate_mean_squared_error(network, test_inputs, test_results)))
-    plot_errors(network, training_errors, test_errors)
+    network_plot_complete_terrain(network)
 
 
 def maintain_same_weights():
-    load = False
-    filename = 'tpe2/network_dumps/weights_test.obj'
+    load = True
+    filename = 'weights_test.json'
     parser = Parser()
     training_inputs, training_results = parser.get_half_data()
     test_inputs, test_results = parser.get_half_data(half='last')
 
     if load:
-        network = load_network(filename)
+        network, err = config.parse_network(filename)
     else:
         network = get_generic_network()
         # config.write_network(network, filename)
@@ -164,6 +162,8 @@ def maintain_same_weights():
     network.print_structure()
     print("---------TRAINING---------")
     train_and_print(network, training_inputs, training_results, test_inputs, test_results)
+    print(network.print_structure())
+    network_plot_complete_terrain(network)
     config.write_network(network, filename)
 
 
@@ -177,16 +177,15 @@ def test_plot_terrain():
 
 
 def test_network_terrain():
-    network = load_network('tpe2/network_dumps/weights_test copy.obj')
-    network_plot_complete_terrain(network)
+    # network = load_network('tpe2/network_dumps/weights_test copy.obj')
+    network, err = config.parse_network("weights_test.json")
+    # config.write_network(network, "weight_test.json")
+    print(network.print_structure())
+    # network_plot_complete_terrain(network)
 
 
 def xor():
-    if not should_load_network:
-        network, err = config.parse_network()
-    else:
-        network = load_network('tpe2/network_dumps/xor_net.obj')
-
+    network, err = config.parse_network()
     inputs = [[0, 0], [0, 1], [1, 0], [1, 1]]
     results = [[-1], [1], [1], [-1]]
 
@@ -204,8 +203,7 @@ def xor():
 
 
 if __name__ == "__main__":
-    # main()
     # xor()
-    # maintain_same_weights()
+    maintain_same_weights()
     # test_plot_terrain()
-    test_network_terrain()
+    # test_network_terrain()
