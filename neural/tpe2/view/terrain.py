@@ -10,10 +10,11 @@ from ..util import Parser
 
 class TerrainPlot:
     @classmethod
-    def _basic(cls, X, Y, Z):
+    def _basic(cls, X, Y, Z, title=''):
         fig = plt.figure()
         ax = Axes3D(fig)
-        ax.scatter(X, Y, Z, s=2, c=(0, 0, 1, 1))
+        ax.scatter(X, Y, Z, s=2, c=Z, cmap=plt.get_cmap('plasma'))
+        plt.title(title)
         plt.show()
 
     @classmethod
@@ -34,7 +35,20 @@ class TerrainPlot:
         return np.meshgrid(x, y)
 
     @classmethod
-    def only_network(cls, network, resolution: float = 0.05):
+    def only_original(cls):
+        inputs, outputs = cls._original_data()
+        x = [x[0] for x in inputs]
+        y = [x[1] for x in inputs]
+        z = [x[0] for x in outputs]
+
+        fig = plt.figure()
+        ax = Axes3D(fig)
+        ax.scatter(x, y, z, s=6, c=z, cmap=plt.get_cmap('viridis'))
+        plt.show()
+
+
+    @classmethod
+    def only_network(cls, network, resolution: float = 0.05, title=''):
         inputs, outputs = cls._original_data()
         x = [x[0] for x in inputs]
         y = [x[1] for x in inputs]
@@ -43,7 +57,7 @@ class TerrainPlot:
         for x_i, y_i in zip(X, Y):
             for x_j, y_j in zip(x_i, y_i):
                 Z.append(network.predict([x_j, y_j]))
-        cls._basic(X, Y, Z)
+        cls._basic(X, Y, Z, title)
 
     @classmethod
     def network_and_original(cls, network_and_resolution: Optional[Tuple[Network, float]]):
@@ -54,7 +68,7 @@ class TerrainPlot:
 
         fig = plt.figure()
         ax = Axes3D(fig)
-        ax.scatter(x, y, z, s=2, c=(0, 0, 1, 1))
+        ax.scatter(x, y, z, s=7, c=(0, 0, 1, 1))
 
         if network_and_resolution is not None:
             network, resolution = network_and_resolution

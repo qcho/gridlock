@@ -21,6 +21,9 @@ class LogisticFunction(TransferenceFunction):
     def __init__(self, a: float = 1.7159):
         self.a = a
 
+    def __str__(self):
+        return "exp (a:{})".format(round(self.a, 2))
+
     def apply(self, value):
         return np.divide(1, 1 + np.exp(-1 * self.a * value))
 

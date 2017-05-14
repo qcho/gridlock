@@ -2,7 +2,7 @@ from copy import deepcopy
 from typing import List, Tuple, Optional, Dict
 
 from .network_layer import NetworkLayer
-from ..mean_squared_error import calculate_mean_squared_error
+from ..util.mean_squared_error import calculate_mean_squared_error
 from ..transference import TransferenceFunction
 from ..transference import factory as activation_factory
 
@@ -179,18 +179,20 @@ class Network:
     def _adapt_eta_bold(self, data, expected_output, previous_errors):
         if len(previous_errors) > 0:
             current_error = calculate_mean_squared_error(self, data, expected_output)
-            if (current_error - previous_errors[-1]) > 0:
-                print("reversed! old:{}, delta:{}".format(self.eta, self._adaptive_bold.b * self.eta))
+            if self._error_increased(current_error, previous_errors):
                 self.eta -= self._adaptive_bold.b * self.eta
-                # self.layers = self._previous_layers
-                return
-            if len(previous_errors) >= self._adaptive_bold.k:
-                consistent = True
-                for error in previous_errors[-self._adaptive_bold.k:]:
-                    consistent = consistent and current_error - error < 0
-                if consistent:
-                    self.eta += self._adaptive_bold.a
-                    print("---consistent!", self.eta)
+                self.layers = self._previous_layers
+
+            elif self._error_decreased(current_error, previous_errors):
+                self.eta += self._adaptive_bold.a
+
+    def _error_increased(self, current_error, previous_errors):
+        percentage_change = (current_error - previous_errors[-1]) / previous_errors[-1] * 100
+        return percentage_change > 5
+
+    def _error_decreased(self, current_error, previous_errors):
+        percentage_change = (current_error - previous_errors[-1]) / previous_errors[-1] * 100
+        return percentage_change < 5
 
     def _adapt_eta_annealing(self, previous_errors):
         if len(previous_errors) >= self._adaptive_annealing_k:
