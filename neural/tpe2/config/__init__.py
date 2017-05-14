@@ -9,8 +9,9 @@ from ..data import __data_pkg__
 
 
 def validate_network(json_network):
-    validation_json = json.loads(pkg_resources.resource_string(__data_pkg__, "network.schema.json"))
-    validate(json_network, validation_json)
+    with open(pkg_resources.resource_filename(__data_pkg__, "network.schema.json"), 'r') as fp:
+        validation_json = json.load(fp)
+        validate(json_network, validation_json)
 
 
 class Config:
@@ -24,8 +25,8 @@ class Config:
             return None, err
 
     def _parse(self, path):
-        with pkg_resources.resource_stream(__data_pkg__, path if path is not None else self._file_path) as stream:
-            json_obj = json.load(stream)
+        with open(pkg_resources.resource_filename(__data_pkg__, path if path is not None else self._file_path)) as fp:
+            json_obj = json.load(fp)
             if 'network' not in json_obj:
                 raise ValueError("Missing network configuration parameters")
             validate_network(json_obj["network"])
