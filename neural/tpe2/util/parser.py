@@ -28,8 +28,8 @@ class Parser:
         self.data, self.err = _parse(file_name)
         self.data_size = len(list(self.data))
 
-    def get(self, filter_fn: Callable[List[Any], Any]=None,
-            order_fn: Optional[Callable[List[Any], Any]]=None):
+    def get(self, filter_fn: Optional[Callable[[List[Any]], Any]]=None,
+            order_fn: Optional[Callable[[List[Any]], Any]]=None):
         data = self.data
         if filter_fn is not None:
             data = filter_fn(data)
