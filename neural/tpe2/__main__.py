@@ -60,7 +60,7 @@ def ordered_alternate_training_and_test_data():
     parser = Parser()
     training_inputs, training_results = parser.get(filter_fn=skipping(amount=1, offset=0), order_fn=z_ordered(ascending=True))
     test_inputs, test_results = parser.get(filter_fn=skipping(amount=1, offset=1), order_fn=z_ordered(ascending=True))
-    return (training_inputs, training_results, test_inputs, test_results)
+    return training_inputs, training_results, test_inputs, test_results
 
 
 def train_and_print(network, training_inputs, training_results, test_inputs, test_results):
