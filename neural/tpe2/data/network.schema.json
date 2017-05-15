@@ -18,6 +18,17 @@
       "maximum": 1,
       "default": 0
     },
+    "momentum_delta": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 0.1,
+      "default": 0.005
+    },
+    "momentum_epoch_increase": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 50
+    },
     "epochs": {
       "type": "integer",
       "minimum": 0,

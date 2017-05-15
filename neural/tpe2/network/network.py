@@ -90,7 +90,8 @@ class Network:
     def __init__(self, n_inputs: int,
                  layer_configuration: List[Tuple[int, TransferenceFunction, Optional[List[float]]]],
                  eta: float, momentum: float = 0.0, adaptive_annealing: int = None,
-                 adaptive_bold: AdaptiveBold = None, epochs: int=0):
+                 adaptive_bold: AdaptiveBold = None, epochs: int=0,
+                 momentum_epoch_increase: int=50, momentum_delta: float=0):
         self.eta = eta
         self._original_eta = eta
         self.layers = _init_layers(n_inputs, layer_configuration)
@@ -100,6 +101,8 @@ class Network:
         self._adaptive_annealing_k = adaptive_annealing
         self._previous_layers = None
         self._epochs = epochs
+        self.momentum_epoch_increase = momentum_epoch_increase
+        self.momentum_delta = momentum_delta
 
     def print_structure(self):
         print("============ Neural Network ============")
@@ -130,6 +133,10 @@ class Network:
         if self._do_adaptive_annealing():
             self._adapt_eta_annealing(previous_errors)
         self._epochs += 1
+        if self.momentum == 0:
+            return
+        if (self.momentum < 0.9) and (self._epochs % self.momentum_epoch_increase) == 0:
+            self.momentum += self.momentum_delta
 
     def predict(self, value):
         return self._feed_forward(value)
@@ -186,7 +193,10 @@ class Network:
             momentum=json_value['momentum'],
             adaptive_annealing=json_value['adaptive_annealing'] if 'adaptive_annealing' in json_value else None,
             adaptive_bold=AdaptiveBold.from_json(json_value['adaptive_bold']) if 'adaptive_bold' in json_value else None,
-            epochs=json_value['epochs'] if 'epochs' in json_value else 0)
+            epochs=json_value['epochs'] if 'epochs' in json_value else 0,
+            momentum_delta=json_value['momentum_delta'] if 'momentum_delta' in json_value else 0,
+            momentum_epoch_increase=json_value['momentum_epoch_increase'] if 'momentum_epoch_increase' in json_value else 0,
+        )
 
     def to_json(self):
         return {
@@ -195,6 +205,8 @@ class Network:
                 "inputs": len(self.layers[0].neurons[0].weights),
                 "eta": self.eta,
                 "momentum": self.momentum,
+                "momentum_delta": self.momentum_delta,
+                "momentum_epoch_increase": self.momentum_epoch_increase,
                 "adaptive_bold": self._adaptive_bold.to_json() if self._adaptive_bold is not None else None,
                 "adaptive_annealing": self._adaptive_annealing_k,
                 "layers": [layer.to_json() for layer in self.layers]
