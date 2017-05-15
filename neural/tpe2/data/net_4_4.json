@@ -2,7 +2,7 @@
   "network": {
     "epochs": 500,
     "inputs": 2,
-    "eta": 0.2,
+    "eta": 0.4,
     "momentum": 0.0,
     "adaptive_bold": null,
     "adaptive_annealing": null,
