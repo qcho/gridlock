@@ -101,6 +101,7 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
                 print('    Training {} Test'.format('>' if training_error > test_error else '<'))
                 print('    Expected {}'.format(error_limit))
                 print('    eta {}'.format(network.eta))
+                print('    momentum {}'.format(network.momentum))
             prints += 1
         else:
             print(epochs)
