@@ -132,7 +132,7 @@ def maintain_same_weights():
     print("---------TRAINING---------")
     train_and_print(network, training_inputs, training_results, test_inputs, test_results)
     print(network.print_structure())
-    config.write_network(network, config.network_path + "_trained")
+    config.write_network(network)
 
 
 def test_plot_terrain(inputs, outputs):
