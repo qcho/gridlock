@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "id": "",
+  "type": "object",
+  "required": ["training_epochs", "input_network", "input_strategy"],
+  "properties": {
+    "training_epochs": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    },
+    "input_network": {
+      "type": "string"
+    },
+    "input_strategy": {
+      "enum": ["first_half", "second_half", "z_ascending", "z_descending"]
+    },
+    "print_progress_every": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 10
+    }
+  }
+}

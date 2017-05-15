@@ -3,6 +3,7 @@ from typing import Tuple, Optional, List, Callable, Any
 import pkg_resources
 
 from ..data import __data_pkg__
+from ..util.data_filters import half as filter_half, z_ordered
 
 
 def _zip(data):
@@ -22,11 +23,23 @@ def _parse(file_name) -> Tuple[Optional[List[List[float]]], Optional[IOError]]:
         return None, err
 
 
+input_strategies = {
+    "first_half": (filter_half(first_half=True), None),
+    "second_half": (filter_half(first_half=False), None),
+    "z_ascending": (None, z_ordered(ascending=True)),
+    "z_descending": (None, z_ordered(ascending=False))
+}
+
+
 class Parser:
     def __init__(self, file_name='terrain05.data'):
         self.file_name = file_name
         self.data, self.err = _parse(file_name)
         self.data_size = len(list(self.data))
+
+    def get_with_strategy(self, strategy):
+        filter_fn, order_fn = input_strategies[strategy]
+        return self.get(filter_fn=filter_fn, order_fn=order_fn)
 
     def get(self, filter_fn = None, order_fn = None):
         data = self.data

@@ -17,7 +17,7 @@ from .view import TerrainPlot
 
 network_filename = "tpe2/network_dumps/net.obj"
 should_load_network = False
-config = Config("xor.json")
+config = Config("config.json")
 adaptive_k = 100
 
 
@@ -65,7 +65,7 @@ def ordered_alternate_training_and_test_data():
 
 def train_and_print(network, training_inputs, training_results, test_inputs, test_results):
     epochs = 0
-    epochs_limit = 2000
+    epochs_limit = config.epochs
 
     expected_error = 1e-3
     error_limit = (expected_error ** 2) / 2
@@ -78,7 +78,7 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
     pr = True
     prints = 0
-    print_every = 10
+    print_every = config.print_progress_every
 
     while test_error > error_limit and epochs < epochs_limit:
         network.train(training_inputs, training_results, test_errors)
@@ -117,26 +117,22 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
 
 def maintain_same_weights():
-    load = True
-    filename = 'weights_test.json'
     # training_inputs, training_results, test_inputs, test_results = ordered_alternate_training_and_test_data()
-    training_inputs, training_results = Parser().get(filter_fn=filter_half(first_half=True))
+    print("Starting training with the following config:")
+    print(config)
+    training_inputs, training_results = Parser().get_with_strategy(config.input_strategy)
     test_inputs, test_results = Parser().get()
 
-    if load:
-        network, err = config.parse_network("trained_4_4_e3.json")
-        if err is not None:
-            print("Error: ", err)
-            raise err
-    else:
-        network = get_generic_network()
-        # config.write_network(network, filename)
+    network, err = config.parse_network()
+    if err is not None:
+        print("Error: ", err)
+        raise err
 
     network.print_structure()
     print("---------TRAINING---------")
     train_and_print(network, training_inputs, training_results, test_inputs, test_results)
     print(network.print_structure())
-    config.write_network(network, filename)
+    config.write_network(network, config.network_path + "_trained")
 
 
 def test_plot_terrain(inputs, outputs):
