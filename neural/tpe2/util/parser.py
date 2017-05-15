@@ -2,7 +2,7 @@ from typing import Tuple, Optional, List, Callable, Any
 
 import pkg_resources
 
-from data import __data_pkg__
+from ..data import __data_pkg__
 
 
 def _zip(data):

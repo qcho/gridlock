@@ -233,9 +233,12 @@ def xor():
     config.write_network(network)
 
 
-if __name__ == "__main__":
+def main():
     # xor()
     maintain_same_weights()
     # inputs, outputs = Parser().get()
     # test_plot_terrain(inputs, outputs)
     # test_network_terrain()
+
+if __name__ == "__main__":
+    main()
