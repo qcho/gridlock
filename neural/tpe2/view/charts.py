@@ -15,7 +15,7 @@ class Charts:
 
         plt.ylabel('Error')
         plt.xlabel('Epochs')
-        plt.ylim([0, 0.001])
+        plt.ylim([0, max([max(test_errors), max(training_errors)])])
 
         hidden_layers = 2
         title = '{} HLayers: {}, eta: {}'.format(hidden_layers, [x.reduced_description() for x in network.layers[:hidden_layers]], network.eta)
