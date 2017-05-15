@@ -5,54 +5,67 @@
   "required": ["inputs", "eta", "layers"],
   "properties": {
     "inputs": {
+      "description": "Cantidad de inputs que tiene la red",
       "type": "integer",
       "minimum": 1
     },
     "eta": {
+      "description": "El coeficiente de entrenamiento",
       "type": "number",
       "minimum": 0
     },
     "momentum": {
+      "description": "El coeficiente de momento",
       "type": "number",
       "minimum": 0,
       "maximum": 1,
       "default": 0
     },
     "epochs": {
+      "description": "Edad de la red (sólo estado)",
       "type": "integer",
       "minimum": 0,
       "default": 0
     },
     "adaptive_bold": {
+      "description": "Configuracion de parametros adaptativos",
       "type": ["object", "null"],
       "required": ["a", "b", "k"],
       "properties": {
         "k": {
+          "description": "Número de pasos previos para comprobar la progresión del error (aumento o disminución)",
           "type": "integer",
           "minimum": 1
         },
         "a": {
+          "description": "Valor para incrementar a eta en la disminución consistente del error: eta = eta + a",
           "type": "number"
         },
         "b": {
+          "description": "Valor para multiplicar y decrementar eta actual: eta = eta - b * eta",
           "type": "number"
         }
       }
     },
     "adaptive_annealing": {
+      "description": "Coeficiente de annealing",
       "type": ["integer", "null"]
     },
     "layers": {
+      "description": "Configuración de las capas de la red",
       "type": "array",
       "items": {
+        "description": "Configuración de las neuronas de la capa",
         "type": "object",
         "required": ["neurons", "activation_function"],
         "properties": {
           "neurons": {
+            "description": "Cantidad de neuronas",
             "type": "integer",
             "minimum": 1
           },
           "activation_function": {
+            "description": "Funcion de activación",
             "type": "object",
             "required": ["type"],
             "properties": {
@@ -68,6 +81,7 @@
             }
           },
           "neuron_weights": {
+            "description": "Estado de cada neurona",
             "type": "array",
             "items": {
               "type": "object",
