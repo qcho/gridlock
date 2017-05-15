@@ -141,8 +141,10 @@ def test_plot_terrain(inputs, outputs):
 
 
 def test_network_terrain():
-    network, err = config.parse_network("weights_test.json")
-    # print(network.print_structure())
+    network, err = config.parse_network("weights_test")
+    if err is not None:
+        print(err)
+        raise err
     TerrainPlot.only_network(network)
 
 
