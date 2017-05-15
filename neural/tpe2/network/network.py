@@ -175,10 +175,9 @@ class Network:
             inputs = data if i == 0 else [neuron.output for neuron in self.layers[i - 1].neurons]
             for neuron in self.layers[i].neurons:
                 for j in range(len(inputs)):
-                    delta_weight = self.eta * neuron.delta * inputs[j]
-                    neuron.weights[j] += delta_weight + neuron.last_weight_deltas[j] * self.momentum
+                    delta_weight = self.eta * neuron.delta * inputs[j] + self.momentum * neuron.last_weight_deltas[j]
+                    neuron.weights[j] += delta_weight
                     neuron.last_weight_deltas[j] = delta_weight
-
                 neuron.bias += self.eta * neuron.delta
 
     @classmethod
