@@ -104,6 +104,8 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
             prints += 1
         else:
             print(epochs)
+        if (network.momentum != 0 and network.momentum != 0.99) and (epochs % 50) == 0:
+            network.momentum += 0.005
         epochs += 1
 
     print('* Training error: {}'.format(calculate_mean_squared_error(network, training_inputs, training_results)))
