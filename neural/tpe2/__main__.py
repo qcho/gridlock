@@ -17,7 +17,7 @@ from .view import TerrainPlot
 
 network_filename = "tpe2/network_dumps/net.obj"
 should_load_network = False
-config = Config("config.json")
+config = Config("xor.json")
 adaptive_k = 100
 
 
