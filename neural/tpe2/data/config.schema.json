@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/schema#",
   "id": "",
   "type": "object",
-  "required": ["training_epochs", "input_network", "input_strategy"],
+  "required": ["training_epochs", "input_network", "input_strategy", "trained_network_name", "print_progress_every"],
   "properties": {
     "training_epochs": {
       "type": "integer",
@@ -19,6 +19,9 @@
       "type": "integer",
       "minimum": 0,
       "default": 10
+    },
+    "trained_network_name": {
+      "type": "string"
     }
   }
 }

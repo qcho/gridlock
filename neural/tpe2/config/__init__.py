@@ -33,6 +33,7 @@ class Config:
             self.network_path = json_object["input_network"]
             self.input_strategy = json_object["input_strategy"]
             self.print_progress_every = json_object["print_progress_every"]
+            self.trained_network_name = json_object["trained_network_name"]
 
     def parse_network(self, path=None) -> Tuple[Optional[Network], Optional[Exception]]:
         try:
@@ -41,7 +42,7 @@ class Config:
             return None, err
 
     def write_network(self, network: Network, file_path=None):
-        file_path = file_path if file_path is not None else self.network_path
+        file_path = file_path if file_path is not None else self.trained_network_name
         with open(pkg_resources.resource_filename(__data_pkg__, file_path + ".json"), 'w') as fh:
             json.dump(network.to_json(), fh, indent=2)
 
