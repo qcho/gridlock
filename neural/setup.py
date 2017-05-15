@@ -40,7 +40,9 @@ setup(
         'numpy',
         'matplotlib',
         'jsonschema',
-        'pip-tools'
+        'pip-tools',
+        'scipy',
+        'scikit-learn'
     ],
 
     # List additional groups of dependencies here (e.g. development
