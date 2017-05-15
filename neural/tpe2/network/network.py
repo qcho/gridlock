@@ -108,10 +108,13 @@ class Network:
         print("============ Neural Network ============")
         print("Properties:")
         print("    η: {}".format(self.eta))
-        print("    momentum (α): {}".format(self.momentum))
-        print("    adaptive_bold: {}".format(self._adaptive_bold))
-        print("    adaptive_annealing: {}".format(self._adaptive_annealing_k))
         print("    epochs: {}".format(self._epochs))
+        if self.momentum > 0:
+            print("    momentum (α): {}".format(self.momentum))
+        if self._do_adaptive_bold():
+            print("    adaptive_bold: {}".format(self._adaptive_bold))
+        if self._do_adaptive_annealing():
+            print("    adaptive_annealing: {}".format(self._adaptive_annealing_k))
         print("Layers:")
         for i, layer in enumerate(self.layers):
             print("> Layer {}:\n{}".format(i, layer))
