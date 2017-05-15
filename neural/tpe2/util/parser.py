@@ -24,6 +24,7 @@ def _parse(file_name) -> Tuple[Optional[List[List[float]]], Optional[IOError]]:
 
 
 input_strategies = {
+    "all": (None, None),
     "first_half": (filter_half(first_half=True), None),
     "second_half": (filter_half(first_half=False), None),
     "z_ascending": (None, z_ordered(ascending=True)),

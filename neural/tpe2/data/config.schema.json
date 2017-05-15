@@ -16,7 +16,7 @@
     },
     "input_strategy": {
       "description": "Tipo de estrategia de selección de puntos de entrenamiento",
-      "enum": ["first_half", "second_half", "z_ascending", "z_descending"]
+      "enum": ["first_half", "second_half", "z_ascending", "z_descending", "all"]
     },
     "print_progress_every": {
       "description": "Se muestra por stdout el progreso del entrenamiento con este step",
