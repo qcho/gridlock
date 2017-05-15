@@ -82,7 +82,6 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
     while test_error > error_limit and epochs < epochs_limit:
         network.train(training_inputs, training_results, test_errors)
-        epochs += 1
 
         prev_training_error = training_error
         prev_test_error = test_error
@@ -105,6 +104,7 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
             prints += 1
         else:
             print(epochs)
+        epochs += 1
 
     print('* Training error: {}'.format(calculate_mean_squared_error(network, training_inputs, training_results)))
     print('* Test     error: {}'.format(calculate_mean_squared_error(network, test_inputs, test_results)))
