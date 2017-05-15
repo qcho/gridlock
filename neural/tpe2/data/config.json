@@ -3,5 +3,6 @@
   "input_network": "net_4_4_learning_test",
   "input_strategy": "first_half",
   "print_progress_every": 10,
-  "trained_network_name": "net_4_4_learning_test_trained"
+  "trained_network_name": "net_4_4_learning_test_trained",
+  "plot": ["error", "network_and_original"]
 }

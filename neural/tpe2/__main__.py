@@ -110,8 +110,15 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
 
     print('* Training error: {}'.format(calculate_mean_squared_error(network, training_inputs, training_results)))
     print('* Test     error: {}'.format(calculate_mean_squared_error(network, test_inputs, test_results)))
-    Charts.training_errors(network, training_errors, test_errors)
-    TerrainPlot.only_network(network)
+
+    charting_type = {
+        "network": lambda: TerrainPlot.only_network(network),
+        "error": lambda: Charts.training_errors(network, training_errors, test_errors),
+        "network_and_original": lambda: TerrainPlot.network_and_original(network)
+    }
+    for chart in config.chart_types:
+        if chart in charting_type.keys():
+            charting_type[chart]()
 
 
 def maintain_same_weights():

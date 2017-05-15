@@ -27,6 +27,13 @@
     "trained_network_name": {
       "description": "Nombre del archivo de configuracion de red saliente. Situado en .data/ y sin el .json",
       "type": "string"
+    },
+    "plot": {
+      "description": "Tipos de gráfico que se graficarán",
+      "type": "array",
+      "items": {
+        "enum": ["network", "network_and_original", "error"]
+      }
     }
   }
 }

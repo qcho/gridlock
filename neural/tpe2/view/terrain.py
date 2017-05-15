@@ -60,7 +60,7 @@ class TerrainPlot:
         cls._basic(X, Y, Z, title)
 
     @classmethod
-    def network_and_original(cls, network_and_resolution: Optional[Tuple[Network, float]]):
+    def network_and_original(cls, network: Network, resolution: float = 0.05):
         inputs, outputs = cls._original_data()
         x = [x[0] for x in inputs]
         y = [x[1] for x in inputs]
@@ -70,12 +70,10 @@ class TerrainPlot:
         ax = Axes3D(fig)
         ax.scatter(x, y, z, s=7, c=(0, 0, 1, 1))
 
-        if network_and_resolution is not None:
-            network, resolution = network_and_resolution
-            X, Y = cls._get_meshgrid(x, y, resolution)
-            Z = []
-            for x_i, y_i in zip(X, Y):
-                for x_j, y_j in zip(x_i, y_i):
-                    Z.append(network.predict([x_j, y_j]))
-            ax.scatter(X, Y, Z, s=5, c=(0, 1, 0, 0.5))
+        X, Y = cls._get_meshgrid(x, y, resolution)
+        Z = []
+        for x_i, y_i in zip(X, Y):
+            for x_j, y_j in zip(x_i, y_i):
+                Z.append(network.predict([x_j, y_j]))
+        ax.scatter(X, Y, Z, s=5, c=(0, 1, 0, 0.5))
         plt.show()
