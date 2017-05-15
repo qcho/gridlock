@@ -22,12 +22,14 @@
       "default": 0
     },
     "momentum_delta": {
+      "description": "Delta a agregarle al coeficiente de momento",
       "type": "number",
       "minimum": 0,
       "maximum": 0.1,
       "default": 0.005
     },
     "momentum_epoch_increase": {
+      "description": "Cada cuantas épocas se le quitará momentum_delta a momentum",
       "type": "integer",
       "minimum": 1,
       "default": 50
