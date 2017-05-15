@@ -1,13 +1,12 @@
-from typing import List, Tuple, Optional, Dict
-from sklearn import linear_model
-import numpy as np
-
 from copy import deepcopy
+from typing import List, Tuple, Optional, Dict
+
+import numpy as np
+from sklearn import linear_model
 
 from .network_layer import NetworkLayer
 from ..transference import TransferenceFunction
 from ..transference import factory as activation_factory
-from ..util.mean_squared_error import calculate_mean_squared_error
 
 
 def _parse_layers(json_value):
@@ -60,26 +59,35 @@ class AdaptiveBold:
             "k": self.k
         }
 
-    def delta_eta(self, eta, current_error, previous_errors):
-        if len(previous_errors) > 0:
-            delta_error = (current_error - previous_errors[-1])
-            if delta_error <= 0:
-                self._enabled = True
-            if not self._enabled:
-                return 0
-            if delta_error > 0:
-                self._enabled = False
+    def delta_eta(self, eta, previous_errors):
+        if len(previous_errors) >= self.k:
+            if _consistent_increase(previous_errors, self.k):
+                print("increase")
                 return -(self.b * eta)
-            if len(previous_errors) >= self.k:
-                consistent = True
-                for error in previous_errors[-self.k:]:
-                    consistent = consistent and current_error - error < 0
-                if consistent:
-                    return self.a
+            if _consistent_decrease(previous_errors, self.k):
+                print("decrease")
+                return self.a
         return 0
 
     def __str__(self):
         return "AdaptiveBold(a:{}, b:{}, k:{})".format(self.a, self.b, self.k)
+
+
+def _calculate_error_slope(previous_errors, k):
+    regression = linear_model.LinearRegression()
+    regression.fit(np.transpose(np.matrix(range(k))), np.transpose(np.matrix(previous_errors[-k:])))
+    out_val = (regression.predict(X=(k - 1)) - regression.predict(X=0)) / (k - 1)
+    # print("errors:", previous_errors[-k:])
+    # print("slope:", out_val)
+    return out_val
+
+
+def _consistent_increase(previous_errors, k, err=1e-7):
+    return _calculate_error_slope(previous_errors, k) > err
+
+
+def _consistent_decrease(previous_errors, k, err=1e-7):
+    return _calculate_error_slope(previous_errors, k) > -err
 
 
 class Network:
@@ -122,7 +130,7 @@ class Network:
             self._back_propagate(x_i, expected_i)
 
         if self._do_adaptive_bold():
-            self._adapt_eta_bold(data, expected_output, previous_errors)
+            self._adapt_eta_bold(previous_errors)
         if self._do_adaptive_annealing():
             self._adapt_eta_annealing(previous_errors)
         self._epochs += 1
@@ -198,9 +206,8 @@ class Network:
             }
         }
 
-    def _adapt_eta_bold(self, data, expected_output, previous_errors):
-        current_error = calculate_mean_squared_error(self, data, expected_output)
-        delta_eta = self._adaptive_bold.delta_eta(self.eta, current_error, previous_errors)
+    def _adapt_eta_bold(self, previous_errors):
+        delta_eta = self._adaptive_bold.delta_eta(self.eta, previous_errors)
         if delta_eta < 0:
             self.layers = self._previous_layers
         self.eta += delta_eta
@@ -214,14 +221,3 @@ class Network:
 
     def _do_adaptive_bold(self):
         return self._adaptive_bold is not None
-
-    def _calculate_error_slope(self, previous_errors, k):
-        regression = linear_model.LinearRegression()
-        regression.fit(np.transpose(np.matrix(range(k))), np.transpose(np.matrix(previous_errors[-k:])))
-        return (regression.predict(k - 1) - regression.predict(0)) / (k - 1)
-
-    def _consistent_increase(self, previous_errors, k, err = 0.01):
-        return self._calculate_error_slope(previous_errors, k) > err
-
-    def _consistent_decrease(self, previous_errors, k, err = 0.01):
-        return self._calculate_error_slope(previous_errors, k) < err
