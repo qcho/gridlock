@@ -25,6 +25,7 @@
       "default": 10
     },
     "trained_network_name": {
+      "description": "Nombre del archivo de configuracion de red saliente. Situado en .data/ y sin el .json",
       "type": "string"
     }
   }
