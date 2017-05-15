@@ -75,8 +75,6 @@ def _calculate_error_slope(previous_errors, k):
     regression = linear_model.LinearRegression()
     regression.fit(np.transpose(np.matrix(range(k))), np.transpose(np.matrix(previous_errors[-k:])))
     out_val = (regression.predict(X=(k - 1)) - regression.predict(X=0)) / (k - 1)
-    # print("errors:", previous_errors[-k:])
-    # print("slope:", out_val)
     return out_val
 
 
