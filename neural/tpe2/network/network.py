@@ -62,10 +62,8 @@ class AdaptiveBold:
     def delta_eta(self, eta, previous_errors):
         if len(previous_errors) >= self.k:
             if _consistent_increase(previous_errors, self.k):
-                print("increase")
                 return -(self.b * eta)
             if _consistent_decrease(previous_errors, self.k):
-                print("decrease")
                 return self.a
         return 0
 
