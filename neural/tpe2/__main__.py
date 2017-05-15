@@ -105,6 +105,7 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
             prints += 1
         else:
             print(epochs)
+        # config.write_network(network, "{}_{}".format(config.file_path, epochs))
         if (network.momentum != 0 and network.momentum != 0.99) and (epochs % 50) == 0:
             network.momentum += 0.005
         epochs += 1
