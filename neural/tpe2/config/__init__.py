@@ -35,6 +35,7 @@ class Config:
             self.print_progress_every = json_object["print_progress_every"]
             self.trained_network_name = json_object["trained_network_name"]
             self.chart_types = json_object["plot"] if 'plot' in json_object else []
+            self.stop_error = json_object["stop_error"] if 'stop_error' in json_object else None
 
     def parse_network(self, path=None) -> Tuple[Optional[Network], Optional[Exception]]:
         try:

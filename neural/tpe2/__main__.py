@@ -2,7 +2,7 @@ from pickle import Unpickler
 from time import time
 
 import numpy as np
-
+from math import sqrt
 from .config import Config
 from .network import Network
 from .transference import HyperbolicTangent
@@ -67,20 +67,20 @@ def train_and_print(network, training_inputs, training_results, test_inputs, tes
     epochs = 0
     epochs_limit = config.epochs
 
-    expected_error = 1e-3
+    expected_error = config.stop_error
     error_limit = (expected_error ** 2) / 2
 
     training_error = calculate_mean_squared_error(network, training_inputs, training_results)
-    test_error = calculate_mean_squared_error(network, test_inputs, test_results)
-
+    mean_test_error = calculate_mean_squared_error(network, test_inputs, test_results)
+    test_error = sqrt(mean_test_error * 2)
     training_errors = [training_error]
-    test_errors = [test_error]
+    test_errors = [mean_test_error]
 
     pr = True
     prints = 0
     print_every = config.print_progress_every
 
-    while test_error > error_limit and epochs < epochs_limit:
+    while test_error > expected_error and epochs < epochs_limit:
         network.train(training_inputs, training_results, test_errors)
 
         prev_training_error = training_error
