@@ -1,0 +1,38 @@
+{
+  "network": {
+    "epochs": 0,
+    "inputs": 2,
+    "eta": 1.25,
+    "momentum": 0.0,
+    "adaptive_bold": {
+      "a": 0.001,
+      "b": 0.01,
+      "k": 3
+    },
+    "adaptive_annealing": null,
+    "layers": [
+      {
+        "neurons": 4,
+        "activation_function": {
+          "type": "htan",
+          "a": 1.7159,
+          "beta": 0.6666666666666666
+        }
+      },
+      {
+        "neurons": 4,
+        "activation_function": {
+          "type": "htan",
+          "a": 1.7159,
+          "beta": 0.6666666666666666
+        }
+      },
+      {
+        "neurons": 1,
+        "activation_function": {
+          "type": "linear"
+        }
+      }
+    ]
+  }
+}

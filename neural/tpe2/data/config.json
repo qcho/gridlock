@@ -1,6 +1,6 @@
 {
   "training_epochs": 1000,
-  "input_network": "trained_4_4_e3",
+  "input_network": "adaptative_big_eta",
   "input_strategy": "all",
   "print_progress_every": 10,
   "trained_network_name": "net_4_4_learning_test_trained",
