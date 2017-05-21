@@ -59,8 +59,10 @@ class AdaptiveBold:
             "k": self.k
         }
 
-    def delta_eta(self, eta, previous_errors):
-        if len(previous_errors) >= self.k:
+    def delta_eta(self, eta, previous_errors, force_decrement=False):
+        if force_decrement:
+            return -(self.b * eta)
+        elif len(previous_errors) >= self.k:
             if _consistent_increase(previous_errors, self.k):
                 return -(self.b * eta)
             if _consistent_decrease(previous_errors, self.k):
@@ -103,6 +105,7 @@ class Network:
         self._epochs = epochs
         self.momentum_epoch_increase = momentum_epoch_increase
         self.momentum_delta = momentum_delta
+        self.saturated = False
 
     def print_structure(self):
         print("============ Neural Network ============")
@@ -126,11 +129,10 @@ class Network:
         """
         if self._do_adaptive_bold():
             self._previous_layers = deepcopy(self.layers)
-
+        self.saturated = False
         for x_i, expected_i in zip(data, expected_output):
             self._feed_forward(x_i)
             self._back_propagate(x_i, expected_i)
-
         if self._do_adaptive_bold():
             self._adapt_eta_bold(previous_errors)
         if self._do_adaptive_annealing():
@@ -163,6 +165,8 @@ class Network:
                 for j in range(len(layer.neurons)):
                     error = 0.0
                     for neuron in self.layers[i + 1].neurons:
+                        if neuron.is_saturated():
+                            self.saturated = True
                         error += (neuron.weights[j] * neuron.delta)
                     errors.append(error)
             else:  # Output layer
@@ -217,7 +221,7 @@ class Network:
         }
 
     def _adapt_eta_bold(self, previous_errors):
-        delta_eta = self._adaptive_bold.delta_eta(self.eta, previous_errors)
+        delta_eta = self._adaptive_bold.delta_eta(self.eta, previous_errors, self.saturated)
         if delta_eta < 0:
             self.layers = self._previous_layers
         self.eta += delta_eta

@@ -16,7 +16,10 @@ class Neuron:
         return np.dot(neuron_input, self.weights) + self.bias
 
     def __str__(self):
-        return "{}-input neuron"
+        return "Neuron(b:{}, o:{}, d:{})".format(self.bias, self.output, self.delta)
+
+    def is_saturated(self):
+        return abs(self.delta) > int(1e10)
 
     def to_json(self):
         return {
