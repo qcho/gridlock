@@ -22,13 +22,13 @@ def _between(array, value):
             return i
 
 
-def _accumulated_realtive_fitness(population):
+def _accumulated_relative_fitness(population):
     relative_fitness = relative_aptitude(population)
     return list(accumulate(relative_fitness))
 
 
 def _roulette(population, amount: int):
-    accumulated = _accumulated_realtive_fitness(population)
+    accumulated = _accumulated_relative_fitness(population)
 
     result = []
     for _ in range(amount):
@@ -40,7 +40,7 @@ def _roulette(population, amount: int):
 
 
 def _universal(population, amount: int):
-    accumulated = _accumulated_realtive_fitness(population)
+    accumulated = _accumulated_relative_fitness(population)
     r = random()
     randoms = []
     for i in range(amount):
