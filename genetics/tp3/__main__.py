@@ -3,6 +3,7 @@ from .models.characters import Warrior
 from models.items import Armour, Boots, Gloves, Helmet, Weapon
 from .utils.parser import parse
 from random import sample
+from .utils.config import Config
 
 
 def print_stats(population):
@@ -34,24 +35,20 @@ def generate_individuals(amount, items, special_modifiers):
 
 def databases():
     weapons = list(map(lambda x: Weapon(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/armas.tsv")[0]))
-    boots = list(map(lambda x: Boots(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/botas.tsv")[0]))
+    boots   = list(map(lambda x:  Boots(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/botas.tsv")[0]))
     helmets = list(map(lambda x: Helmet(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/cascos.tsv")[0]))
-    gloves = list(map(lambda x: Gloves(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/guantes.tsv")[0]))
+    gloves  = list(map(lambda x: Gloves(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/guantes.tsv")[0]))
     armours = list(map(lambda x: Armour(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/pecheras.tsv")[0]))
     return (weapons, boots, helmets, gloves, armours)
 
 
 def main():
+    config = Config("config.json")
     items = databases()
-    population_amount = 100
-    special_modifiers = {
-        'special_strength': 1.2,
-        'special_agility': 1.0,
-        'special_expertise': 0.8,
-        'special_resistance': 0.8,
-        'special_life': 0.8,
-    }
-    population = generate_individuals(100, items, special_modifiers)
+    population_size = config.population_size
+    special_modifiers = config.special_modifiers
+    population = generate_individuals(population_size, items, special_modifiers)
+    print(len(population))
 
 
 if __name__ == "__main__":

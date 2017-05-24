@@ -1,0 +1,10 @@
+{
+  "population_size": 100,
+  "special_modifiers": {
+    "special_strength": 1.2,
+    "special_agility": 1.0,
+    "special_expertise": 0.8,
+    "special_resistance": 0.8,
+    "special_life": 0.8
+  }
+}
