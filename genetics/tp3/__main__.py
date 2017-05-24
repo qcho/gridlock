@@ -1,7 +1,8 @@
 import numpy as np
-from algorithms.selection import stochastic_sample
 from .models.characters import Warrior
 from models.items import Armour, Boots, Gloves, Helmet, Weapon
+from .utils.parser import parse
+from random import sample
 
 
 def print_stats(population):
@@ -17,13 +18,32 @@ def print_stats(population):
     print("Min fitness: {}".format(min_fitness))
 
 
-def generate_individuals(amount):
-    armour = Armour(1, 0.1, 0.2, 0.3, 0.4, 0.5)
-    boots = Boots(1, 0.1, 0.2, 0.3, 0.4, 0.5)
-    gloves = Gloves(1, 0.1, 0.2, 0.3, 0.4, 0.5)
-    helmet = Helmet(1, 0.1, 0.2, 0.3, 0.4, 0.5)
-    weapon = Weapon(1, 0.1, 0.2, 0.3, 0.4, 0.5)
+def generate_individuals(amount, items, special_modifiers):
+    population = []
+    for _ in range(amount):
+        w = Warrior(special_modifiers)
+        w.add_item(sample(items[0], 1)[0])
+        w.add_item(sample(items[1], 1)[0])
+        w.add_item(sample(items[2], 1)[0])
+        w.add_item(sample(items[3], 1)[0])
+        w.add_item(sample(items[4], 1)[0])
+        w.calculate_fitness()
+        population.append(w)
+    return population
 
+
+def databases():
+    weapons = list(map(lambda x: Weapon(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/armas.tsv")[0]))
+    boots = list(map(lambda x: Boots(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/botas.tsv")[0]))
+    helmets = list(map(lambda x: Helmet(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/cascos.tsv")[0]))
+    gloves = list(map(lambda x: Gloves(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/guantes.tsv")[0]))
+    armours = list(map(lambda x: Armour(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/pecheras.tsv")[0]))
+    return (weapons, boots, helmets, gloves, armours)
+
+
+def main():
+    items = databases()
+    population_amount = 100
     special_modifiers = {
         'special_strength': 1.2,
         'special_agility': 1.0,
@@ -31,25 +51,7 @@ def generate_individuals(amount):
         'special_resistance': 0.8,
         'special_life': 0.8,
     }
-
-    population = []
-    for _ in range(amount):
-        # Our special modifiers
-        w = Warrior(special_modifiers)
-        w.add_item(armour)
-        w.add_item(boots)
-        w.add_item(gloves)
-        w.add_item(helmet)
-        w.add_item(weapon)
-        w.calculate_fitness()
-        population.append(w)
-    return population
-
-
-def main():
-    population = generate_individuals(10)
-    stochastic_sample(population, 5, type='universal')
-    print_stats(population)
+    population = generate_individuals(100, items, special_modifiers)
 
 
 if __name__ == "__main__":
