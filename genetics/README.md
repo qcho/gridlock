@@ -9,3 +9,5 @@ In order to enable git-lfs:
 git lfs install
 ```
 3. Done! You should be able to access the data files on next pull
+
+## Project dependencies
