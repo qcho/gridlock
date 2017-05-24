@@ -23,9 +23,19 @@ def generate_individuals(amount):
     gloves = Gloves(1, 0.1, 0.2, 0.3, 0.4, 0.5)
     helmet = Helmet(1, 0.1, 0.2, 0.3, 0.4, 0.5)
     weapon = Weapon(1, 0.1, 0.2, 0.3, 0.4, 0.5)
+
+    special_modifiers = {
+        'special_strength': 1.2,
+        'special_agility': 1.0,
+        'special_expertise': 0.8,
+        'special_resistance': 0.8,
+        'special_life': 0.8,
+    }
+
     population = []
     for _ in range(amount):
-        w = Warrior()
+        # Our special modifiers
+        w = Warrior(special_modifiers)
         w.add_item(armour)
         w.add_item(boots)
         w.add_item(gloves)

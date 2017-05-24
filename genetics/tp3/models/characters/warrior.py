@@ -1,8 +1,8 @@
 from .character import Character
 
 class Warrior(Character):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, special_modifiers):
+        super().__init__(special_modifiers)
 
 
     def calculate_fitness(self):
