@@ -2,3 +2,4 @@
 
 ## [TPE1](gridlock/)
 ## [TPE2](neural/)
+## [TPE3](genetics/)
