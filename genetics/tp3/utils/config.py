@@ -13,6 +13,10 @@ class Config:
         with open(pkg_resources.resource_filename(__data_pkg__, self.filename), 'r') as fp:
             json_object = json.load(fp)
             self.population_size = json_object['population_size']
+            self.generations_limit = json_object['generations_limit']
+            self.mutation_chance = json_object['mutation_chance']
+            self.crossover_chance = json_object['crossover_chance']
+            self.generation_gap = json_object['generation_gap']
             self.special_modifiers = {
                 'special_strength': json_object['special_modifiers']['special_strength'],
                 'special_agility': json_object['special_modifiers']['special_agility'],

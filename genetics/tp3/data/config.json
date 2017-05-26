@@ -1,5 +1,9 @@
 {
   "population_size": 100,
+  "generations_limit": 10000,
+  "mutation_chance": 0.005,
+  "crossover_chance": 0.65,
+  "generation_gap": 0.5,
   "special_modifiers": {
     "special_strength": 1.2,
     "special_agility": 1.0,
