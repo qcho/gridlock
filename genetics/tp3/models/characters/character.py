@@ -1,5 +1,6 @@
 import numpy as np
-from abc import ABCMeta, abstractmethod
+from copy import deepcopy
+from abc import ABCMeta
 from random import uniform
 from ..items.item import Item
 from ..stats import Stats

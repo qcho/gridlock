@@ -1,5 +1,5 @@
-import algorithms.selection as sele
-import algorithms.crossover as cross
+import tp3.algorithms.selection as sele
+import tp3.algorithms.crossover as cross
 import random as r
 
 

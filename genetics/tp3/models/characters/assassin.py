@@ -1,4 +1,4 @@
-from .character import Character
+from . import Character
 
 
 class Assassin(Character):
