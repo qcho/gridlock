@@ -1,6 +1,6 @@
 from itertools import accumulate
 from random import sample, random
-from utils.relative_aptitude import relative_aptitude
+from tp3.utils.relative_aptitude import relative_aptitude
 
 
 def elite_sample(population, amount: int):

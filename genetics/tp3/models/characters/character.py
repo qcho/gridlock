@@ -1,5 +1,6 @@
 import numpy as np
-from abc import ABCMeta, abstractmethod
+from copy import deepcopy
+from abc import ABCMeta
 from random import uniform
 from ..items.item import Item
 from ..stats import Stats
@@ -71,6 +72,5 @@ class Character:
     def __str__(self):
         return "Items: {}".format(self.items)
 
-    @abstractmethod
     def spawn(self):
-        raise NotImplementedError("Extend this class")
+        return deepcopy(self)

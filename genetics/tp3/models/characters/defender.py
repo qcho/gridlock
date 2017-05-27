@@ -1,4 +1,4 @@
-from .character import Character
+from . import Character
 
 
 class Defender(Character):
@@ -8,9 +8,6 @@ class Defender(Character):
 
     def calculate_fitness(self):
         self.fitness = 0.1 * self.get_attack() + 0.9 * self.get_defense()
-
-    def spawn(self):
-        return Defender()
 
     def __str__(self):
         return "Fitness: {} ".format(self.fitness) + super().__str__()
