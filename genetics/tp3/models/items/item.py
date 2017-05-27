@@ -11,14 +11,15 @@ class ItemType(Enum):
 
 class Item:
 
-    def __init__(self, id: int, strength: float, agility: float, expertise: float, resistance: float, life: float):
+    def __init__(self, id: int, strength: float, agility: float, expertise: float, resistance: float, life: float,
+                 item_type: ItemType):
         self._id = id
         self._strength = strength
         self._agility = agility
         self._expertise = expertise
         self._resistance = resistance
         self._life = life
-        self._type = None
+        self._type = item_type
 
     @property
     def strength(self):
