@@ -1,7 +1,7 @@
 import numpy as np
 from .algorithms.genetic import Genetic
 from .models.characters import Character, Warrior, Archer, Defender, Assassin
-from models.items import Armour, Boots, Gloves, Helmet, Weapon
+from .models.items import Armour, Boots, Gloves, Helmet, Weapon
 from .utils.parser import parse
 from random import sample
 from .utils.config import Config
@@ -45,11 +45,11 @@ def class_setter(population_class):
 
 def databases():
     weapons = list(map(lambda x: Weapon(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/armas.tsv")[0]))
-    boots   = list(map(lambda x:  Boots(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/botas.tsv")[0]))
+    boots = list(map(lambda x: Boots(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/botas.tsv")[0]))
     helmets = list(map(lambda x: Helmet(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/cascos.tsv")[0]))
-    gloves  = list(map(lambda x: Gloves(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/guantes.tsv")[0]))
+    gloves = list(map(lambda x: Gloves(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/guantes.tsv")[0]))
     armours = list(map(lambda x: Armour(int(x[0]), x[1], x[2], x[3], x[4], x[5]), parse("testdata/pecheras.tsv")[0]))
-    return (weapons, boots, helmets, gloves, armours)
+    return weapons, boots, helmets, gloves, armours
 
 
 def main():
@@ -66,5 +66,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
