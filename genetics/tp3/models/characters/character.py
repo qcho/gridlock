@@ -40,28 +40,28 @@ class Character:
     def add_item(self, item: Item):
         self.items[item.type] = item
 
-    def _items_properties_sum(self, function):
-        return np.sum(list(map(function, self.items.values())))
+    def _items_properties_sum(self, property_fn):
+        return np.sum(list(map(lambda x: property_fn.__get__(x, Item), self.items.values())))
 
     def get_strength(self):
         return 100 * np.tanh(
-            0.01 * self._items_properties_sum(lambda x: x.strength) * self.special_modifiers[Stats.STRENGTH])
+            0.01 * self._items_properties_sum(Item.strength) * self.special_modifiers[Stats.STRENGTH])
 
     def get_agility(self):
         return np.tanh(
-            0.01 * self._items_properties_sum(lambda x: x.agility) * self.special_modifiers[Stats.AGILITY])
+            0.01 * self._items_properties_sum(Item.agility) * self.special_modifiers[Stats.AGILITY])
 
     def get_expertise(self):
         return 0.6 * np.tanh(
-            0.01 * self._items_properties_sum(lambda x: x.expertise) * self.special_modifiers[Stats.EXPERTISE])
+            0.01 * self._items_properties_sum(Item.expertise) * self.special_modifiers[Stats.EXPERTISE])
 
     def get_resistance(self):
         return np.tanh(
-            0.01 * self._items_properties_sum(lambda x: x.resistance) * self.special_modifiers[Stats.RESISTANCE])
+            0.01 * self._items_properties_sum(Item.resistance) * self.special_modifiers[Stats.RESISTANCE])
 
     def get_life(self):
         return 100 * np.tanh(
-            0.01 * self._items_properties_sum(lambda x: x.life) * self.special_modifiers[Stats.LIFE])
+            0.01 * self._items_properties_sum(Item.life) * self.special_modifiers[Stats.LIFE])
 
     def get_attack(self):
         return (self.get_agility() + self.get_expertise()) * self.get_strength() * self.attack_modifier
