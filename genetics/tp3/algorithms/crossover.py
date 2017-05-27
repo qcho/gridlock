@@ -14,20 +14,20 @@ def _change_point(character_1, character_2, new_character_1, new_character_2, i)
         new_character_2.height = character_1.height
         new_character_1.height = character_2.height
     elif i == 1:
-        new_character_2.items[Item.ItemType.weapon.name] = character_1.items[Item.ItemType.weapon.name]
-        new_character_1.items[Item.ItemType.weapon.name] = character_2.items[Item.ItemType.weapon.name]
+        new_character_2.items[ItemType.WEAPON] = character_1.items[ItemType.WEAPON]
+        new_character_1.items[ItemType.WEAPON] = character_2.items[ItemType.WEAPON]
     elif i == 2:
-        new_character_2.items[Item.ItemType.boots.name] = character_1.items[Item.ItemType.boots.name]
-        new_character_1.items[Item.ItemType.boots.name] = character_2.items[Item.ItemType.boots.name]
+        new_character_2.items[ItemType.BOOTS] = character_1.items[ItemType.BOOTS]
+        new_character_1.items[ItemType.BOOTS] = character_2.items[ItemType.BOOTS]
     elif i == 3:
-        new_character_2.items[Item.ItemType.helmet.name] = character_1.items[Item.ItemType.helmet.name]
-        new_character_1.items[Item.ItemType.helmet.name] = character_2.items[Item.ItemType.helmet.name]
+        new_character_2.items[ItemType.HELMET] = character_1.items[ItemType.HELMET]
+        new_character_1.items[ItemType.HELMET] = character_2.items[ItemType.HELMET]
     elif i == 4:
-        new_character_2.items[Item.ItemType.gloves.name] = character_1.items[Item.ItemType.gloves.name]
-        new_character_1.items[Item.ItemType.gloves.name] = character_2.items[Item.ItemType.gloves.name]
+        new_character_2.items[ItemType.GLOVES] = character_1.items[ItemType.GLOVES]
+        new_character_1.items[ItemType.GLOVES] = character_2.items[ItemType.GLOVES]
     elif i == 5:
-        new_character_2.items[Item.ItemType.armour.name] = character_1.items[Item.ItemType.armour.name]
-        new_character_1.items[Item.ItemType.armour.name] = character_2.items[Item.ItemType.armour.name]
+        new_character_2.items[ItemType.ARMOUR] = character_1.items[ItemType.ARMOUR]
+        new_character_1.items[ItemType.ARMOUR] = character_2.items[ItemType.ARMOUR]
 
 
 def _maintain_point(character_1, character_2, new_character_1, new_character_2, i):
@@ -36,20 +36,20 @@ def _maintain_point(character_1, character_2, new_character_1, new_character_2, 
         new_character_1.height = character_1.height
         new_character_2.height = character_2.height
     elif i == 1:
-        new_character_1.items[Item.ItemType.weapon.name] = character_1.items[Item.ItemType.weapon.name]
-        new_character_2.items[Item.ItemType.weapon.name] = character_2.items[Item.ItemType.weapon.name]
+        new_character_1.items[ItemType.WEAPON] = character_1.items[ItemType.WEAPON]
+        new_character_2.items[ItemType.WEAPON] = character_2.items[ItemType.WEAPON]
     elif i == 2:
-        new_character_1.items[Item.ItemType.boots.name] = character_1.items[Item.ItemType.boots.name]
-        new_character_2.items[Item.ItemType.boots.name] = character_2.items[Item.ItemType.boots.name]
+        new_character_1.items[ItemType.BOOTS] = character_1.items[ItemType.BOOTS]
+        new_character_2.items[ItemType.BOOTS] = character_2.items[ItemType.BOOTS]
     elif i == 3:
-        new_character_1.items[Item.ItemType.helmet.name] = character_1.items[Item.ItemType.helmet.name]
-        new_character_2.items[Item.ItemType.helmet.name] = character_2.items[Item.ItemType.helmet.name]
+        new_character_1.items[ItemType.HELMET] = character_1.items[ItemType.HELMET]
+        new_character_2.items[ItemType.HELMET] = character_2.items[ItemType.HELMET]
     elif i == 4:
-        new_character_1.items[Item.ItemType.gloves.name] = character_1.items[Item.ItemType.gloves.name]
-        new_character_2.items[Item.ItemType.gloves.name] = character_2.items[Item.ItemType.gloves.name]
+        new_character_1.items[ItemType.GLOVES] = character_1.items[ItemType.GLOVES]
+        new_character_2.items[ItemType.GLOVES] = character_2.items[ItemType.GLOVES]
     elif i == 5:
-        new_character_1.items[Item.ItemType.armour.name] = character_1.items[Item.ItemType.armour.name]
-        new_character_2.items[Item.ItemType.armour.name] = character_2.items[Item.ItemType.armour.name]
+        new_character_1.items[ItemType.ARMOUR] = character_1.items[ItemType.ARMOUR]
+        new_character_2.items[ItemType.ARMOUR] = character_2.items[ItemType.ARMOUR]
 
 
 def one_point(character_1, character_2, items, point):

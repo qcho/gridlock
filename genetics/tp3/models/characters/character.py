@@ -35,7 +35,7 @@ class Character:
         }
 
     def add_item(self, item: Item):
-        self.items[item.type.name] = item
+        self.items[item.type] = item
 
     def _items_properties_sum(self, function):
         return np.sum(list(map(function, self.items.values())))
