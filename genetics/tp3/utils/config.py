@@ -8,7 +8,6 @@ class Config:
         self.filename = filename
         self._parse_config()
 
-
     def _parse_config(self):
         with open(pkg_resources.resource_filename(__data_pkg__, self.filename), 'r') as fp:
             json_object = json.load(fp)
