@@ -5,6 +5,8 @@
   "crossover_chance": 0.65,
   "generation_gap": 0.5,
   "child_per_generation": 40,
+  "goal_score": 20,
+  "print_every_n_generations": 10,
   "population_class": "warrior",
   "breed_selection_method": "elite_sample",
   "generation_gap_selection_method": "elite_sample",

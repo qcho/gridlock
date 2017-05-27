@@ -19,6 +19,8 @@ class Config:
             self.generation_gap = json_object['generation_gap']
             self.population_class = json_object['population_class']
             self.child_per_generation = json_object['child_per_generation']
+            self.goal_score = json_object['goal_score']
+            self.print_interval = json_object['print_every_n_generations']
             self.breed_selection_method = json_object['breed_selection_method']
             self.generation_gap_selection_method = json_object['generation_gap_selection_method']
             self.child_to_keep_selection_method = json_object['child_to_keep_selection_method']
