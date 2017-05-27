@@ -1,5 +1,6 @@
 {
   "population_size": 100,
+  "population_class": "warrior",
   "generations_limit": 10000,
   "mutation_chance": 0.005,
   "crossover_chance": 0.65,

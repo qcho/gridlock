@@ -1,5 +1,8 @@
 import numpy as np
 from .models.characters import Warrior
+from .models.characters import Archer
+from .models.characters import Defender
+from .models.characters import Assassin
 from models.items import Armour, Boots, Gloves, Helmet, Weapon
 from .utils.parser import parse
 from random import sample
@@ -19,18 +22,27 @@ def print_stats(population):
     print("Min fitness: {}".format(min_fitness))
 
 
-def generate_individuals(amount, items, special_modifiers):
+def generate_individuals(amount, items, special_modifiers, population_class):
     population = []
     for _ in range(amount):
-        w = Warrior(special_modifiers)
-        w.add_item(sample(items[0], 1)[0])
-        w.add_item(sample(items[1], 1)[0])
-        w.add_item(sample(items[2], 1)[0])
-        w.add_item(sample(items[3], 1)[0])
-        w.add_item(sample(items[4], 1)[0])
-        w.calculate_fitness()
-        population.append(w)
+        individual = class_setter(population_class, special_modifiers)
+        individual.add_item(sample(items[0], 1)[0])
+        individual.add_item(sample(items[1], 1)[0])
+        individual.add_item(sample(items[2], 1)[0])
+        individual.add_item(sample(items[3], 1)[0])
+        individual.add_item(sample(items[4], 1)[0])
+        individual.calculate_fitness()
+        population.append(individual)
     return population
+
+
+def class_setter(population_class, special_modifiers):
+    return {
+        'warrior': Warrior(special_modifiers),
+        'archer': Archer(special_modifiers),
+        'defender': Defender(special_modifiers),
+        'assassin': Assassin(special_modifiers),
+    }[population_class]
 
 
 def databases():
@@ -47,9 +59,12 @@ def main():
     items = databases()
     population_size = config.population_size
     special_modifiers = config.special_modifiers
-    population = generate_individuals(population_size, items, special_modifiers)
+    population_class = config.population_class
+    population = generate_individuals(population_size, items, special_modifiers, population_class)
     print(len(population))
 
 
 if __name__ == "__main__":
     main()
+
+

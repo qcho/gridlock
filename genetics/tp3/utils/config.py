@@ -17,6 +17,7 @@ class Config:
             self.mutation_chance = json_object['mutation_chance']
             self.crossover_chance = json_object['crossover_chance']
             self.generation_gap = json_object['generation_gap']
+            self.population_class = json_object['population_class']
             self.special_modifiers = {
                 'special_strength': json_object['special_modifiers']['special_strength'],
                 'special_agility': json_object['special_modifiers']['special_agility'],
