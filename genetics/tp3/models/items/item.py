@@ -2,7 +2,6 @@ from enum import Enum
 
 
 class ItemType(Enum):
-    NONE = 0
     ARMOUR = 1
     BOOTS = 2
     GLOVES = 3
@@ -19,7 +18,7 @@ class Item:
         self.expertise = expertise
         self.resistance = resistance
         self.life = life
-        self.type = ItemType.NONE
+        self.type = None
 
     def __str__(self):
         return "[ {} (id: {}) S: {} | A: {} | E: {} | R: {} | L: {} ]".format(
