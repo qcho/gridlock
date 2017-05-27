@@ -24,11 +24,11 @@ def generate_individuals(amount, items, population_class):
     population = []
     for _ in range(amount):
         individual = class_setter(population_class)
-        individual.add_item(sample(items[0], 1)[0])
-        individual.add_item(sample(items[1], 1)[0])
-        individual.add_item(sample(items[2], 1)[0])
-        individual.add_item(sample(items[3], 1)[0])
-        individual.add_item(sample(items[4], 1)[0])
+        individual.set_item(sample(items[0], 1)[0])
+        individual.set_item(sample(items[1], 1)[0])
+        individual.set_item(sample(items[2], 1)[0])
+        individual.set_item(sample(items[3], 1)[0])
+        individual.set_item(sample(items[4], 1)[0])
         individual.calculate_fitness()
         population.append(individual)
     return population
@@ -60,6 +60,7 @@ def main():
     population_class = config.population_class
     population = generate_individuals(population_size, items, population_class)
     experiment = Genetic(config, population, items)
+    experiment.natural_selection()
     print(experiment)
     print(population[0].spawn())
 

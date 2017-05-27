@@ -20,7 +20,7 @@ class Genetic:
         self.gsm = sele.selection_function_dictionary[config.generation_gap_selection_method]
         self.csm = sele.selection_function_dictionary[config.child_to_keep_selection_method]
         self.cof = cross.crossover_function_dictionary[config.crossover_type]
-        self.child = list()
+        self.children = list()
         self.items = items
         self.print_interval = config.print_interval
 
@@ -30,26 +30,27 @@ class Genetic:
         for i in range(0, self.k, 1):
             couple = self.csm(self.population, 2)
             if r.random() < self.Cc:
-                self.child.append(self.cof(couple[0], couple[1], self.items))
+                [self.children.append(x) for x in self.cof(couple[0], couple[1], r.randint(0, 6))]
             else:
-                self.child.append(couple)
+                [self.children.append(x) for x in couple]
 
     def mutate_children(self):
-        for child in self.child:
+        for child in self.children:
             if r.random() < self.Mc:
                 child.height = r.uniform(1.3, 2.0)
-            for i in range(0, child.items.length):
+            print(child)
+            for i in range(0, len(child.items)):
                 if r.random() < self.Mc:
-                    child.add_item(r.sample(self.items[i], 1)[0])
+                    child.set_item(r.sample(self.items[i], 1)[0])
 
     def select_new_generation(self):
         parents_count = round(self.N * (1-self.G))
         child_count = self.N - parents_count
         new_pop = list()
-        new_pop.append(self.gsm(self.population, parents_count))
-        new_pop.append(self.csm(self.child, child_count))
+        [new_pop.append(x) for x in self.gsm(self.population, parents_count)]
+        [new_pop.append(x) for x in self.csm(self.children, child_count)]
         self.population = new_pop
-        self.child.clear()
+        self.children.clear()
 
     def natural_selection(self):
         generation = 0
@@ -58,7 +59,7 @@ class Genetic:
         while max_fitness < self.goal and generation < self.generations_limit:
             self.generate_children()
             self.mutate_children()
-            for child in self.child:
+            for child in self.children:
                 child.calculate_fitness()
             self.select_new_generation()
             generation += 1
@@ -76,7 +77,7 @@ class Genetic:
             print("Max generation reached...Exiting with a best score of: {}".format(max_fitness))
         else:
             print("The target score was surpassed with a score of: {}".format(max_fitness))
-            individual = filter(lambda x: x.fitness == max_fitness, self.population)
-            print("The individual is: {}", individual[0])
+            individual = list(filter(lambda x: x.fitness == max_fitness, self.population))
+            print("The individual is: {}".format(individual[0]))
 
 

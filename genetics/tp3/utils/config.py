@@ -1,6 +1,6 @@
 import pkg_resources
 import json
-from data import __data_pkg__
+from ..data import __data_pkg__
 
 
 class Config:

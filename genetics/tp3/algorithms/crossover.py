@@ -1,5 +1,5 @@
-from tp3.models.items import ItemType
-from tp3.models.characters import Character
+from ..models.items import ItemType
+from ..models.characters import Character
 from random import random
 
 

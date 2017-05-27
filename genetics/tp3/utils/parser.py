@@ -1,5 +1,5 @@
 import pkg_resources
-from data import __data_pkg__
+from ..data import __data_pkg__
 
 
 def parse(file_name):

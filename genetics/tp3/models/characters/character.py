@@ -37,7 +37,7 @@ class Character:
             Stats.LIFE: special_modifiers['special_life'],
         }
 
-    def add_item(self, item: Item):
+    def set_item(self, item: Item):
         self.items[item.type] = item
 
     def _items_properties_sum(self, property_fn):
