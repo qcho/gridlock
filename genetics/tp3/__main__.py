@@ -1,8 +1,6 @@
 import numpy as np
-from .models.characters import Warrior
-from .models.characters import Archer
-from .models.characters import Defender
-from .models.characters import Assassin
+from .algorithms.genetic import Genetic
+from .models.characters import Character, Warrior, Archer, Defender, Assassin
 from models.items import Armour, Boots, Gloves, Helmet, Weapon
 from .utils.parser import parse
 from random import sample
@@ -22,10 +20,10 @@ def print_stats(population):
     print("Min fitness: {}".format(min_fitness))
 
 
-def generate_individuals(amount, items, special_modifiers, population_class):
+def generate_individuals(amount, items, population_class):
     population = []
     for _ in range(amount):
-        individual = class_setter(population_class, special_modifiers)
+        individual = class_setter(population_class)
         individual.add_item(sample(items[0], 1)[0])
         individual.add_item(sample(items[1], 1)[0])
         individual.add_item(sample(items[2], 1)[0])
@@ -36,12 +34,12 @@ def generate_individuals(amount, items, special_modifiers, population_class):
     return population
 
 
-def class_setter(population_class, special_modifiers):
+def class_setter(population_class):
     return {
-        'warrior': Warrior(special_modifiers),
-        'archer': Archer(special_modifiers),
-        'defender': Defender(special_modifiers),
-        'assassin': Assassin(special_modifiers),
+        'warrior': Warrior(),
+        'archer': Archer(),
+        'defender': Defender(),
+        'assassin': Assassin(),
     }[population_class]
 
 
@@ -58,10 +56,12 @@ def main():
     config = Config("config.json")
     items = databases()
     population_size = config.population_size
-    special_modifiers = config.special_modifiers
+    Character.set_special_modifiers(config.special_modifiers)
     population_class = config.population_class
-    population = generate_individuals(population_size, items, special_modifiers, population_class)
-    print(len(population))
+    population = generate_individuals(population_size, items, population_class)
+    experiment = Genetic(config, population, items)
+    print(experiment)
+    print(population[0].spawn())
 
 
 if __name__ == "__main__":

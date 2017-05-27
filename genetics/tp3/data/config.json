@@ -1,10 +1,15 @@
 {
   "population_size": 100,
-  "population_class": "warrior",
   "generations_limit": 10000,
   "mutation_chance": 0.005,
   "crossover_chance": 0.65,
   "generation_gap": 0.5,
+  "child_per_generation": 40,
+  "population_class": "warrior",
+  "breed_selection_method": "elite_sample",
+  "generation_gap_selection_method": "elite_sample",
+  "child_to_keep_selection_method": "elite_sample",
+  "crossover_type": "one_point",
   "special_modifiers": {
     "special_strength": 1.2,
     "special_agility": 1.0,

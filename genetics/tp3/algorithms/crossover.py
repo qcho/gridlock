@@ -1,16 +1,14 @@
-from models.characters import Warrior
 from models.items import Item
 from random import random
 
 
 def _new_characters(character_1, character_2):
-    # TODO: Make the creation of characters generic not hardcoded by warriors
-    new_character_1 = Warrior(character_1.special_modifiers)
-    new_character_2 = Warrior(character_2.special_modifiers)
-    return (new_character_1, new_character_2)
+    new_character_1 = character_1.spawn()
+    new_character_2 = character_2.spawn()
+    return new_character_1, new_character_2
 
 
-def _change_point(character_1, character_2, new_character_1, new_character_2, items, i):
+def _change_point(character_1, character_2, new_character_1, new_character_2, i):
     # Height, weapons, boots, helmets, gloves, armour
     if i == 0:
         new_character_2.height = character_1.height
@@ -32,7 +30,7 @@ def _change_point(character_1, character_2, new_character_1, new_character_2, it
         new_character_1.items[Item.ItemType.armour.name] = character_2.items[Item.ItemType.armour.name]
 
 
-def _maintain_point(character_1, character_2, new_character_1, new_character_2, items, i):
+def _maintain_point(character_1, character_2, new_character_1, new_character_2, i):
     # Height, weapons, boots, helmets, gloves, armour
     if i == 0:
         new_character_1.height = character_1.height
@@ -92,3 +90,12 @@ def anular(character_1, character_2, items):
     new_character_1, new_character_2 = _new_characters(character_1, character_2)
     # TODO
     return (new_character_1, new_character_2)
+
+
+#TODO completar el diccionario
+crossover_function_dictionary = {
+    'one_point': one_point,
+    'two_points': two_points,
+    'uniform': uniform,
+    'anular': anular,
+}

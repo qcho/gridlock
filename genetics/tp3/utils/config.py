@@ -18,6 +18,11 @@ class Config:
             self.crossover_chance = json_object['crossover_chance']
             self.generation_gap = json_object['generation_gap']
             self.population_class = json_object['population_class']
+            self.child_per_generation = json_object['child_per_generation']
+            self.breed_selection_method = json_object['breed_selection_method']
+            self.generation_gap_selection_method = json_object['generation_gap_selection_method']
+            self.child_to_keep_selection_method = json_object['child_to_keep_selection_method']
+            self.crossover_type = json_object['crossover_type']
             self.special_modifiers = {
                 'special_strength': json_object['special_modifiers']['special_strength'],
                 'special_agility': json_object['special_modifiers']['special_agility'],

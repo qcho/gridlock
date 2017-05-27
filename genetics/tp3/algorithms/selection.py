@@ -76,3 +76,9 @@ def stochastic_sample(population, amount: int, type: str):
     }
     func = switcher[type]
     return func(population, amount)
+
+#TODO completar el diccionario
+selection_function_dictionary = {
+    'elite_sample': elite_sample,
+    'random_sample': random_sample,
+}
