@@ -1,4 +1,5 @@
 {
+  "dataset": "testdata",
   "population_size": 100,
   "generations_limit": 10000,
   "mutation_chance": 0.09,
