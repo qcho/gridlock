@@ -1,10 +1,12 @@
 import numpy as np
+from abc import ABCMeta, abstractmethod
 from random import uniform
 from ..items.item import Item
 from ..stats import Stats
 
 
 class Character:
+    __metaclass__ = ABCMeta
 
     attack_modifier_function = lambda h: 0.5 - (3*h - 5)**4 + (3*h - 5)**2 + h/2
     defense_modifier_function = lambda h: 2 + (3*h - 5)**4 - (3*h - 5)**2 - h/2
@@ -18,7 +20,6 @@ class Character:
     }
 
     def __init__(self):
-        super().__init__()
         self.items = {}
         self.height = uniform(1.3, 2.0)
         self.attack_modifier = Character.attack_modifier_function(self.height)
@@ -61,6 +62,6 @@ class Character:
     def get_defense(self):
         return (self.get_resistance() + self.get_expertise()) * self.get_life() * self.defense_modifier
 
+    @abstractmethod
     def spawn(self):
-        return Character()
-
+        raise NotImplementedError("Extend this class")
