@@ -23,7 +23,7 @@ class Item:
 
     def __str__(self):
         return "[ {} (id: {}) S: {} | A: {} | E: {} | R: {} | L: {} ]".format(
-            self.type.name, self.id, self.strength, self.agility, self.expertise, self.resistance, self.life)
+            self.type, self.id, self.strength, self.agility, self.expertise, self.resistance, self.life)
 
 
     def __repr__(self):
