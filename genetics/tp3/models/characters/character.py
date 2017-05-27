@@ -71,8 +71,8 @@ class Character:
 
     def __str__(self):
         string = "Height: {} \nItems: \n".format(self.height)
-        for x in self.items:
-            string = string + x.__str__() + "\n"
+        for x in self.items.values():
+            string += str(x) + "\n"
         return string
 
     def spawn(self):

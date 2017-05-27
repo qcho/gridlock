@@ -50,8 +50,5 @@ class Item:
         return self._type
 
     def __str__(self):
-        return "[ {} (id: {}) S: {} | A: {} | E: {} | R: {} | L: {} ]".format(
+        return " {} (id: {})\n\t Str: {:+.10f} | Agi: {:+.10f} | Exp: {:+.10f} | Res: {:+.10f} | Life: {:+.10f}".format(
             self.type, self.id, self.strength, self.agility, self.expertise, self.resistance, self.life)
-
-    def __repr__(self):
-        return self.__str__()
