@@ -1,7 +1,7 @@
 import numpy as np
 from .algorithms.genetic import Genetic
 from .models.characters import Character, Warrior, Archer, Defender, Assassin
-from .models.items import Armour, Boots, Gloves, Helmet, Weapon
+from .models.items import Armour, Boots, Gloves, Helmet, Weapon, ItemType
 from .utils.parser import parse
 from random import sample
 from .utils.config import Config
