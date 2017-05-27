@@ -61,8 +61,6 @@ def main():
     population = generate_individuals(population_size, items, population_class)
     experiment = Genetic(config, population, items)
     experiment.natural_selection()
-    print(experiment)
-    print(population[0].spawn())
 
 
 if __name__ == "__main__":

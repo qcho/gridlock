@@ -24,8 +24,6 @@ class Genetic:
         self.items = items
         self.print_interval = config.print_interval
 
-# TODO add interval printing
-
     def generate_children(self):
         for i in range(0, self.k, 1):
             couple = self.breed_fn(self.population, 2)
@@ -38,7 +36,6 @@ class Genetic:
         for child in self.children:
             if r.random() < self.Mc:
                 child.height = r.uniform(1.3, 2.0)
-            print(child)
             for i in range(0, len(child.items)):
                 if r.random() < self.Mc:
                     child.set_item(r.sample(self.items[i], 1)[0])
@@ -76,7 +73,7 @@ class Genetic:
         if self.generations_limit == generation:
             print("Max generation reached...Exiting with a best score of: {}".format(max_fitness))
         else:
-            print("The target score was surpassed with a score of: {}".format(max_fitness))
+            print("The target score was surpassed in generation: {} with a score of: {}".format(generation, max_fitness))
             individual = list(filter(lambda x: x.fitness == max_fitness, self.population))
             print("The individual is: {}".format(individual[0]))
 

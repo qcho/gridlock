@@ -70,7 +70,10 @@ class Character:
         return (self.get_resistance() + self.get_expertise()) * self.get_life() * self.defense_modifier
 
     def __str__(self):
-        return "Items: {}".format(self.items)
+        string = "Height: {} \nItems: \n".format(self.height)
+        for x in self.items:
+            string = string + x.__str__() + "\n"
+        return string
 
     def spawn(self):
         return deepcopy(self)

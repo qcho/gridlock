@@ -10,5 +10,5 @@ class Archer(Character):
         self.fitness = 0.9 * self.get_attack() + 0.1 * self.get_defense()
 
     def __str__(self):
-        return "Fitness: {} ".format(self.fitness) + super().__str__()
+        return "Fitness: {} \n".format(self.fitness) + super().__str__()
 
