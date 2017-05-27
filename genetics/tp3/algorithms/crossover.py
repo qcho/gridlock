@@ -1,4 +1,4 @@
-from models.items import Item
+from tp3.models.items import ItemType
 from random import random
 
 
@@ -61,7 +61,7 @@ def one_point(character_1, character_2, items, point):
         else:
             _maintain_point(character_1, character_2, new_character_1, new_character_2, i)
 
-    return (new_character_1, new_character_2)
+    return new_character_1, new_character_2
 
 
 def two_points(character_1, character_2, items, point_1, point_2):
@@ -73,7 +73,7 @@ def two_points(character_1, character_2, items, point_1, point_2):
         else:
             _maintain_point(character_1, character_2, new_character_1, new_character_2, i)
 
-    return (new_character_1, new_character_2)
+    return new_character_1, new_character_2
 
 
 def uniform(character_1, character_2, items, probability=0.5):
@@ -83,13 +83,13 @@ def uniform(character_1, character_2, items, probability=0.5):
         if random() < probability:
             _change_point(character_1, character_2, new_character_1, new_character_2, i)
 
-    return (new_character_1, new_character_2)
+    return new_character_1, new_character_2
 
 
 def anular(character_1, character_2, items):
     new_character_1, new_character_2 = _new_characters(character_1, character_2)
     # TODO
-    return (new_character_1, new_character_2)
+    return new_character_1, new_character_2
 
 
 #TODO completar el diccionario

@@ -25,6 +25,5 @@ class Item:
         return "[ {} (id: {}) S: {} | A: {} | E: {} | R: {} | L: {} ]".format(
             self.type, self.id, self.strength, self.agility, self.expertise, self.resistance, self.life)
 
-
     def __repr__(self):
         return self.__str__()

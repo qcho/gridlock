@@ -8,8 +8,8 @@ from ..stats import Stats
 class Character:
     __metaclass__ = ABCMeta
 
-    attack_modifier_function = lambda h: 0.5 - (3*h - 5)**4 + (3*h - 5)**2 + h/2
-    defense_modifier_function = lambda h: 2 + (3*h - 5)**4 - (3*h - 5)**2 - h/2
+    attack_modifier_function = lambda h: 0.5 - (3 * h - 5) ** 4 + (3 * h - 5) ** 2 + h / 2
+    defense_modifier_function = lambda h: 2 + (3 * h - 5) ** 4 - (3 * h - 5) ** 2 - h / 2
     special_modifiers = None
     default_special_modifiers = {
         'special_strength': 1.0,
@@ -24,6 +24,7 @@ class Character:
         self.height = uniform(1.3, 2.0)
         self.attack_modifier = Character.attack_modifier_function(self.height)
         self.defense_modifier = Character.defense_modifier_function(self.height)
+        self.fitness = 0
 
     @staticmethod
     def set_special_modifiers(special_modifiers):

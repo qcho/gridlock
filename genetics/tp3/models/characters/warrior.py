@@ -11,4 +11,3 @@ class Warrior(Character):
 
     def spawn(self):
         return Warrior()
-

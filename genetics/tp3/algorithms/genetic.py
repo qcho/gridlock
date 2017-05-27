@@ -46,4 +46,4 @@ class Genetic:
         self.population = new_pop
         self.child.clear()
 
-#TODO estandarizar parametros de cof y de las func de selection
+# TODO estandarizar parametros de cof y de las func de selection
