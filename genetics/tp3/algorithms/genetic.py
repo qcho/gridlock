@@ -18,8 +18,8 @@ class Genetic:
         self.generations_limit = config.generations_limit
         self.breed_fn = sele.selection_function_dictionary[config.breed_selection_method]
         self.generation_fn = sele.selection_function_dictionary[config.generation_gap_selection_method]
-        self.crossover_fn = sele.selection_function_dictionary[config.child_to_keep_selection_method]
-        self.cof = cross.crossover_function_dictionary[config.crossover_type]
+        self.child_selection_fn = sele.selection_function_dictionary[config.child_to_keep_selection_method]
+        self.crossover_fn = cross.crossover_function_dictionary[config.crossover_type]
         self.children = list()
         self.items = items
         self.print_interval = config.print_interval
@@ -28,9 +28,9 @@ class Genetic:
 
     def generate_children(self):
         for i in range(0, self.k, 1):
-            couple = self.crossover_fn(self.population, 2)
+            couple = self.breed_fn(self.population, 2)
             if r.random() < self.Cc:
-                [self.children.append(x) for x in self.cof(couple[0], couple[1], r.randint(0, 6))]
+                [self.children.append(x) for x in self.crossover_fn(couple[0], couple[1], r.randint(0, 6))]
             else:
                 [self.children.append(x) for x in couple]
 
@@ -48,7 +48,7 @@ class Genetic:
         child_count = self.N - parents_count
         new_pop = list()
         [new_pop.append(x) for x in self.generation_fn(self.population, parents_count)]
-        [new_pop.append(x) for x in self.crossover_fn(self.children, child_count)]
+        [new_pop.append(x) for x in self.child_selection_fn(self.children, child_count)]
         self.population = new_pop
         self.children.clear()
 
