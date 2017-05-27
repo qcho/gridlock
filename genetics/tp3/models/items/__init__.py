@@ -1,4 +1,4 @@
-from .item import Item
+from .item import Item, ItemType
 from .armour import Armour
 from .boots import Boots
 from .gloves import Gloves

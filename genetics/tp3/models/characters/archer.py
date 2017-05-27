@@ -11,4 +11,3 @@ class Archer(Character):
 
     def spawn(self):
         return Archer()
-

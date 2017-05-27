@@ -1,3 +1,9 @@
 from enum import Enum
 
-Stats = Enum('Stats', 'strength agility expertise resistance life')
+
+class Stats(Enum):
+    STRENGTH = 1
+    AGILITY = 2
+    EXPERTISE = 3
+    RESISTANCE = 4
+    LIFE = 5

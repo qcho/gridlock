@@ -14,11 +14,11 @@ def random_sample(population, amount: int):
 
 def _between(array, value):
     # Special first case
-    if (value < array[0]):
+    if value < array[0]:
         return 0
     # Rest of cases
     for i in range(1, len(array)):
-        if (value > array[i - 1] and value < array[i]):
+        if array[i - 1] < value < array[i]:
             return i
 
 
