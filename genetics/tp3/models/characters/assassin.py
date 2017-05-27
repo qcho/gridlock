@@ -8,7 +8,3 @@ class Assassin(Character):
 
     def calculate_fitness(self):
         self.fitness = 0.7 * self.get_attack() + 0.3 * self.get_defense()
-
-    def spawn(self):
-        return Assassin()
-

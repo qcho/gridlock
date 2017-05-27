@@ -68,6 +68,5 @@ class Character:
     def get_defense(self):
         return (self.get_resistance() + self.get_expertise()) * self.get_life() * self.defense_modifier
 
-    @abstractmethod
     def spawn(self):
-        raise NotImplementedError("Extend this class")
+        return deepcopy(self)

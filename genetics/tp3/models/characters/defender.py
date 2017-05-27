@@ -8,7 +8,3 @@ class Defender(Character):
 
     def calculate_fitness(self):
         self.fitness = 0.1 * self.get_attack() + 0.9 * self.get_defense()
-
-    def spawn(self):
-        return Defender()
-
