@@ -11,6 +11,7 @@ class Config:
     def _parse_config(self):
         with open(pkg_resources.resource_filename(__data_pkg__, self.filename), 'r') as fp:
             json_object = json.load(fp)
+            self.dataset = json_object['dataset']
             self.population_size = json_object['population_size']
             self.generations_limit = json_object['generations_limit']
             self.mutation_chance = json_object['mutation_chance']
