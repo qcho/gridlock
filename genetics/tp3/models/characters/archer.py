@@ -11,3 +11,6 @@ class Archer(Character):
 
     def spawn(self):
         return Archer()
+
+    def __str__(self):
+        return "Fitness: {} ".format(self.fitness) + super().__str__()

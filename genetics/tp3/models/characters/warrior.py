@@ -11,3 +11,6 @@ class Warrior(Character):
 
     def spawn(self):
         return Warrior()
+
+    def __str__(self):
+        return "Fitness: {} ".format(self.fitness) + super().__str__()

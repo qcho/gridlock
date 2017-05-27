@@ -12,3 +12,6 @@ class Defender(Character):
     def spawn(self):
         return Defender()
 
+    def __str__(self):
+        return "Fitness: {} ".format(self.fitness) + super().__str__()
+

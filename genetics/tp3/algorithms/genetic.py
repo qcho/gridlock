@@ -53,7 +53,7 @@ class Genetic:
 
     def natural_selection(self):
         generation = 0
-        avg_fitness = self.goal - 1
+        max_fitness = self.goal - 1
         fitness_list = list()
         while max_fitness < self.goal and generation < self.generations_limit:
             self.generate_children()
@@ -72,4 +72,11 @@ class Genetic:
                 print("Avg fitness: {}".format(avg_fitness))
                 print("Max fitness: {}".format(max_fitness))
                 print("Min fitness: {}".format(min_fitness))
+        if self.generations_limit == generation:
+            print("Max generation reached...Exiting with a best score of: {}".format(max_fitness))
+        else:
+            print("The target score was surpassed with a score of: {}".format(max_fitness))
+            individual = filter(lambda x: x.fitness == max_fitness, self.population)
+            print("The individual is: {}", individual[0])
+
 
