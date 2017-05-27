@@ -57,9 +57,9 @@ def one_point(character_1, character_2, items, point):
 
     for i in range(5):
         if i < point:
-            _change_point(character_1, character_2, new_character_1, new_character_2, items, i)
+            _change_point(character_1, character_2, new_character_1, new_character_2, i)
         else:
-            _maintain_point(character_1, character_2, new_character_1, new_character_2, items, i)
+            _maintain_point(character_1, character_2, new_character_1, new_character_2, i)
 
     return (new_character_1, new_character_2)
 
@@ -69,9 +69,9 @@ def two_points(character_1, character_2, items, point_1, point_2):
 
     for i in range(5):
         if i < point_1 or i >= point_2:
-            _change_point(character_1, character_2, new_character_1, new_character_2, items, i)
+            _change_point(character_1, character_2, new_character_1, new_character_2, i)
         else:
-            _maintain_point(character_1, character_2, new_character_1, new_character_2, items, i)
+            _maintain_point(character_1, character_2, new_character_1, new_character_2, i)
 
     return (new_character_1, new_character_2)
 
@@ -81,7 +81,7 @@ def uniform(character_1, character_2, items, probability=0.5):
 
     for i in range(5):
         if random() < probability:
-            _change_point(character_1, character_2, new_character_1, new_character_2, items, i)
+            _change_point(character_1, character_2, new_character_1, new_character_2, i)
 
     return (new_character_1, new_character_2)
 
