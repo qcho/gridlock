@@ -83,7 +83,20 @@ def _tournaments_stochastic(population, amount: int, times: int, randomness: flo
 
 
 def _ranking(population, amount: int):
-    return 1
+    sort = list(reversed(sorted(population, key=lambda x: x.fitness)))
+    N = len(sort)
+    probabilities = []
+    for i in range(N):
+        probabilities.append((N - i) / (N*(N+1)/2))
+    accumulated_probabilities =list(accumulate(probabilities))
+
+    result = []
+    for _ in range(amount):
+        r = random()
+        i = _between(accumulated_probabilities, r)
+        result.append(sort[i])
+
+    return result
 
 
 def stochastic_sample(population, amount: int, type: str, times: int = 1, randomness: float = 0.75):
