@@ -58,24 +58,45 @@ def _boltzmann(population, amount: int):
     return 1
 
 
-def _tournaments(population, amount: int):
-    return 1
+def _tournaments_deterministic(population, amount: int, times: int):
+    result = []
+    for _ in range(times):
+        small_group = sample(population, amount)
+        best = elite_sample(small_group, 1)
+        result.append(best[0])
+
+    return result
+
+
+def _tournaments_stochastic(population, amount: int, times: int, randomness: float = 0.75):
+    result = []
+    for _ in range(times):
+        small_group = sample(population, 2)
+        best = elite_sample(small_group, 2)
+        r = random()
+        if r < randomness:
+            result.append(best[0])
+        else:
+            result.append(best[1])
+
+    return result
 
 
 def _ranking(population, amount: int):
     return 1
 
 
-def stochastic_sample(population, amount: int, type: str):
+def stochastic_sample(population, amount: int, type: str, times: int = 1, randomness: float = 0.75):
     switcher = {
         'roulette': _roulette,
         'universal': _universal,
         'boltzmann': _boltzmann,
-        'tournaments': _tournaments,
+        'tournaments-deterministic': _tournaments_deterministic,
+        'tournaments-stochastic': _tournaments_stochastic,
         'ranking': _ranking
     }
     func = switcher[type]
-    return func(population, amount)
+    return func(population, amount=amount, times=times, randomness=randomness)
 
 #TODO completar el diccionario
 selection_function_dictionary = {
