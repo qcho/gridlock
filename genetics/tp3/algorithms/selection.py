@@ -18,15 +18,14 @@ def _between(array, value):
         if array[i - 1] < value < array[i]:
             return i
 
-
-################################################################################
-#                                 Algorithms                                   #
-################################################################################
 def _accumulated_relative_fitness(population):
     relative_fitness = relative_aptitude(population)
     return list(accumulate(relative_fitness))
 
 
+################################################################################
+#                                 Algorithms                                   #
+################################################################################
 def _elite_sample(population, amount: int):
     data = list(reversed(sorted(population, key=lambda x: x.fitness)))
     return data[:amount]
