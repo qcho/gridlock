@@ -2,6 +2,8 @@ from ..models.items import ItemType
 from ..models.characters import Character
 from random import random
 
+GENES = 6
+
 
 def _spawn_children(char_1, char_2):
     return char_1.spawn(), char_2.spawn()
@@ -48,9 +50,16 @@ def uniform(char_1: Character, char_2: Character, probability: int = 0.5):
     return child_1, child_2
 
 
-def anular(char_1: Character, char_2: Character):
+def annular(char_1: Character, char_2: Character):
     child_1, child_2 = _spawn_children(char_1, char_2)
-    # TODO
+    point = random.randint(0, GENES)
+    len = random.randint(0, GENES-1)
+    for i in range(len):
+        index = (point + i) % GENES
+        if index == 1:
+            _swap_height(child_1, child_2)
+        else:
+            _swap_item(child_1, child_2, index)
     return child_1, child_2
 
 
@@ -59,5 +68,5 @@ crossover_function_dictionary = {
     'one_point': one_point,
     'two_points': two_points,
     'uniform': uniform,
-    'anular': anular,
+    'annular': annular,
 }
