@@ -25,12 +25,14 @@ class Genetic:
         self.print_interval = config.print_interval
 
     def generate_children(self):
-        for i in range(0, self.k, 1):
-            couple = self.breed_fn(self.population, 2)
+        parents = self.breed_fn(self.population, self.k)
+        r.shuffle(parents)
+        for i in range(0, int(self.k/2), 1):
             if r.random() < self.Cc:
-                [self.children.append(x) for x in self.crossover_fn(couple[0], couple[1], r.randint(0, 6))]
+                [self.children.append(x) for x in self.crossover_fn(parents.pop(), parents.pop(), r.randint(0, 6))]
             else:
-                [self.children.append(x) for x in couple]
+                self.children.append(parents.pop())
+                self.children.append(parents.pop())
 
     def mutate_children(self):
         for child in self.children:
@@ -50,6 +52,9 @@ class Genetic:
         self.children.clear()
 
     def natural_selection(self):
+        g_gap_children_required = self.N - round((1-self.G) * self.N)
+        if g_gap_children_required > self.k:
+            self.k = g_gap_children_required
         generation = 0
         max_fitness = self.goal - 1
         fitness_list = list()
