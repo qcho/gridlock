@@ -5,6 +5,7 @@ from .models.items import ItemType
 from .utils.parser import parse
 from random import sample
 from .utils.config import Config
+from .algorithms.selection import set_constants
 
 
 def print_stats(population):
@@ -59,6 +60,7 @@ def databases(config: Config):
 
 def main():
     config = Config("config.json")
+    set_constants(randomness=config.randomness, tournaments_times=config.tournaments_times)
     items = databases(config)
     population_size = config.population_size
     Character.set_special_modifiers(config.special_modifiers)

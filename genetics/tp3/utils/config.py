@@ -32,3 +32,5 @@ class Config:
                 'special_resistance': json_object['special_modifiers']['special_resistance'],
                 'special_life': json_object['special_modifiers']['special_life']
             }
+            self.randomness = json_object['tournaments_stochastic_randomness']
+            self.tournaments_times = json_object['tournaments_times']

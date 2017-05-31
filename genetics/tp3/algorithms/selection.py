@@ -3,13 +3,23 @@ from random import sample, random
 from ..utils.relative_aptitude import relative_aptitude
 
 
-def elite_sample(population, amount: int):
+CONSTANTS = {
+    'randomness': 0.75,
+    'tournaments_times': 20,
+}
+
+
+def _elite_sample(population, amount: int):
     data = list(reversed(sorted(population, key=lambda x: x.fitness)))
     return data[:amount]
 
 
-def random_sample(population, amount: int):
-    return sample(population, amount)
+def _random_sample(population, amount: int):
+    result = []
+    for _ in range(amount):
+        result.append(sample(population, 1))
+
+    return result
 
 
 def _between(array, value):
@@ -58,23 +68,23 @@ def _boltzmann(population, amount: int):
     return 1
 
 
-def _tournaments_deterministic(population, amount: int, times: int):
+def _tournaments_deterministic(population, amount: int):
     result = []
-    for _ in range(times):
+    for _ in range(CONSTANTS['tournaments_times']):
         small_group = sample(population, amount)
-        best = elite_sample(small_group, 1)
+        best = _elite_sample(small_group, 1)
         result.append(best[0])
 
     return result
 
 
-def _tournaments_stochastic(population, amount: int, times: int, randomness: float = 0.75):
+def _tournaments_stochastic(population, amount: int):
     result = []
-    for _ in range(times):
+    for _ in range(amount):
         small_group = sample(population, 2)
-        best = elite_sample(small_group, 2)
+        best = _elite_sample(small_group, 2)
         r = random()
-        if r < randomness:
+        if r < CONSTANTS['randomness']:
             result.append(best[0])
         else:
             result.append(best[1])
@@ -99,20 +109,21 @@ def _ranking(population, amount: int):
     return result
 
 
-def stochastic_sample(population, amount: int, type: str, times: int = 1, randomness: float = 0.75):
+def selection_switcher(type: str):
     switcher = {
+        'elite_sample': _elite_sample,
+        'random_sample': _random_sample,
         'roulette': _roulette,
         'universal': _universal,
         'boltzmann': _boltzmann,
         'tournaments-deterministic': _tournaments_deterministic,
         'tournaments-stochastic': _tournaments_stochastic,
-        'ranking': _ranking
+        'ranking': _ranking,
     }
-    func = switcher[type]
-    return func(population, amount=amount, times=times, randomness=randomness)
 
-#TODO completar el diccionario
-selection_function_dictionary = {
-    'elite_sample': elite_sample,
-    'random_sample': random_sample,
-}
+    return switcher[type]
+
+
+def set_constants(randomness: float = 0.75, tournaments_times: int = 20):
+    CONSTANTS['randomness'] = randomness
+    CONSTANTS['tournaments_times'] = tournaments_times

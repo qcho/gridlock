@@ -19,5 +19,7 @@
     "special_expertise": 0.8,
     "special_resistance": 0.8,
     "special_life": 0.8
-  }
+  },
+  "tournaments_times": 20,
+  "tournaments_stochastic_randomness": 0.6
 }

@@ -1,5 +1,5 @@
 import numpy as np
-import tp3.algorithms.selection as sele
+from .selection import selection_switcher
 import tp3.algorithms.crossover as cross
 import random as r
 
@@ -16,16 +16,16 @@ class Genetic:
         self.N = config.population_size
         self.goal = config.goal_score
         self.generations_limit = config.generations_limit
-        self.breed_fn = sele.selection_function_dictionary[config.breed_selection_method]
-        self.generation_fn = sele.selection_function_dictionary[config.generation_gap_selection_method]
-        self.child_selection_fn = sele.selection_function_dictionary[config.child_to_keep_selection_method]
+        self.breed_fn = selection_switcher(config.breed_selection_method)
+        self.generation_fn = selection_switcher(config.generation_gap_selection_method)
+        self.child_selection_fn = selection_switcher(config.child_to_keep_selection_method)
         self.crossover_fn = cross.crossover_function_dictionary[config.crossover_type]
         self.children = list()
         self.items = items
         self.print_interval = config.print_interval
 
     def generate_children(self):
-        parents = self.breed_fn(self.population, self.k)
+        parents = self.breed_fn(self.population, amount=self.k)
         r.shuffle(parents)
         for i in range(0, int(self.k/2), 1):
             if r.random() < self.Cc:
@@ -46,8 +46,8 @@ class Genetic:
         parents_count = round(self.N * (1-self.G))
         child_count = self.N - parents_count
         new_pop = list()
-        [new_pop.append(x) for x in self.generation_fn(self.population, parents_count)]
-        [new_pop.append(x) for x in self.child_selection_fn(self.children, child_count)]
+        [new_pop.append(x) for x in self.generation_fn(self.population, amount=parents_count)]
+        [new_pop.append(x) for x in self.child_selection_fn(self.children, amount=child_count)]
         self.population = new_pop
         self.children.clear()
 
