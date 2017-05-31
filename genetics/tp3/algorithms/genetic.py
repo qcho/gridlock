@@ -27,7 +27,7 @@ class Genetic:
     def generate_children(self):
         parents = self.breed_fn(self.population, amount=self.k)
         r.shuffle(parents)
-        for i in range(0, int(self.k/2), 1):
+        for i in range(int(self.k/2)):
             if r.random() < self.Cc:
                 [self.children.append(x) for x in self.crossover_fn(parents.pop(), parents.pop(), r.randint(0, 6))]
             else:
@@ -38,7 +38,7 @@ class Genetic:
         for child in self.children:
             if r.random() < self.Mc:
                 child.height = r.uniform(1.3, 2.0)
-            for i in range(0, len(child.items)):
+            for i in range(len(child.items)):
                 if r.random() < self.Mc:
                     child.set_item(r.sample(self.items[i], 1)[0])
 

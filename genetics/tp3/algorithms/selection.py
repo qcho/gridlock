@@ -9,6 +9,24 @@ CONSTANTS = {
 }
 
 
+def _between(array, value):
+    # Special first case
+    if value < array[0]:
+        return 0
+    # Rest of cases
+    for i in range(1, len(array)):
+        if array[i - 1] < value < array[i]:
+            return i
+
+
+################################################################################
+#                                 Algorithms                                   #
+################################################################################
+def _accumulated_relative_fitness(population):
+    relative_fitness = relative_aptitude(population)
+    return list(accumulate(relative_fitness))
+
+
 def _elite_sample(population, amount: int):
     data = list(reversed(sorted(population, key=lambda x: x.fitness)))
     return data[:amount]
@@ -20,21 +38,6 @@ def _random_sample(population, amount: int):
         result.append(sample(population, 1))
 
     return result
-
-
-def _between(array, value):
-    # Special first case
-    if value < array[0]:
-        return 0
-    # Rest of cases
-    for i in range(1, len(array)):
-        if array[i - 1] < value < array[i]:
-            return i
-
-
-def _accumulated_relative_fitness(population):
-    relative_fitness = relative_aptitude(population)
-    return list(accumulate(relative_fitness))
 
 
 def _roulette(population, amount: int):
