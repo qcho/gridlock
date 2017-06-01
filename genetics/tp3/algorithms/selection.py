@@ -1,6 +1,8 @@
 from itertools import accumulate
 from random import sample, random
 from ..utils.relative_aptitude import relative_aptitude
+from math import exp
+from numpy import mean
 
 
 CONSTANTS = {
@@ -17,6 +19,7 @@ def _between(array, value):
     for i in range(1, len(array)):
         if array[i - 1] < value < array[i]:
             return i
+
 
 def _accumulated_relative_fitness(population):
     relative_fitness = relative_aptitude(population)
@@ -67,7 +70,21 @@ def _universal(population, amount: int):
 
 
 def _boltzmann(population, amount: int):
-    return 1
+    values = list()
+    t = 100
+    [values.append(exp(x.fitness / t)) for x in population]
+    boltzmann_mean = mean(values)
+    for i in range(0, len(values)):
+        values[i] = values[i] / boltzmann_mean
+    accumulated = list(accumulate(values))
+
+    result = []
+    for _ in range(amount):
+        r = random() * len(accumulated)
+        i = _between(accumulated, r)
+        result.append(population[i])
+
+    return result
 
 
 def _tournaments_deterministic(population, amount: int):
@@ -100,7 +117,7 @@ def _ranking(population, amount: int):
     probabilities = []
     for i in range(N):
         probabilities.append((N - i) / (N*(N+1)/2))
-    accumulated_probabilities =list(accumulate(probabilities))
+    accumulated_probabilities = list(accumulate(probabilities))
 
     result = []
     for _ in range(amount):
