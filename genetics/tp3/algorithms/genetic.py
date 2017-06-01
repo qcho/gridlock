@@ -73,6 +73,7 @@ class Genetic:
             if generation % self.print_interval == 0:
                 avg_fitness = np.average(fitness_list)
                 min_fitness = np.min(fitness_list)
+                print("Generation:", generation)
                 print("Avg fitness: {}".format(avg_fitness))
                 print("Max fitness: {}".format(max_fitness))
                 print("Min fitness: {}".format(min_fitness))
