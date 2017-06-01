@@ -1,15 +1,15 @@
 {
   "dataset": "testdata",
-  "population_size": 100,
+  "population_size": 200,
   "generations_limit": 10000,
   "mutation_chance": 0.09,
   "crossover_chance": 0.75,
   "generation_gap": 0.5,
-  "child_per_generation": 40,
+  "child_per_generation": 75,
   "goal_score": 31,
   "print_every_n_generations": 1000,
   "population_class": "warrior",
-  "breed_selection_method": "elite_sample",
+  "breed_selection_method": "boltzmann",
   "generation_gap_selection_method": "elite_sample",
   "child_to_keep_selection_method": "elite_sample",
   "crossover_type": "one_point",
@@ -21,5 +21,8 @@
     "special_life": 0.8
   },
   "tournaments_times": 20,
-  "tournaments_stochastic_randomness": 0.6
+  "tournaments_stochastic_randomness": 0.6,
+  "boltzmann_starting_temp": 100,
+  "boltzmann_minimum_temp": 50,
+  "boltzmann_cooling_step": 0.5
 }

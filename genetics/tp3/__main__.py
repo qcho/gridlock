@@ -5,7 +5,8 @@ from .models.items import ItemType
 from .utils.parser import parse
 from random import sample
 from .utils.config import Config
-from .algorithms.selection import set_constants
+from .algorithms.selection import set_tournament_constants
+from .algorithms.selection import set_boltzmann_constants
 
 
 def print_stats(population):
@@ -60,7 +61,8 @@ def databases(config: Config):
 
 def main():
     config = Config("config.json")
-    set_constants(randomness=config.randomness, tournaments_times=config.tournaments_times)
+    set_tournament_constants(randomness=config.randomness, tournaments_times=config.tournaments_times)
+    set_boltzmann_constants(config.boltzmann_starting_temp, config.boltzmann_minimum_temp, config.boltzmann_cooling_step)
     items = databases(config)
     population_size = config.population_size
     Character.set_special_modifiers(config.special_modifiers)

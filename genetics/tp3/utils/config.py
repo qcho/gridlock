@@ -34,3 +34,6 @@ class Config:
             }
             self.randomness = json_object['tournaments_stochastic_randomness']
             self.tournaments_times = json_object['tournaments_times']
+            self.boltzmann_starting_temp = json_object['boltzmann_starting_temp']
+            self.boltzmann_minimum_temp = json_object['boltzmann_minimum_temp']
+            self.boltzmann_cooling_step = json_object['boltzmann_cooling_step']

@@ -2,6 +2,7 @@ import numpy as np
 from .selection import selection_switcher
 import tp3.algorithms.crossover as cross
 import random as r
+from .selection import mark_new_gen
 
 
 class Genetic:
@@ -75,6 +76,7 @@ class Genetic:
                 print("Avg fitness: {}".format(avg_fitness))
                 print("Max fitness: {}".format(max_fitness))
                 print("Min fitness: {}".format(min_fitness))
+            mark_new_gen()
         if self.generations_limit == generation:
             print("Max generation reached...Exiting with a best score of: {}".format(max_fitness))
         else:

@@ -8,6 +8,9 @@ from numpy import mean
 CONSTANTS = {
     'randomness': 0.75,
     'tournaments_times': 20,
+    't': 100,
+    'min_t': 50,
+    'cooling_rate': 0.1,
 }
 
 
@@ -71,7 +74,7 @@ def _universal(population, amount: int):
 
 def _boltzmann(population, amount: int):
     values = list()
-    t = 100
+    t = CONSTANTS['t']
     [values.append(exp(x.fitness / t)) for x in population]
     boltzmann_mean = mean(values)
     for i in range(0, len(values)):
@@ -83,7 +86,6 @@ def _boltzmann(population, amount: int):
         r = random() * len(accumulated)
         i = _between(accumulated, r)
         result.append(population[i])
-
     return result
 
 
@@ -143,6 +145,17 @@ def selection_switcher(type: str):
     return switcher[type]
 
 
-def set_constants(randomness: float = 0.75, tournaments_times: int = 20):
+def set_tournament_constants(randomness: float = 0.75, tournaments_times: int = 20):
     CONSTANTS['randomness'] = randomness
     CONSTANTS['tournaments_times'] = tournaments_times
+
+
+def set_boltzmann_constants(boltzmann_starting_temp, boltzmann_minimum_temp, boltzmann_cooling_step):
+    CONSTANTS['t'] = boltzmann_starting_temp
+    CONSTANTS['min_t'] = boltzmann_minimum_temp
+    CONSTANTS['cooling_rate'] = boltzmann_cooling_step
+
+
+def mark_new_gen():
+    if CONSTANTS['t'] > CONSTANTS['min_t']:
+        CONSTANTS['t'] -= CONSTANTS['cooling_rate']
