@@ -30,7 +30,7 @@ class Genetic:
         r.shuffle(parents)
         for i in range(int(self.k/2)):
             if r.random() < self.Cc:
-                [self.children.append(x) for x in self.crossover_fn(parents.pop(), parents.pop(), r.randint(0, 6))]
+                [self.children.append(x) for x in self.crossover_fn(parents.pop(), parents.pop())]
             else:
                 self.children.append(parents.pop())
                 self.children.append(parents.pop())

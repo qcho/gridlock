@@ -12,7 +12,7 @@
   "breed_selection_method": "boltzmann",
   "generation_gap_selection_method": "elite_sample",
   "child_to_keep_selection_method": "elite_sample",
-  "crossover_type": "one_point",
+  "crossover_type": "two_points",
   "special_modifiers": {
     "special_strength": 1.2,
     "special_agility": 1.0,
