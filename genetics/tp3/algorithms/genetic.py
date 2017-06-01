@@ -79,6 +79,8 @@ class Genetic:
             mark_new_gen()
         if self.generations_limit == generation:
             print("Max generation reached...Exiting with a best score of: {}".format(max_fitness))
+            individual = list(filter(lambda x: x.fitness == max_fitness, self.population))
+            print("The individual stats are: \n{}".format(individual[0]))
         else:
             print("The target score was surpassed in generation: {} with a score of: {}".format(generation, max_fitness))
             individual = list(filter(lambda x: x.fitness == max_fitness, self.population))

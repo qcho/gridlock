@@ -11,6 +11,7 @@ CONSTANTS = {
     't': 100,
     'min_t': 50,
     'cooling_rate': 0.1,
+    'elite_roulette_ratio': 0.25,
 }
 
 
@@ -130,16 +131,26 @@ def _ranking(population, amount: int):
     return result
 
 
+def _elitist_roulette(population, amount: int):
+    elite = round(amount * CONSTANTS['elite_roulette_ratio'])
+    non_elite = amount - elite
+    result = list()
+    result.extend(_elite_sample(population, elite))
+    result.extend(_roulette(population, non_elite))
+    return result
+
+
 def selection_switcher(type: str):
     switcher = {
-        'elite_sample': _elite_sample,
-        'random_sample': _random_sample,
+        'elite-sample': _elite_sample,
+        'random-sample': _random_sample,
         'roulette': _roulette,
         'universal': _universal,
         'boltzmann': _boltzmann,
         'tournaments-deterministic': _tournaments_deterministic,
         'tournaments-stochastic': _tournaments_stochastic,
         'ranking': _ranking,
+        'elitist-roulette': _elitist_roulette,
     }
 
     return switcher[type]
@@ -154,6 +165,10 @@ def set_boltzmann_constants(boltzmann_starting_temp, boltzmann_minimum_temp, bol
     CONSTANTS['t'] = boltzmann_starting_temp
     CONSTANTS['min_t'] = boltzmann_minimum_temp
     CONSTANTS['cooling_rate'] = boltzmann_cooling_step
+
+
+def set_elite_roulette_constants(ratio: float = 0.25):
+    CONSTANTS['elite_roulette_ratio'] = ratio
 
 
 def mark_new_gen():

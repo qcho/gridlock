@@ -37,3 +37,4 @@ class Config:
             self.boltzmann_starting_temp = json_object['boltzmann_starting_temp']
             self.boltzmann_minimum_temp = json_object['boltzmann_minimum_temp']
             self.boltzmann_cooling_step = json_object['boltzmann_cooling_step']
+            self.elitist_roulette_ratio = json_object['elitist_roulette_ratio']
