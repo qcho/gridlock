@@ -74,9 +74,8 @@ def _universal(population, amount: int):
 
 
 def _boltzmann(population, amount: int):
-    values = list()
     t = CONSTANTS['t']
-    [values.append(exp(x.fitness / t)) for x in population]
+    values = [exp(x.fitness / t) for x in population]
     boltzmann_mean = mean(values)
     for i in range(0, len(values)):
         values[i] = values[i] / boltzmann_mean
