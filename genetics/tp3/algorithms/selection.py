@@ -7,7 +7,7 @@ from numpy import mean
 
 CONSTANTS = {
     'randomness': 0.75,
-    'tournaments_times': 20,
+    'tournaments_group_size': 20,
     't': 100,
     'min_t': 50,
     'cooling_rate': 0.1,
@@ -91,8 +91,8 @@ def _boltzmann(population, amount: int):
 
 def _tournaments_deterministic(population, amount: int):
     result = []
-    for _ in range(CONSTANTS['tournaments_times']):
-        small_group = sample(population, amount)
+    for _ in range(amount):
+        small_group = sample(population, CONSTANTS['tournaments_group_size'])
         best = _elite_sample(small_group, 1)
         result.append(best[0])
 
@@ -155,9 +155,9 @@ def selection_switcher(type: str):
     return switcher[type]
 
 
-def set_tournament_constants(randomness: float = 0.75, tournaments_times: int = 20):
+def set_tournament_constants(randomness: float = 0.75, tournaments_group_size: int = 20):
     CONSTANTS['randomness'] = randomness
-    CONSTANTS['tournaments_times'] = tournaments_times
+    CONSTANTS['tournaments_group_size'] = tournaments_group_size
 
 
 def set_boltzmann_constants(boltzmann_starting_temp, boltzmann_minimum_temp, boltzmann_cooling_step):
