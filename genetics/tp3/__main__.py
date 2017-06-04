@@ -6,6 +6,29 @@ from .utils.parser import parse
 from random import sample
 from .utils.config import Config
 from .algorithms.selection import set_tournament_constants, set_elite_roulette_constants, set_boltzmann_constants
+from.executor import Executor
+from copy import deepcopy
+
+
+selection_algorithms = [
+    'elite-sample',
+    'random-sample',
+    'roulette',
+    'universal',
+    'boltzmann',
+    'tournaments-deterministic',
+    'tournaments-stochastic',
+    'ranking',
+    'elitist-roulette'
+]
+
+
+crossover_algorithms = [
+    'one_point',
+    'two_points',
+    'uniform',
+    'annular'
+]
 
 
 def print_stats(population):
@@ -59,17 +82,40 @@ def databases(config: Config):
 
 
 def main():
+    # Set constants
     config = Config("config.json")
-    set_tournament_constants(randomness=config.randomness, tournaments_times=config.tournaments_times)
+    set_tournament_constants(randomness=config.randomness, tournaments_group_size=config.tournaments_group_size)
     set_boltzmann_constants(config.boltzmann_starting_temp, config.boltzmann_minimum_temp, config.boltzmann_cooling_step)
     set_elite_roulette_constants(config.elitist_roulette_ratio)
     items = databases(config)
     population_size = config.population_size
     Character.set_special_modifiers(config.special_modifiers)
     population_class = config.population_class
+    # Randomize
+    executors = []
     population = generate_individuals(population_size, items, population_class)
-    experiment = Genetic(config, population, items)
-    experiment.natural_selection()
+    for breed in selection_algorithms:
+        for gap in selection_algorithms:
+            for child_to_keep in selection_algorithms:
+                for crossover in crossover_algorithms:
+                    config.breed_selection_method = breed
+                    config.generation_gap_selection_method = gap
+                    config.child_to_keep_selection_method = child_to_keep
+                    config.crossover_type = crossover
+                    experiment = Genetic(config, deepcopy(population), items)
+                    executors.append(Executor(items, experiment, name="{} {} {} {}".format(breed, gap, child_to_keep, crossover)))
+
+    best = None
+    of = None
+    for ex in executors:
+        best_child = ex.run(config.generations_limit)
+        if best == None or best_child.fitness > best.fitness:
+            best = best_child
+            of = ex.name
+
+    print("The best was:")
+    print(best)
+    print(of)
 
 
 if __name__ == "__main__":

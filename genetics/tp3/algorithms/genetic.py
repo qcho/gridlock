@@ -86,3 +86,21 @@ class Genetic:
             print("The target score was surpassed in generation: {} with a score of: {}".format(generation, max_fitness))
             individual = list(filter(lambda x: x.fitness == max_fitness, self.population))
             print("The individual stats are: \n{}".format(individual[0]))
+
+
+    def generation(self):
+        g_gap_children_required = self.N - round((1 - self.G) * self.N)
+        if g_gap_children_required > self.k:
+            self.k = g_gap_children_required
+        fitness_list = list()
+
+        self.generate_children()
+        self.mutate_children()
+        for child in self.children:
+            child.calculate_fitness()
+        self.select_new_generation()
+        fitness_list.clear()
+        for individual in self.population:
+            fitness_list.append(individual)
+        mark_new_gen()
+        return fitness_list
