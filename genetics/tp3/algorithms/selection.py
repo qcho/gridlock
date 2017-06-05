@@ -11,7 +11,6 @@ CONSTANTS = {
     't': 100,
     'min_t': 50,
     'cooling_rate': 0.1,
-    'elite_roulette_ratio': 0.25,
 }
 
 
@@ -130,15 +129,6 @@ def _ranking(population, amount: int):
     return result
 
 
-def _elitist_roulette(population, amount: int):
-    elite = round(amount * CONSTANTS['elite_roulette_ratio'])
-    non_elite = amount - elite
-    result = list()
-    result.extend(_elite_sample(population, elite))
-    result.extend(_roulette(population, non_elite))
-    return result
-
-
 def selection_switcher(type: str):
     switcher = {
         'elite-sample': _elite_sample,
@@ -149,7 +139,6 @@ def selection_switcher(type: str):
         'tournaments-deterministic': _tournaments_deterministic,
         'tournaments-stochastic': _tournaments_stochastic,
         'ranking': _ranking,
-        'elitist-roulette': _elitist_roulette,
     }
 
     return switcher[type]
