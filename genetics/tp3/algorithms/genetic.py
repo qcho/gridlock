@@ -1,4 +1,6 @@
 import numpy as np
+
+from tp3.utils.Hud import Hud
 from .selection import selection_switcher
 import tp3.algorithms.crossover as cross
 import random as r
@@ -34,7 +36,11 @@ class Genetic:
         self.crossover_fn = cross.crossover_function_dictionary[config.crossover_type]
         self.children = list()
         self.items = items
-        self.print_interval = config.print_interval
+        self.hud = Hud(
+            config.print_interval,
+            config.generations_limit,
+            config.goal_score
+        )
 
     def generate_children(self):
         amount_a = round(self.k * self.A)
@@ -60,23 +66,12 @@ class Genetic:
     def natural_selection(self):
         generation = 0
         max_fitness = self.goal - 1
-        fitness_list = list()
         while max_fitness < self.goal and generation < self.generations_limit:
             self.replacement_type()
             for individual in self.population:
                 individual.calculate_fitness()
             generation += 1
-            fitness_list.clear()
-            for individual in self.population:
-                fitness_list.append(individual.fitness)
-            max_fitness = np.max(fitness_list)
-            if generation % self.print_interval == 0:
-                avg_fitness = np.average(fitness_list)
-                min_fitness = np.min(fitness_list)
-                print("Generation:", generation)
-                print("Avg fitness: {}".format(avg_fitness))
-                print("Max fitness: {}".format(max_fitness))
-                print("Min fitness: {}".format(min_fitness))
+            max_fitness = self.hud.add_points_get_max(generation, self.population)
             mark_new_gen()
         if self.generations_limit == generation:
             print("Max generation reached...Exiting with a best score of: {}".format(max_fitness))
@@ -86,7 +81,7 @@ class Genetic:
             print("The target score was surpassed in generation: {} with a score of: {}".format(generation, max_fitness))
             individual = list(filter(lambda x: x.fitness == max_fitness, self.population))
             print("The individual stats are: \n{}".format(individual[0]))
-
+        self.hud.wait()
 
     def replacement_method_1(self):
         parents = self.population
@@ -134,4 +129,3 @@ class Genetic:
         [new_pop.append(x) for x in self.child_selection_fn_2(self.children + self.population, amount=children_count - amount_c)]
         self.population = new_pop
         self.children.clear()
-
