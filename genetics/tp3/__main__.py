@@ -1,11 +1,12 @@
+from random import sample
+
 from .algorithms.genetic import Genetic
+from .algorithms.selection import set_tournament_constants, set_boltzmann_constants
 from .models.characters import Character, Warrior, Archer, Defender, Assassin
 from .models.items import ItemType
-from .utils.parser import parse
-from random import sample
-from .utils.config import Config
-from .algorithms.selection import set_tournament_constants, set_elite_roulette_constants, set_boltzmann_constants
 from .utils.Hud import Hud
+from .utils.config import Config
+from .utils.parser import parse
 
 
 def generate_individuals(amount, items, population_class):
