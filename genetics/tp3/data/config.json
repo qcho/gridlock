@@ -20,11 +20,11 @@
   "replacement_method": "method_2",
   "crossover_type": "annular",
   "special_modifiers": {
-    "special_strength": 1.2,
-    "special_agility": 1.0,
-    "special_expertise": 0.8,
-    "special_resistance": 0.8,
-    "special_life": 0.8
+    "strength": 1.2,
+    "agility": 1.0,
+    "expertise": 0.8,
+    "resistance": 0.8,
+    "life": 0.8
   },
   "tournaments_group_size": 50,
   "tournaments_stochastic_randomness": 0.6,

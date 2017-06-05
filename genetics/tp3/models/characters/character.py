@@ -30,11 +30,11 @@ class Character:
     @staticmethod
     def set_special_modifiers(special_modifiers):
         Character.special_modifiers = {
-            Stats.STRENGTH: special_modifiers['special_strength'],
-            Stats.AGILITY: special_modifiers['special_agility'],
-            Stats.EXPERTISE: special_modifiers['special_expertise'],
-            Stats.RESISTANCE: special_modifiers['special_resistance'],
-            Stats.LIFE: special_modifiers['special_life'],
+            Stats.STRENGTH: special_modifiers['strength'],
+            Stats.AGILITY: special_modifiers['agility'],
+            Stats.EXPERTISE: special_modifiers['expertise'],
+            Stats.RESISTANCE: special_modifiers['resistance'],
+            Stats.LIFE: special_modifiers['life'],
         }
 
     def set_item(self, item: Item):

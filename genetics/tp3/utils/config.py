@@ -32,11 +32,11 @@ class Config:
             self.replacement_method = json_object["replacement_method"]
             self.crossover_type = json_object['crossover_type']
             self.special_modifiers = {
-                'special_strength': json_object['special_modifiers']['special_strength'],
-                'special_agility': json_object['special_modifiers']['special_agility'],
-                'special_expertise': json_object['special_modifiers']['special_expertise'],
-                'special_resistance': json_object['special_modifiers']['special_resistance'],
-                'special_life': json_object['special_modifiers']['special_life']
+                'strength': json_object['special_modifiers']['strength'],
+                'agility': json_object['special_modifiers']['agility'],
+                'expertise': json_object['special_modifiers']['expertise'],
+                'resistance': json_object['special_modifiers']['resistance'],
+                'life': json_object['special_modifiers']['life']
             }
             self.randomness = json_object['tournaments_stochastic_randomness']
             self.tournaments_group_size = json_object['tournaments_group_size']
