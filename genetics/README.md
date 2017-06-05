@@ -11,3 +11,6 @@ git lfs install
 3. Done! You should be able to access the data files on next pull
 
 ## Project dependencies
+
+## Pycharm Debug
+* https://github.com/amnong/misc/tree/master/pycharm_runner
