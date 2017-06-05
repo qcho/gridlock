@@ -8,15 +8,21 @@
   "goal_score": 80,
   "print_every_n_generations": 100,
   "population_class": "warrior",
-  "breed_selection_method_1": "elite-sample",
-  "breed_selection_method_2": "boltzmann",
-  "A_ratio": 0.3,
-  "generation_gap_selection_method_1": "elite-sample",
-  "generation_gap_selection_method_2": "boltzmann",
-  "B_ratio": 0.3,
-  "child_to_keep_selection_method_1": "elite-sample",
-  "child_to_keep_selection_method_2": "boltzmann",
-  "C_ratio": 0.3,
+  "breed_selection": {
+    "method_1": "elite-sample",
+    "method_2": "boltzmann",
+    "ratio": 0.3
+  },
+  "generation_gap_selection": {
+    "method_1": "elite-sample",
+    "method_2": "boltzmann",
+    "ratio": 0.3
+  },
+  "child_to_keep_selection": {
+    "method_1": "elite-sample",
+    "method_2": "boltzmann",
+    "ratio": 0.3
+  },
   "replacement_method": "method_2",
   "crossover_type": "annular",
   "special_modifiers": {
@@ -26,9 +32,13 @@
     "resistance": 0.8,
     "life": 0.8
   },
-  "tournaments_group_size": 50,
-  "tournaments_stochastic_randomness": 0.6,
-  "boltzmann_starting_temp": 100,
-  "boltzmann_minimum_temp": 50,
-  "boltzmann_cooling_step": 0.5
+  "tournaments": {
+    "group_size": 50,
+    "stochastic_randomness": 0.6
+  },
+  "boltzmann": {
+    "starting_temp": 100,
+    "minimum_temp": 50,
+    "cooling_step": 0.5
+  }
 }
