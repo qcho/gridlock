@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 import numpy as np
 
+
 class Hud:
 
     def __init__(self, print_interval: int, max_generations, max_fitness) -> None:
@@ -11,12 +12,16 @@ class Hud:
         print(plt.style.available)
         #plt.xkcd()
         self.fig, self.ax = plt.subplots()
-        self.min_line, self.avg_line, self.max_line = self.ax.plot([0], [0], [0], [0], [0], [0])
+        self.min_line, = self.ax.plot([0], [0], label="Min")
+        self.avg_line, = self.ax.plot([0], [0], label="Avg")
+        self.max_line, = self.ax.plot([0], [0], label="Max")
+
+        self.ax.set_ylabel("Fitness")
+        self.ax.set_xlabel("Generation")
         self.ax.set_xlim(0, max_generations)
         self.ax.set_ylim(0, max_fitness)
         self.fig.canvas.set_window_title("TPE3 - GENETICS")
-        self.info_text = plt.figtext(0.15, 0.7, r'', fontsize=15)
-        self._set_texts()
+
         ani = animation.FuncAnimation(self.fig, self._update, interval=100)
         plt.ion()
         plt.draw()
@@ -25,11 +30,10 @@ class Hud:
 
     def _set_texts(self):
         self.ax.set_title("Generaton: ${}$".format(self.get_generation()))
-        self.info_text.set_text(
-            "Max: ${0:.2f}$".format(self.get_max_fitness()) + "\n" +
-            "Avg: ${0:.2f}$".format(self.get_avg_fitness()) + "\n" +
-            "Min: ${0:.2f}$".format(self.get_min_fitness())
-        )
+        self.min_line.set_label("Min: ${0:.2f}$".format(self.get_min_fitness()))
+        self.avg_line.set_label("Avg: ${0:.2f}$".format(self.get_avg_fitness()))
+        self.max_line.set_label("Max: ${0:.2f}$".format(self.get_max_fitness()))
+        plt.legend(handles=[self.max_line, self.avg_line, self.min_line])
 
     def _update(self, i):
         self._set_texts()
