@@ -30,16 +30,16 @@ class Genetic:
         self.generation_fn_2 = selection_switcher(config.generation_gap_selection_method_2)
         self.child_selection_fn_1 = selection_switcher(config.child_to_keep_selection_method_1)
         self.child_selection_fn_2 = selection_switcher(config.child_to_keep_selection_method_2)
-        self.replacement_type = replacement_method_dictionary[config.replacement_method_1]
+        self.replacement_type = replacement_method_dictionary[config.replacement_method]
         self.crossover_fn = cross.crossover_function_dictionary[config.crossover_type]
         self.children = list()
         self.items = items
         self.print_interval = config.print_interval
 
     def generate_children(self):
-        amount_a = round(self.k*self.A)
+        amount_a = round(self.k * self.A)
         parents = self.breed_fn_1(self.population, amount=amount_a)
-        parents = parents + self.breed_fn_2(self.population, amount=(self.k-amount_a))
+        parents = parents + self.breed_fn_2(self.population, amount=(self.k - amount_a))
         r.shuffle(parents)
         for i in range(int(self.k/2)):
             if r.random() < self.Cc:
@@ -109,15 +109,14 @@ class Genetic:
         parents_count = self.N - self.k
         children_count = (self.N - parents_count)
         amount_b = round(parents_count * self.B)
-        amount_c = (children_count * self.C)
+        amount_c = round(children_count * self.C)
         new_pop = list()
         [new_pop.append(x) for x in self.generation_fn_1(self.population, amount=amount_b)]
         [new_pop.append(x) for x in self.generation_fn_2(self.population, amount=parents_count - amount_b)]
         [new_pop.append(x) for x in self.child_selection_fn_1(self.children, amount=amount_c)]
         [new_pop.append(x) for x in self.child_selection_fn_2(self.children, amount=children_count - amount_c)]
-        self.population =  new_pop
+        self.population = new_pop
         self.children.clear()
-
 
     def replacement_method_3(self):
         self.generate_children()
