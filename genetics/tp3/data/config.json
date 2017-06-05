@@ -17,9 +17,7 @@
   "child_to_keep_selection_method_1": "elite",
   "child_to_keep_selection_method_2": "elite",
   "C_ratio": "0.5",
-  "replacement_method_1": "method_1",
-  "replacement_method_2": "method_1",
-  "D_ratio": "0.5,",
+  "replacement_method": "method_1",
   "crossover_type": "annular",
   "special_modifiers": {
     "special_strength": 1.2,

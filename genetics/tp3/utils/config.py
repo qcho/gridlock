@@ -29,9 +29,7 @@ class Config:
             self.child_to_keep_selection_method_1 = json_object['child_to_keep_selection_method_1']
             self.child_to_keep_selection_method_2 = json_object['child_to_keep_selection_method_2']
             self.c_ratio = json_object["C_ratio"]
-            self.replacement_method_1 = json_object["replacement_method_1"]
-            self.replacement_method_2 = json_object["replacement_method_2"]
-            self.d_ratio = json_object["D_ratio"]
+            self.replacement_method = json_object["replacement_method"]
             self.crossover_type = json_object['crossover_type']
             self.special_modifiers = {
                 'special_strength': json_object['special_modifiers']['special_strength'],

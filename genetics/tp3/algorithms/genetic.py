@@ -3,8 +3,6 @@ from .selection import selection_switcher
 import tp3.algorithms.crossover as cross
 import random as r
 from .selection import mark_new_gen
-from copy import deepcopy
-
 
 
 class Genetic:
@@ -25,7 +23,6 @@ class Genetic:
         self.A = config.a_ratio
         self.B = config.b_ratio
         self.C = config.c_ratio
-        self.D = config.d_ratio
         self.generations_limit = config.generations_limit
         self.breed_fn_1 = selection_switcher(config.breed_selection_method_1)
         self.breed_fn_2 = selection_switcher(config.breed_selection_method_2)
@@ -33,8 +30,7 @@ class Genetic:
         self.generation_fn_2 = selection_switcher(config.generation_gap_selection_method_2)
         self.child_selection_fn_1 = selection_switcher(config.child_to_keep_selection_method_1)
         self.child_selection_fn_2 = selection_switcher(config.child_to_keep_selection_method_2)
-        self.replacement_type_1 = replacement_method_dictionary[config.replacement_method_1]
-        self.replacement_type_2 = replacement_method_dictionary[config.replacement_method_2]
+        self.replacement_type = replacement_method_dictionary[config.replacement_method_1]
         self.crossover_fn = cross.crossover_function_dictionary[config.crossover_type]
         self.children = list()
         self.items = items
@@ -66,10 +62,9 @@ class Genetic:
         max_fitness = self.goal - 1
         fitness_list = list()
         while max_fitness < self.goal and generation < self.generations_limit:
-            amount = round(self.N * self.D )
-            pop_1 = self.population[:amount]
-            pop_2 = self.population[(self.N - amount):]
-            new_pop = self.replacement_type_1() + self.replacement_type_2()
+            self.replacement_type()
+            for individual in self.population:
+                individual.calculate_fitness()
             generation += 1
             fitness_list.clear()
             for individual in self.population:
@@ -94,7 +89,7 @@ class Genetic:
 
 
     def replacement_method_1(self):
-        parents = deepcopy(self.population)
+        parents = self.population
         new_pop = list()
         r.shuffle(parents)
         for i in range(int(self.N / 2)):
@@ -103,9 +98,8 @@ class Genetic:
             else:
                 new_pop.append(parents.pop())
                 new_pop.append(parents.pop())
-        for individual in new_pop:
-            individual.calculate_fitness()
-        return new_pop
+        self.population = new_pop
+
 
     def replacement_method_2(self):
         self.generate_children()
@@ -113,15 +107,16 @@ class Genetic:
         for child in self.children:
             child.calculate_fitness()
         parents_count = self.N - self.k
+        children_count = (self.N - parents_count)
         amount_b = round(parents_count * self.B)
-        amount_c = (self.k * self.C)
+        amount_c = (children_count * self.C)
         new_pop = list()
         [new_pop.append(x) for x in self.generation_fn_1(self.population, amount=amount_b)]
         [new_pop.append(x) for x in self.generation_fn_2(self.population, amount=parents_count - amount_b)]
         [new_pop.append(x) for x in self.child_selection_fn_1(self.children, amount=amount_c)]
-        [new_pop.append(x) for x in self.child_selection_fn_2(self.children, amount=self.k - amount_c)]
+        [new_pop.append(x) for x in self.child_selection_fn_2(self.children, amount=children_count - amount_c)]
+        self.population =  new_pop
         self.children.clear()
-        return new_pop
 
 
     def replacement_method_3(self):
@@ -130,12 +125,14 @@ class Genetic:
         for child in self.children:
             child.calculate_fitness()
         parents_count = self.N - self.k
+        children_count = (self.N - parents_count)
         amount_b = round(parents_count * self.B)
-        amount_c = (self.k * self.C)
+        amount_c = (children_count * self.C)
         new_pop = list()
         [new_pop.append(x) for x in self.generation_fn_1(self.population, amount=amount_b)]
         [new_pop.append(x) for x in self.generation_fn_2(self.population, amount=parents_count - amount_b)]
         [new_pop.append(x) for x in self.child_selection_fn_1(self.children + self.population, amount=amount_c)]
-        [new_pop.append(x) for x in self.child_selection_fn_2(self.children + self.population, amount=self.k - amount_c)]
+        [new_pop.append(x) for x in self.child_selection_fn_2(self.children + self.population, amount=children_count - amount_c)]
+        self.population = new_pop
         self.children.clear()
-        return new_pop
+
