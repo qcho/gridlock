@@ -1,17 +1,25 @@
 {
-  "dataset": "fulldata",
+  "dataset": "testdata",
   "population_size": 200,
   "generations_limit": 1000,
   "mutation_chance": 0.09,
   "crossover_chance": 0.75,
-  "generation_gap": 0.5,
   "child_per_generation": 75,
   "goal_score": 30,
   "print_every_n_generations": 100,
   "population_class": "warrior",
-  "breed_selection_method": "boltzmann",
-  "generation_gap_selection_method": "elitist-roulette",
-  "child_to_keep_selection_method": "elitist-roulette",
+  "breed_selection_method_1": "boltzmann",
+  "breed_selection_method_2": "boltzmann",
+  "A_ratio": "0.5",
+  "generation_gap_selection_method_1": "elite",
+  "generation_gap_selection_method_2": "elite",
+  "B_ratio": "0.5",
+  "child_to_keep_selection_method_1": "elite",
+  "child_to_keep_selection_method_2": "elite",
+  "C_ratio": "0.5",
+  "replacement_method_1": "method_1",
+  "replacement_method_2": "method_1",
+  "D_ratio": "0.5,",
   "crossover_type": "annular",
   "special_modifiers": {
     "special_strength": 1.2,
@@ -24,6 +32,5 @@
   "tournaments_stochastic_randomness": 0.6,
   "boltzmann_starting_temp": 100,
   "boltzmann_minimum_temp": 50,
-  "boltzmann_cooling_step": 0.5,
-  "elitist_roulette_ratio": 0.25
+  "boltzmann_cooling_step": 0.5
 }

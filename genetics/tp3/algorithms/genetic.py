@@ -3,30 +3,47 @@ from .selection import selection_switcher
 import tp3.algorithms.crossover as cross
 import random as r
 from .selection import mark_new_gen
+from copy import deepcopy
+
 
 
 class Genetic:
 
     def __init__(self, config, population, items):
         super().__init__()
+        replacement_method_dictionary = {
+            'method_1': self.replacement_method_1,
+            'method_2': self.replacement_method_2,
+            'method_3': self.replacement_method_3,
+        }
         self.population = population
         self.k = config.child_per_generation
-        self.G = config.generation_gap
         self.Cc = config.crossover_chance
         self.Mc = config.mutation_chance
         self.N = config.population_size
         self.goal = config.goal_score
+        self.A = config.a_ratio
+        self.B = config.b_ratio
+        self.C = config.c_ratio
+        self.D = config.d_ratio
         self.generations_limit = config.generations_limit
-        self.breed_fn = selection_switcher(config.breed_selection_method)
-        self.generation_fn = selection_switcher(config.generation_gap_selection_method)
-        self.child_selection_fn = selection_switcher(config.child_to_keep_selection_method)
+        self.breed_fn_1 = selection_switcher(config.breed_selection_method_1)
+        self.breed_fn_2 = selection_switcher(config.breed_selection_method_2)
+        self.generation_fn_1 = selection_switcher(config.generation_gap_selection_method_1)
+        self.generation_fn_2 = selection_switcher(config.generation_gap_selection_method_2)
+        self.child_selection_fn_1 = selection_switcher(config.child_to_keep_selection_method_1)
+        self.child_selection_fn_2 = selection_switcher(config.child_to_keep_selection_method_2)
+        self.replacement_type_1 = replacement_method_dictionary[config.replacement_method_1]
+        self.replacement_type_2 = replacement_method_dictionary[config.replacement_method_2]
         self.crossover_fn = cross.crossover_function_dictionary[config.crossover_type]
         self.children = list()
         self.items = items
         self.print_interval = config.print_interval
 
     def generate_children(self):
-        parents = self.breed_fn(self.population, amount=self.k)
+        amount_a = round(self.k*self.A)
+        parents = self.breed_fn_1(self.population, amount=amount_a)
+        parents = parents + self.breed_fn_2(self.population, amount=(self.k-amount_a))
         r.shuffle(parents)
         for i in range(int(self.k/2)):
             if r.random() < self.Cc:
@@ -43,28 +60,16 @@ class Genetic:
                 if r.random() < self.Mc:
                     child.set_item(r.sample(self.items[i], 1)[0])
 
-    def select_new_generation(self):
-        parents_count = round(self.N * (1-self.G))
-        child_count = self.N - parents_count
-        new_pop = list()
-        [new_pop.append(x) for x in self.generation_fn(self.population, amount=parents_count)]
-        [new_pop.append(x) for x in self.child_selection_fn(self.children, amount=child_count)]
-        self.population = new_pop
-        self.children.clear()
 
     def natural_selection(self):
-        g_gap_children_required = self.N - round((1-self.G) * self.N)
-        if g_gap_children_required > self.k:
-            self.k = g_gap_children_required
         generation = 0
         max_fitness = self.goal - 1
         fitness_list = list()
         while max_fitness < self.goal and generation < self.generations_limit:
-            self.generate_children()
-            self.mutate_children()
-            for child in self.children:
-                child.calculate_fitness()
-            self.select_new_generation()
+            amount = round(self.N * self.D )
+            pop_1 = self.population[:amount]
+            pop_2 = self.population[(self.N - amount):]
+            new_pop = self.replacement_type_1() + self.replacement_type_2()
             generation += 1
             fitness_list.clear()
             for individual in self.population:
@@ -86,3 +91,51 @@ class Genetic:
             print("The target score was surpassed in generation: {} with a score of: {}".format(generation, max_fitness))
             individual = list(filter(lambda x: x.fitness == max_fitness, self.population))
             print("The individual stats are: \n{}".format(individual[0]))
+
+
+    def replacement_method_1(self):
+        parents = deepcopy(self.population)
+        new_pop = list()
+        r.shuffle(parents)
+        for i in range(int(self.N / 2)):
+            if r.random() < self.Cc:
+                [new_pop.append(x) for x in self.crossover_fn(parents.pop(), parents.pop())]
+            else:
+                new_pop.append(parents.pop())
+                new_pop.append(parents.pop())
+        for individual in new_pop:
+            individual.calculate_fitness()
+        return new_pop
+
+    def replacement_method_2(self):
+        self.generate_children()
+        self.mutate_children()
+        for child in self.children:
+            child.calculate_fitness()
+        parents_count = self.N - self.k
+        amount_b = round(parents_count * self.B)
+        amount_c = (self.k * self.C)
+        new_pop = list()
+        [new_pop.append(x) for x in self.generation_fn_1(self.population, amount=amount_b)]
+        [new_pop.append(x) for x in self.generation_fn_2(self.population, amount=parents_count - amount_b)]
+        [new_pop.append(x) for x in self.child_selection_fn_1(self.children, amount=amount_c)]
+        [new_pop.append(x) for x in self.child_selection_fn_2(self.children, amount=self.k - amount_c)]
+        self.children.clear()
+        return new_pop
+
+
+    def replacement_method_3(self):
+        self.generate_children()
+        self.mutate_children()
+        for child in self.children:
+            child.calculate_fitness()
+        parents_count = self.N - self.k
+        amount_b = round(parents_count * self.B)
+        amount_c = (self.k * self.C)
+        new_pop = list()
+        [new_pop.append(x) for x in self.generation_fn_1(self.population, amount=amount_b)]
+        [new_pop.append(x) for x in self.generation_fn_2(self.population, amount=parents_count - amount_b)]
+        [new_pop.append(x) for x in self.child_selection_fn_1(self.children + self.population, amount=amount_c)]
+        [new_pop.append(x) for x in self.child_selection_fn_2(self.children + self.population, amount=self.k - amount_c)]
+        self.children.clear()
+        return new_pop

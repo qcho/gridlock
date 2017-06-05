@@ -62,7 +62,6 @@ def main():
     config = Config("config.json")
     set_tournament_constants(randomness=config.randomness, tournaments_group_size=config.tournaments_group_size)
     set_boltzmann_constants(config.boltzmann_starting_temp, config.boltzmann_minimum_temp, config.boltzmann_cooling_step)
-    set_elite_roulette_constants(config.elitist_roulette_ratio)
     items = databases(config)
     population_size = config.population_size
     Character.set_special_modifiers(config.special_modifiers)
