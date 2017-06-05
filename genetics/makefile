@@ -21,7 +21,7 @@ install_env:
 .PHONY: install_env
 
 install_tpe3:
-	$(envname)/bin/pip install --editable .
+	$(envname)/bin/pip install --editable .[dev]
 .PHONY: install_tpe3
 
 uninstall_tpe3:

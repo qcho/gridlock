@@ -39,8 +39,7 @@ setup(
     install_requires=[
         'numpy',
         'matplotlib',
-        # 'jsonschema',
-        # 'pip-tools'
+        'jsonschema',
     ],
 
     # List additional groups of dependencies here (e.g. development
@@ -48,7 +47,7 @@ setup(
     # for example:
     # $ pip install -e .[dev,test]
     extras_require={
-        'dev': ['check-manifest'],
+        'dev': ['pip-tools'],
         'test': ['coverage'],
     },
 
