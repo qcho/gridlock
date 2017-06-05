@@ -6,7 +6,7 @@
   "crossover_chance": 0.75,
   "generation_gap": 0.5,
   "child_per_generation": 75,
-  "goal_score": 30,
+  "goal_score": 100,
   "print_every_n_generations": 100,
   "population_class": "warrior",
   "breed_selection_method": "boltzmann",

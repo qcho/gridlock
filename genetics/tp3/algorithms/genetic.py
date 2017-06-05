@@ -25,7 +25,11 @@ class Genetic:
         self.crossover_fn = cross.crossover_function_dictionary[config.crossover_type]
         self.children = list()
         self.items = items
-        self.hud = Hud(config.print_interval)
+        self.hud = Hud(
+            config.print_interval,
+            config.generations_limit,
+            config.goal_score
+        )
 
     def generate_children(self):
         parents = self.breed_fn(self.population, amount=self.k)
@@ -77,3 +81,4 @@ class Genetic:
             print("The target score was surpassed in generation: {} with a score of: {}".format(generation, max_fitness))
             individual = list(filter(lambda x: x.fitness == max_fitness, self.population))
             print("The individual stats are: \n{}".format(individual[0]))
+        self.hud.wait()
