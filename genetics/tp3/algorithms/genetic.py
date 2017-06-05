@@ -1,4 +1,6 @@
 import numpy as np
+
+from tp3.utils.Hud import Hud
 from .selection import selection_switcher
 import tp3.algorithms.crossover as cross
 import random as r
@@ -23,7 +25,7 @@ class Genetic:
         self.crossover_fn = cross.crossover_function_dictionary[config.crossover_type]
         self.children = list()
         self.items = items
-        self.print_interval = config.print_interval
+        self.hud = Hud(config.print_interval)
 
     def generate_children(self):
         parents = self.breed_fn(self.population, amount=self.k)
@@ -58,7 +60,6 @@ class Genetic:
             self.k = g_gap_children_required
         generation = 0
         max_fitness = self.goal - 1
-        fitness_list = list()
         while max_fitness < self.goal and generation < self.generations_limit:
             self.generate_children()
             self.mutate_children()
@@ -66,17 +67,7 @@ class Genetic:
                 child.calculate_fitness()
             self.select_new_generation()
             generation += 1
-            fitness_list.clear()
-            for individual in self.population:
-                fitness_list.append(individual.fitness)
-            max_fitness = np.max(fitness_list)
-            if generation % self.print_interval == 0:
-                avg_fitness = np.average(fitness_list)
-                min_fitness = np.min(fitness_list)
-                print("Generation:", generation)
-                print("Avg fitness: {}".format(avg_fitness))
-                print("Max fitness: {}".format(max_fitness))
-                print("Min fitness: {}".format(min_fitness))
+            max_fitness = self.hud.add_points_get_max(generation, self.population)
             mark_new_gen()
         if self.generations_limit == generation:
             print("Max generation reached...Exiting with a best score of: {}".format(max_fitness))
