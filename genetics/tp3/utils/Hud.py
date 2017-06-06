@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib import animation
 import numpy as np
+from abc import ABCMeta, abstractmethod
 
 from tp3.utils.config import Config
 
@@ -23,19 +24,37 @@ def _max_fitness(points):
 
 def _last_fitness(points):
     return points[-1]
-class RealtimeOutput:
+
+class Output:
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def process_generation(self, data):
+        pass
+
+
+class RealtimeOutput(Output):
     def __init__(self, config: Config):
         self.config = config
 
+    def process_generation(self, data):
+        pass
 
-class ConsoleOutput:
+
+class ConsoleOutput(Output):
     def __init__(self, config: Config):
         self.config = config
 
+    def process_generation(self, data):
+        pass
 
-class FileOutput:
+
+class FileOutput(Output):
     def __init__(self, config: Config):
         self.config = config
+
+    def process_generation(self, data):
+        pass
 
 
 class Hud:
