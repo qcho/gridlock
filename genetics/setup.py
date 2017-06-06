@@ -64,7 +64,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'tpe3 = tpe3.__main__:main',
+            'tp3 = tp3.__main__:main',
         ],
     },
 )
