@@ -1,8 +1,6 @@
-from random import sample
-
-from multiprocessing import freeze_support
-
 import sys
+from multiprocessing import freeze_support
+from random import sample
 
 from .algorithms.genetic import Genetic
 from .algorithms.selection import set_tournament_constants, set_boltzmann_constants
@@ -10,7 +8,6 @@ from .models.characters import Character, Warrior, Archer, Defender, Assassin
 from .utils.Hud import Hud
 from .utils.config import Config
 from .utils.parser import databases
-import cProfile
 
 
 def generate_individuals(amount, items, population_class):
