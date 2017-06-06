@@ -45,12 +45,8 @@ def databases(config: Config):
     armours = build_items("pecheras", ItemType.ARMOUR)
     return weapons, boots, helmets, gloves, armours
 
-def run(config: Config):
-
 
 def main():
-    if ()
-
     config = Config("config.json")
     set_tournament_constants(randomness=config.randomness, tournaments_group_size=config.tournaments_group_size)
     set_boltzmann_constants(config.boltzmann_starting_temp, config.boltzmann_minimum_temp, config.boltzmann_cooling_step)
