@@ -41,7 +41,7 @@ class Genetic:
         r.shuffle(parents)
         for i in range(int(self.k/2)):
             if r.random() < self.Cc:
-                [self.children.append(x) for x in self.crossover_fn(parents.pop(), parents.pop())]
+                self.children += list(self.crossover_fn(parents.pop(), parents.pop()))
             else:
                 self.children.append(parents.pop())
                 self.children.append(parents.pop())
@@ -91,14 +91,14 @@ class Genetic:
         for child in self.children:
             child.calculate_fitness()
         parents_count = self.N - self.k
-        children_count = (self.N - parents_count)
+        children_count = self.N - parents_count
         amount_b = round(parents_count * self.B)
         amount_c = round(children_count * self.C)
         new_pop = list()
-        [new_pop.append(x) for x in self.generation_fn_1(self.population, amount=amount_b)]
-        [new_pop.append(x) for x in self.generation_fn_2(self.population, amount=parents_count - amount_b)]
-        [new_pop.append(x) for x in self.child_selection_fn_1(self.children, amount=amount_c)]
-        [new_pop.append(x) for x in self.child_selection_fn_2(self.children, amount=children_count - amount_c)]
+        new_pop += self.generation_fn_1(self.population, amount=amount_b)
+        new_pop += self.generation_fn_2(self.population, amount=parents_count - amount_b)
+        new_pop += self.child_selection_fn_1(self.children, amount=amount_c)
+        new_pop += self.child_selection_fn_2(self.children, amount=children_count - amount_c)
         self.population = new_pop
         self.children.clear()
 
