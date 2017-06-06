@@ -1,4 +1,3 @@
-import numpy as np
 from .algorithms.genetic import Genetic
 from .models.characters import Character, Warrior, Archer, Defender, Assassin
 from .models.items import ItemType
@@ -6,19 +5,7 @@ from .utils.parser import parse
 from random import sample
 from .utils.config import Config
 from .algorithms.selection import set_tournament_constants, set_elite_roulette_constants, set_boltzmann_constants
-
-
-def print_stats(population):
-    fitness_list = []
-    for character in population:
-        fitness_list.append(character.fitness)
-
-    avg_fitness = np.average(fitness_list)
-    max_fitness = np.max(fitness_list)
-    min_fitness = np.min(fitness_list)
-    print("Avg fitness: {}".format(avg_fitness))
-    print("Max fitness: {}".format(max_fitness))
-    print("Min fitness: {}".format(min_fitness))
+from .utils.Hud import Hud
 
 
 def generate_individuals(amount, items, population_class):
@@ -57,8 +44,12 @@ def databases(config: Config):
     armours = build_items("pecheras", ItemType.ARMOUR)
     return weapons, boots, helmets, gloves, armours
 
+def run(config: Config):
+
 
 def main():
+    if ()
+
     config = Config("config.json")
     set_tournament_constants(randomness=config.randomness, tournaments_group_size=config.tournaments_group_size)
     set_boltzmann_constants(config.boltzmann_starting_temp, config.boltzmann_minimum_temp, config.boltzmann_cooling_step)
@@ -68,8 +59,13 @@ def main():
     population_class = config.population_class
     population = generate_individuals(population_size, items, population_class)
     experiment = Genetic(config, population, items)
-    experiment.natural_selection()
-
+    hud = Hud(
+        config.print_interval,
+        config.generations_limit,
+        config.goal_score
+    )
+    experiment.natural_selection(hud)
+    hud.wait()
 
 if __name__ == "__main__":
     main()
