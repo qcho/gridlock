@@ -2,12 +2,30 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 import numpy as np
 
+from tp3.utils.config import Config
+
+
+class RealtimeOutput:
+    def __init__(self, config: Config):
+        self.config = config
+
+
+class ConsoleOutput:
+    def __init__(self, config: Config):
+        self.config = config
+
+
+class FileOutput:
+    def __init__(self, config: Config):
+        self.config = config
+
 
 class Hud:
-    def __init__(self, print_interval: int, max_generations, max_fitness) -> None:
+    def __init__(self, config: Config) -> None:
         super().__init__()
-        self.print_interval = print_interval
+        self.print_interval = config.print_interval
         self.points = [(0, 0.0, 0.0, 0.0, 0.0)]
+        self._init_output_methods(config)
         #plt.xkcd()
         self.fig, self.ax = plt.subplots()
         self.min_line, = self.ax.plot([0], [0], label="Min")
@@ -16,11 +34,11 @@ class Hud:
 
         self.ax.set_ylabel("Fitness")
         self.ax.set_xlabel("Generation")
-        self.ax.set_xlim(0, max_generations)
-        self.ax.set_ylim(0, max_fitness)
+        self.ax.set_xlim(0, config.generations_limit)
+        self.ax.set_ylim(0, config.goal_score)
         self.fig.canvas.set_window_title("TPE3 - GENETICS")
 
-        ani = animation.FuncAnimation(self.fig, self._update, interval=100)
+        _ = animation.FuncAnimation(self.fig, self._update, interval=100)
         plt.ion()
         plt.draw()
         plt.show()
@@ -54,7 +72,7 @@ class Hud:
             np.max(fitness_list),
         ))
         if generation % self.print_interval == 0:
-            plt.pause(0.001)
+            plt.pause(0.01)
             print("Generation:", generation)
             print("Avg fitness: {}".format(self.get_avg_fitness()))
             print("Max fitness: {}".format(self.get_max_fitness()))
@@ -79,3 +97,20 @@ class Hud:
     def wait(self):
         plt.ioff()
         plt.show()
+
+    def _init_output_methods(self, config: Config):
+        if "console" in config.output_methods:
+            self._init_console(config)
+        if "file" in config.output_methods:
+            self._init_file(config)
+        if "realtime" in config.output_methods:
+            self._init_realtime(config)
+
+    def _init_console(self, config: Config):
+        pass
+
+    def _init_file(self, config: Config):
+        pass
+
+    def _init_realtime(self, config: Config):
+        pass
