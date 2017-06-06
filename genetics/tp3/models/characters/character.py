@@ -119,6 +119,11 @@ class Character:
             string += str(x) + "\n"
         return string
 
+    def stats(self):
+        return "Height: {:.2f} | Str: {:.2f} | Agi: {:.2f} | Exp: {:.2f} | Res: {:.2f} | Life: {:.2f}".format(
+            self.height, self.strength, self.agility, self.expertise, self.resistance, self.life
+        )
+
     def spawn(self):
         child = cPickle.loads(cPickle.dumps(self, -1))
         child.invalidate_caches()
