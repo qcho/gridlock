@@ -28,7 +28,7 @@ class Hud:
         plt.pause(0.01)
 
     def _set_texts(self):
-        self.ax.set_title("Generaton: ${}$".format(self.get_generation()))
+        self.ax.set_title("Generation: ${}$".format(self.get_generation()))
         self.min_line.set_label("Min: ${0:.2f}$".format(self.get_min_fitness()))
         self.avg_line.set_label("Avg: ${0:.2f}$".format(self.get_avg_fitness()))
         self.max_line.set_label("Max: ${0:.2f}$".format(self.get_max_fitness()))
