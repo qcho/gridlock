@@ -1,5 +1,7 @@
 {
   "dataset": "fulldata",
+  "outputs": ["console", "file", "realtime"],
+  "output_path": "out",
   "population_size": 200,
   "generations_limit": 500,
   "mutation_chance": 0.09,
