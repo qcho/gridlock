@@ -33,7 +33,7 @@ def _accumulated_relative_fitness(population):
 #                                 Algorithms                                   #
 ################################################################################
 def _elite_sample(population, amount: int):
-    data = list(reversed(sorted(population, key=lambda x: x.fitness)))
+    data = sorted(population, key=lambda x: x.fitness, reverse=True)
     return data[:amount]
 
 
