@@ -2,18 +2,22 @@ import abc
 
 import numpy as np
 import _pickle as cPickle
-# from copy import deepcopy
 from abc import ABCMeta
 from random import uniform
 from ..items.item import Item
 from ..stats import Stats
 
 
+def _attack_modifier(h):
+    return 0.5 - (3 * h - 5) ** 4 + (3 * h - 5) ** 2 + h / 2
+
+
+def _defense_modifier(h):
+    return 2 + (3 * h - 5) ** 4 - (3 * h - 5) ** 2 - h / 2
+
+
 class Character:
     __metaclass__ = ABCMeta
-
-    attack_modifier_function = lambda h: 0.5 - (3 * h - 5) ** 4 + (3 * h - 5) ** 2 + h / 2
-    defense_modifier_function = lambda h: 2 + (3 * h - 5) ** 4 - (3 * h - 5) ** 2 - h / 2
     special_modifiers = None
     default_special_modifiers = {
         'special_strength': 1.0,
@@ -26,8 +30,8 @@ class Character:
     def __init__(self):
         self.items = {}
         self.height = uniform(1.3, 2.0)
-        self.attack_modifier = Character.attack_modifier_function(self.height)
-        self.defense_modifier = Character.defense_modifier_function(self.height)
+        self.attack_modifier = _attack_modifier(self.height)
+        self.defense_modifier = _defense_modifier(self.height)
         self._fitness = None
         self._strength = None
         self._agility = None

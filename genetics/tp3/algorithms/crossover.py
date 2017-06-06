@@ -60,7 +60,7 @@ def uniform(char_1: Character, char_2: Character) -> Tuple[Character, Character]
 def annular(char_1: Character, char_2: Character) -> Tuple[Character, Character]:
     child_1, child_2 = _spawn_children(char_1, char_2)
     point = randint(0, GENES)
-    length = randint(0, GENES-1)
+    length = randint(0, GENES / 2)
     for i in range(length):
         index = (point + i) % GENES
         if index == 0:

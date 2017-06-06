@@ -45,11 +45,7 @@ def _run(config: Config):
     population_class = config.population_class
     population = generate_individuals(population_size, items, population_class)
     experiment = Genetic(config, population, items)
-    hud = Hud(
-        config.print_interval,
-        config.generations_limit,
-        config.goal_score
-    )
+    hud = Hud(config)
     experiment.natural_selection(hud)
     hud.wait()
 
@@ -60,4 +56,5 @@ def main():
     _run(config)
 
 if __name__ == "__main__":
-    cProfile.run('main()', sort='cumtime')
+    main()
+    # cProfile.run('main()', sort='cumtime')

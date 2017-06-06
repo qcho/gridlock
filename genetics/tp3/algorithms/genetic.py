@@ -39,7 +39,7 @@ class Genetic:
         parents = self.breed_fn_1(self.population, amount=amount_a)
         parents = parents + self.breed_fn_2(self.population, amount=(self.k - amount_a))
         r.shuffle(parents)
-        for i in range(int(self.k/2)):
+        for i in range(int(self.k / 2)):
             if r.random() < self.Cc:
                 self.children += list(self.crossover_fn(parents.pop(), parents.pop()))
             else:

@@ -33,16 +33,12 @@ def _accumulated_relative_fitness(population):
 #                                 Algorithms                                   #
 ################################################################################
 def _elite_sample(population, amount: int):
-    data = list(reversed(sorted(population, key=lambda x: x.fitness)))
+    data = sorted(population, key=lambda x: x.fitness, reverse=True)
     return data[:amount]
 
 
 def _random_sample(population, amount: int):
-    result = []
-    for _ in range(amount):
-        result.append(sample(population, 1)[0])
-
-    return result
+    return sample(population, amount)
 
 
 def _roulette(population, amount: int):
