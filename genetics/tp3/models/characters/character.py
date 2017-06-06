@@ -57,6 +57,7 @@ class Character:
 
     def set_item(self, item: Item):
         self.items[item.type] = item
+        self.invalidate_caches()
 
     def _items_properties_sum(self, property_fn):
         return np.sum(list(map(lambda x: property_fn.__get__(x, Item), self.items.values())))
