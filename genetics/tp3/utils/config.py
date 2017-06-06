@@ -5,7 +5,7 @@ from ..data import __data_pkg__
 
 class Config:
     def __init__(self, filename):
-        self.filename = filename
+        self.filename = "configs/{}".format(filename)
         self._parse_config()
 
     def _parse_config(self):

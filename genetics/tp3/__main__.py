@@ -2,6 +2,8 @@ from random import sample
 
 from multiprocessing import freeze_support
 
+import sys
+
 from .algorithms.genetic import Genetic
 from .algorithms.selection import set_tournament_constants, set_boltzmann_constants
 from .models.characters import Character, Warrior, Archer, Defender, Assassin
@@ -33,11 +35,10 @@ def class_setter(population_class):
     }[population_class]
 
 
-def main():
-    freeze_support()
-    config = Config("config.json")
+def _run(config: Config):
     set_tournament_constants(randomness=config.randomness, tournaments_group_size=config.tournaments_group_size)
-    set_boltzmann_constants(config.boltzmann_starting_temp, config.boltzmann_minimum_temp, config.boltzmann_cooling_step)
+    set_boltzmann_constants(config.boltzmann_starting_temp, config.boltzmann_minimum_temp,
+                            config.boltzmann_cooling_step)
     items = databases(config.dataset)
     population_size = config.population_size
     Character.set_special_modifiers(config.special_modifiers)
@@ -46,6 +47,13 @@ def main():
     experiment = Genetic(config, population, items)
     hud = Hud(config)
     experiment.natural_selection(hud)
+    hud.wait()
+
+
+def main():
+    freeze_support()
+    config = Config(sys.argv[1] if len(sys.argv) > 1 else "default.json")
+    _run(config)
 
 if __name__ == "__main__":
     main()

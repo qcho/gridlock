@@ -52,7 +52,11 @@ setup(
     },
 
     package_data={
-        # 'tpe2': ['data/terrain05.data', 'data/*.json'],
+        'tpe3': [
+            'data/configs/*.json',
+            'data/fulldata/*.tsv',
+            'data/testdata/*.tsv'
+        ],
     },
 
     # To provide executable scripts, use entry points in preference to the
