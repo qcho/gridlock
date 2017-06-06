@@ -7,6 +7,7 @@ from .models.items import ItemType
 from .utils.Hud import Hud
 from .utils.config import Config
 from .utils.parser import parse
+import cProfile
 
 
 def generate_individuals(amount, items, population_class):
@@ -62,7 +63,6 @@ def main():
         config.goal_score
     )
     experiment.natural_selection(hud)
-    hud.wait()
 
 if __name__ == "__main__":
-    main()
+    cProfile.run('main()', sort='cumtime')
