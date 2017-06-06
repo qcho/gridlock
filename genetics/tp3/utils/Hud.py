@@ -4,7 +4,6 @@ import numpy as np
 
 
 class Hud:
-
     def __init__(self, print_interval: int, max_generations, max_fitness) -> None:
         super().__init__()
         self.print_interval = print_interval
