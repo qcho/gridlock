@@ -19,7 +19,6 @@ def generate_individuals(amount, items, population_class):
         individual.set_item(sample(items[2], 1)[0])
         individual.set_item(sample(items[3], 1)[0])
         individual.set_item(sample(items[4], 1)[0])
-        individual.calculate_fitness()
         population.append(individual)
     return population
 

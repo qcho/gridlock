@@ -1,3 +1,5 @@
+import abc
+
 import numpy as np
 from copy import deepcopy
 from abc import ABCMeta
@@ -25,7 +27,7 @@ class Character:
         self.height = uniform(1.3, 2.0)
         self.attack_modifier = Character.attack_modifier_function(self.height)
         self.defense_modifier = Character.defense_modifier_function(self.height)
-        self.fitness = 0
+        self._fitness = None
         self._strength = None
         self._agility = None
         self._expertise = None
@@ -44,11 +46,21 @@ class Character:
             Stats.LIFE: special_modifiers['life'],
         }
 
+    @abc.abstractmethod
+    def _calculate_fitness(self):
+        pass
+
     def set_item(self, item: Item):
         self.items[item.type] = item
 
     def _items_properties_sum(self, property_fn):
         return np.sum(list(map(lambda x: property_fn.__get__(x, Item), self.items.values())))
+
+    @property
+    def fitness(self):
+        if self._fitness is None:
+            self._fitness = self._calculate_fitness()
+        return self._fitness
 
     @property
     def strength(self):
@@ -107,6 +119,7 @@ class Character:
         return child
 
     def invalidate_caches(self):
+        self._fitness = None
         self._strength = None
         self._agility = None
         self._expertise = None

@@ -59,8 +59,6 @@ class Genetic:
         max_fitness = self.goal - 1
         while max_fitness < self.goal and generation < self.generations_limit:
             self.replacement_type()
-            for individual in self.population:
-                individual.calculate_fitness()
             generation += 1
             max_fitness = hud.add_points_get_max(generation, self.population)
             mark_new_gen()
@@ -88,8 +86,6 @@ class Genetic:
     def replacement_method_2(self):
         self.generate_children()
         self.mutate_children()
-        for child in self.children:
-            child.calculate_fitness()
         parents_count = self.N - self.k
         children_count = self.N - parents_count
         amount_b = round(parents_count * self.B)
@@ -105,8 +101,6 @@ class Genetic:
     def replacement_method_3(self):
         self.generate_children()
         self.mutate_children()
-        for child in self.children:
-            child.calculate_fitness()
         parents_count = self.N - self.k
         children_count = (self.N - parents_count)
         amount_b = round(parents_count * self.B)
