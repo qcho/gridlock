@@ -1,19 +1,31 @@
-from functools import partial
+import pickle
+from functools import partial, lru_cache
 from multiprocessing.pool import Pool
 import pkg_resources
+from os.path import isfile
+
 from ..models.items import Item, ItemType
 from ..data import __data_pkg__
 
 
 def databases(dataset: str):
-    with Pool(processes=8) as pool:
-        return pool.map(partial(_parse_item, dataset=dataset), [
-            ItemType.WEAPON,
-            ItemType.BOOTS,
-            ItemType.HELMET,
-            ItemType.GLOVES,
-            ItemType.ARMOUR,
-        ])
+    cache_file_path = pkg_resources.resource_filename(__data_pkg__, "{}.pkl".format(dataset))
+
+    if isfile(cache_file_path):
+        with open(cache_file_path, 'rb') as cache:
+            return pickle.load(cache)
+    else:
+        with Pool(processes=8) as pool:
+            dbs = pool.map(partial(_parse_item, dataset=dataset), [
+                ItemType.WEAPON,
+                ItemType.BOOTS,
+                ItemType.HELMET,
+                ItemType.GLOVES,
+                ItemType.ARMOUR,
+            ])
+            with open(cache_file_path, 'wb') as cache:
+                pickle.dump(dbs, cache, pickle.HIGHEST_PROTOCOL)
+            return dbs
 
 filename = {
     ItemType.WEAPON: "armas",
