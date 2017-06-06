@@ -8,12 +8,19 @@ from ..models.items import Item, ItemType
 from ..data import __data_pkg__
 
 
+LOADED_DATABASES = {}
+
+
 def databases(dataset: str):
+    if dataset in LOADED_DATABASES:
+        print("REUSING DB")
+        return LOADED_DATABASES[dataset]
+
     cache_file_path = pkg_resources.resource_filename(__data_pkg__, "{}.pkl".format(dataset))
 
     if isfile(cache_file_path):
         with open(cache_file_path, 'rb') as cache:
-            return pickle.load(cache)
+            LOADED_DATABASES[dataset] = pickle.load(cache)
     else:
         with Pool(processes=8) as pool:
             dbs = pool.map(partial(_parse_item, dataset=dataset), [
@@ -25,7 +32,8 @@ def databases(dataset: str):
             ])
             with open(cache_file_path, 'wb') as cache:
                 pickle.dump(dbs, cache, pickle.HIGHEST_PROTOCOL)
-            return dbs
+            LOADED_DATABASES[dataset] = dbs
+    return LOADED_DATABASES[dataset]
 
 filename = {
     ItemType.WEAPON: "armas",
