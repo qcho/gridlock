@@ -1,5 +1,5 @@
 {
-  "dataset": "testdata",
+  "dataset": "fulldata",
   "outputs": ["console", "realtime"],
   "output_path": "out",
   "population_size": 200,
@@ -9,7 +9,6 @@
   "child_per_generation": 10,
   "goal_score": 80,
   "print_every_n_generations": 100,
-  "population_class": "warrior",
   "breed_selection": {
     "method_1": "elite-sample",
     "method_2": "boltzmann",
@@ -27,12 +26,13 @@
   },
   "replacement_method": "method_2",
   "crossover_type": "annular",
+  "population_class": "defender",
   "special_modifiers": {
-    "strength": 1.2,
-    "agility": 1.0,
-    "expertise": 0.8,
-    "resistance": 0.8,
-    "life": 0.8
+    "strength": 1.0,
+    "agility": 0.9,
+    "expertise": 0.7,
+    "resistance": 1.2,
+    "life": 1.1
   },
   "tournaments": {
     "group_size": 50,

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 import numpy as np
 
-from tp3.utils.config import Config
+from .config import Config
 
 
 class RealtimeOutput:
@@ -23,6 +23,7 @@ class FileOutput:
 class Hud:
     def __init__(self, config: Config) -> None:
         super().__init__()
+        self.best_individual = None
         self.print_interval = config.print_interval
         self.points = [(0, 0.0, 0.0, 0.0, 0.0)]
         self._init_output_methods(config)
@@ -45,7 +46,10 @@ class Hud:
         plt.pause(0.01)
 
     def _set_texts(self):
-        self.ax.set_title("Generation: ${}$".format(self.get_generation()))
+        self.ax.set_title(
+            "Generation: ${}$".format(self.get_generation())
+            + "\n{}".format(self.best_individual.stats() if self.best_individual is not None else "")
+        )
         self.min_line.set_label("Min: ${0:.2f}$".format(self.get_min_fitness()))
         self.avg_line.set_label("Avg: ${0:.2f}$".format(self.get_avg_fitness()))
         self.max_line.set_label("Max: ${0:.2f}$".format(self.get_max_fitness()))
@@ -64,7 +68,11 @@ class Hud:
         return self.min_line, self.avg_line, self.max_line,
 
     def add_points_get_max(self, generation, population):
-        fitness_list = [individual.fitness for individual in population]
+        fitness_list = []
+        for individual in population:
+            if self.best_individual is None or self.best_individual.fitness < individual.fitness:
+                self.best_individual = individual
+            fitness_list.append(individual.fitness)
         self.points.append((
             generation,
             np.min(fitness_list),
