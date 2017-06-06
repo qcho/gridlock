@@ -1,7 +1,7 @@
 {
-  "dataset": "fulldata",
+  "dataset": "testdata",
   "population_size": 200,
-  "generations_limit": 10000,
+  "generations_limit": 500,
   "mutation_chance": 0.09,
   "crossover_chance": 0.75,
   "child_per_generation": 100,
