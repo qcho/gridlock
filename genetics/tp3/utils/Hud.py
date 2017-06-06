@@ -21,7 +21,7 @@ class Hud:
         self.ax.set_ylim(0, max_fitness)
         self.fig.canvas.set_window_title("TPE3 - GENETICS")
 
-        ani = animation.FuncAnimation(self.fig, self._update, interval=1000)
+        ani = animation.FuncAnimation(self.fig, self._update, interval=100)
         plt.ion()
         plt.draw()
         plt.show()
