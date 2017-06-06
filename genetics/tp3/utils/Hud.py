@@ -54,8 +54,8 @@ class Hud:
             np.average(fitness_list),
             np.max(fitness_list),
         ))
-        plt.pause(0.01)
         if generation % self.print_interval == 0:
+            plt.pause(0.001)
             print("Generation:", generation)
             print("Avg fitness: {}".format(self.get_avg_fitness()))
             print("Max fitness: {}".format(self.get_max_fitness()))
