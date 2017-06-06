@@ -26,6 +26,13 @@ class Character:
         self.attack_modifier = Character.attack_modifier_function(self.height)
         self.defense_modifier = Character.defense_modifier_function(self.height)
         self.fitness = 0
+        self._strength = None
+        self._agility = None
+        self._expertise = None
+        self._resistance = None
+        self._life = None
+        self._attack = None
+        self._defense = None
 
     @staticmethod
     def set_special_modifiers(special_modifiers):
@@ -43,31 +50,50 @@ class Character:
     def _items_properties_sum(self, property_fn):
         return np.sum(list(map(lambda x: property_fn.__get__(x, Item), self.items.values())))
 
-    def get_strength(self):
-        return 100 * np.tanh(
-            0.01 * self._items_properties_sum(Item.strength) * self.special_modifiers[Stats.STRENGTH])
+    @property
+    def strength(self):
+        if self._strength is None:
+            self._strength = 100 * np.tanh(
+                0.01 * self._items_properties_sum(Item.strength) * self.special_modifiers[Stats.STRENGTH])
+        return self._strength
 
-    def get_agility(self):
-        return np.tanh(
-            0.01 * self._items_properties_sum(Item.agility) * self.special_modifiers[Stats.AGILITY])
+    @property
+    def agility(self):
+        if self._agility is None:
+            self._agility = np.tanh(
+                0.01 * self._items_properties_sum(Item.agility) * self.special_modifiers[Stats.AGILITY])
+        return self._agility
 
-    def get_expertise(self):
-        return 0.6 * np.tanh(
-            0.01 * self._items_properties_sum(Item.expertise) * self.special_modifiers[Stats.EXPERTISE])
+    @property
+    def expertise(self):
+        if self._expertise is None:
+            self._expertise = 0.6 * np.tanh(
+                0.01 * self._items_properties_sum(Item.expertise) * self.special_modifiers[Stats.EXPERTISE])
+        return self._expertise
 
-    def get_resistance(self):
-        return np.tanh(
-            0.01 * self._items_properties_sum(Item.resistance) * self.special_modifiers[Stats.RESISTANCE])
+    @property
+    def resistance(self):
+        if self._resistance is None:
+            self._resistance = np.tanh(
+                0.01 * self._items_properties_sum(Item.resistance) * self.special_modifiers[Stats.RESISTANCE])
+        return self._resistance
 
-    def get_life(self):
-        return 100 * np.tanh(
-            0.01 * self._items_properties_sum(Item.life) * self.special_modifiers[Stats.LIFE])
+    @property
+    def life(self):
+        if self._life is None:
+            self._life = 100 * np.tanh(
+                0.01 * self._items_properties_sum(Item.life) * self.special_modifiers[Stats.LIFE])
+        return self._life
 
-    def get_attack(self):
-        return (self.get_agility() + self.get_expertise()) * self.get_strength() * self.attack_modifier
+    @property
+    def attack(self):
+        if self._attack is None:
+            self._attack = (self.agility + self.expertise) * self.strength * self.attack_modifier
+        return self._attack
 
-    def get_defense(self):
-        return (self.get_resistance() + self.get_expertise()) * self.get_life() * self.defense_modifier
+    @property
+    def defense(self):
+        return (self.resistance + self.expertise) * self.life * self.defense_modifier
 
     def __str__(self):
         string = "Height: {} \nItems: \n".format(self.height)
@@ -76,4 +102,15 @@ class Character:
         return string
 
     def spawn(self):
-        return deepcopy(self)
+        child = deepcopy(self)
+        child.invalidate_caches()
+        return child
+
+    def invalidate_caches(self):
+        self._strength = None
+        self._agility = None
+        self._expertise = None
+        self._resistance = None
+        self._life = None
+        self._attack = None
+        self._defense = None

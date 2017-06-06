@@ -7,7 +7,7 @@ class Assassin(Character):
         super().__init__()
 
     def calculate_fitness(self):
-        self.fitness = 0.7 * self.get_attack() + 0.3 * self.get_defense()
+        self.fitness = 0.7 * self.attack + 0.3 * self.defense
 
     def __str__(self):
         return "Fitness: {} \n".format(self.fitness) + super().__str__()

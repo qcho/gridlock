@@ -7,7 +7,7 @@ class Warrior(Character):
         super().__init__()
 
     def calculate_fitness(self):
-        self.fitness = 0.6 * self.get_attack() + 0.4 * self.get_defense()
+        self.fitness = 0.6 * self.attack + 0.4 * self.defense
 
     def __str__(self):
         return "Fitness: {} \n".format(self.fitness) + super().__str__()
