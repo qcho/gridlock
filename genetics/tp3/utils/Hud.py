@@ -10,24 +10,8 @@ from .config import Config
 from ..data import __data_pkg__
 
 
-def _generation(points):
-    return points[-1][0]
-
-
-def _min_fitness(points):
-    return points[-1][1]
-
-
-def _avg_fitness(points):
-    return points[-1][2]
-
-
 def _max_fitness(points):
     return points[-1][3]
-
-
-def _last_fitness(points):
-    return points[-1]
 
 
 class Output:
@@ -46,19 +30,16 @@ class Output:
         pass
 
     def get_generation(self):
-        return _generation(self.points)
+        return self.points[-1][0]
 
     def get_min_fitness(self):
-        return _min_fitness(self.points)
+        return self.points[-1][1]
 
     def get_avg_fitness(self):
-        return _avg_fitness(self.points)
+        return self.points[-1][2]
 
     def get_max_fitness(self):
         return _max_fitness(self.points)
-
-    def get_last_fitness(self):
-        return _last_fitness(self.points)
 
 
 class PlotOutput(Output):
