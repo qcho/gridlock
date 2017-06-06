@@ -1,12 +1,12 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import animation
 import pkg_resources
-from ..data import __data_pkg__
+from matplotlib import animation
 
 from .config import Config
+from ..data import __data_pkg__
 
 
 def _generation(points):
@@ -141,9 +141,8 @@ class ConsoleOutput(Output):
 
 
 class FileOutput(PlotOutput):
-    def __init__(self, config: Config, is_plotting):
+    def __init__(self, config: Config):
         super().__init__(config)
-        self.is_plotting = is_plotting
 
     def process_generation(self, data, best_individual):
         super().process_generation(data, best_individual)
@@ -162,7 +161,7 @@ def _init_output_methods(config: Config):
     if "console" in config.output_methods:
         output_methods.append(ConsoleOutput(config))
     if "file" in config.output_methods:
-        output_methods.append(FileOutput(config, "realtime" in config.output_methods))
+        output_methods.append(FileOutput(config))
     if "realtime" in config.output_methods:
         output_methods.append(RealtimeOutput(config))
     return output_methods
