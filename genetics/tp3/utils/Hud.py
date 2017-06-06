@@ -179,7 +179,6 @@ class Hud:
         self.best_individual = None
         self.points = []
         self.output_methods = _init_output_methods(config)
-        #plt.xkcd()
 
     def add_points_get_max(self, generation, population):
         fitness_list = []
