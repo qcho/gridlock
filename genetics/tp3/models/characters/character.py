@@ -1,7 +1,8 @@
 import abc
 
 import numpy as np
-from copy import deepcopy
+import _pickle as cPickle
+# from copy import deepcopy
 from abc import ABCMeta
 from random import uniform
 from ..items.item import Item
@@ -114,7 +115,7 @@ class Character:
         return string
 
     def spawn(self):
-        child = deepcopy(self)
+        child = cPickle.loads(cPickle.dumps(self, -1))
         child.invalidate_caches()
         return child
 
