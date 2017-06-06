@@ -1,7 +1,10 @@
-import matplotlib.pyplot as plt
-from matplotlib import animation
-import numpy as np
 from abc import ABCMeta, abstractmethod
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import animation
+import pkg_resources
+from ..data import __data_pkg__
 
 from .config import Config
 
@@ -25,111 +28,21 @@ def _max_fitness(points):
 def _last_fitness(points):
     return points[-1]
 
+
 class Output:
     __metaclass__ = ABCMeta
 
-    def __init__(self):
-        self.data = []
-
-    @abstractmethod
-    def process_generation(self, data):
-        self.data = data
-
-
-class RealtimeOutput(Output):
     def __init__(self, config: Config):
-        super().__init__()
+        self.points = []
         self.config = config
-
-    def process_generation(self, data):
-        super().process_generation(data)
-        pass
-
-
-class ConsoleOutput(Output):
-    def __init__(self, config: Config):
-        super().__init__()
-        self.config = config
-
-    def process_generation(self, data):
-        super().process_generation(data)
-
-
-class FileOutput(Output):
-    def __init__(self, config: Config):
-        super().__init__()
-        self.config = config
-
-    def process_generation(self, data):
-        super().process_generation(data)
-
-
-class Hud:
-    def __init__(self, config: Config) -> None:
-        super().__init__()
         self.best_individual = None
-        self.print_interval = config.print_interval
-        self.points = [(0, 0.0, 0.0, 0.0, 0.0)]
-        self._init_output_methods(config)
-        #plt.xkcd()
-        self.fig, self.ax = plt.subplots()
-        self.min_line, = self.ax.plot([0], [0], label="Min")
-        self.avg_line, = self.ax.plot([0], [0], label="Avg")
-        self.max_line, = self.ax.plot([0], [0], label="Max")
 
-        self.ax.set_ylabel("Fitness")
-        self.ax.set_xlabel("Generation")
-        self.ax.set_xlim(0, config.generations_limit)
-        self.ax.set_ylim(0, config.goal_score)
-        self.fig.canvas.set_window_title("TPE3 - GENETICS")
+    def process_generation(self, points, best_individual):
+        self.points = points
+        self.best_individual = best_individual
 
-        _ = animation.FuncAnimation(self.fig, self._update, interval=100)
-        plt.ion()
-        plt.draw()
-        plt.show()
-        plt.pause(0.01)
-
-    def _set_texts(self):
-        self.ax.set_title(
-            "Generation: ${}$".format(self.get_generation())
-            + "\n{}".format(self.best_individual.stats() if self.best_individual is not None else "")
-        )
-        self.min_line.set_label("Min: ${0:.2f}$".format(self.get_min_fitness()))
-        self.avg_line.set_label("Avg: ${0:.2f}$".format(self.get_avg_fitness()))
-        self.max_line.set_label("Max: ${0:.2f}$".format(self.get_max_fitness()))
-        plt.legend(handles=[self.max_line, self.avg_line, self.min_line])
-
-    def _update(self, _):
-        self._set_texts()
-        self.min_line.set_xdata([p[0] for p in self.points])
-        self.min_line.set_ydata([p[1] for p in self.points])
-
-        self.avg_line.set_xdata([p[0] for p in self.points])
-        self.avg_line.set_ydata([p[2] for p in self.points])
-
-        self.max_line.set_xdata([p[0] for p in self.points])
-        self.max_line.set_ydata([p[3] for p in self.points])
-        return self.min_line, self.avg_line, self.max_line,
-
-    def add_points_get_max(self, generation, population):
-        fitness_list = []
-        for individual in population:
-            if self.best_individual is None or self.best_individual.fitness < individual.fitness:
-                self.best_individual = individual
-            fitness_list.append(individual.fitness)
-        self.points.append((
-            generation,
-            np.min(fitness_list),
-            np.average(fitness_list),
-            np.max(fitness_list),
-        ))
-        if generation % self.print_interval == 0:
-            plt.pause(0.01)
-            print("Generation:", generation)
-            print("Avg fitness: {}".format(self.get_avg_fitness()))
-            print("Max fitness: {}".format(self.get_max_fitness()))
-            print("Min fitness: {}".format(self.get_min_fitness()))
-        return self.get_max_fitness()
+    def finish(self):
+        pass
 
     def get_generation(self):
         return _generation(self.points)
@@ -146,23 +59,142 @@ class Hud:
     def get_last_fitness(self):
         return _last_fitness(self.points)
 
-    def wait(self):
+
+class PlotOutput(Output):
+    def __init__(self, config: Config):
+        super().__init__(config)
+        self.points.append((0, 0.0, 0.0, 0.0, 0.0))
+        self.fig, self.ax = plt.subplots()
+        self.min_line, = self.ax.plot([0], [0], label="Min")
+        self.avg_line, = self.ax.plot([0], [0], label="Avg")
+        self.max_line, = self.ax.plot([0], [0], label="Max")
+        self.ax.set_ylabel("Fitness")
+        self.ax.set_xlabel("Generation")
+        self.ax.set_xlim(0, config.generations_limit)
+        self.ax.set_ylim(0, config.goal_score)
+        self.fig.canvas.set_window_title("TPE3 - GENETICS")
+
+    def _update(self, _):
+        self._set_texts()
+        self.min_line.set_xdata([p[0] for p in self.points])
+        self.min_line.set_ydata([p[1] for p in self.points])
+
+        self.avg_line.set_xdata([p[0] for p in self.points])
+        self.avg_line.set_ydata([p[2] for p in self.points])
+
+        self.max_line.set_xdata([p[0] for p in self.points])
+        self.max_line.set_ydata([p[3] for p in self.points])
+        return self.min_line, self.avg_line, self.max_line
+
+    def _set_texts(self):
+        self.ax.set_title(
+            "Generation: ${}$".format(self.get_generation())
+            + "\n{}".format(self.best_individual.stats() if self.best_individual is not None else "")
+        )
+        self.min_line.set_label("Min: ${0:.2f}$".format(self.get_min_fitness()))
+        self.avg_line.set_label("Avg: ${0:.2f}$".format(self.get_avg_fitness()))
+        self.max_line.set_label("Max: ${0:.2f}$".format(self.get_max_fitness()))
+        plt.legend(handles=[self.max_line, self.avg_line, self.min_line])
+
+
+class RealtimeOutput(PlotOutput):
+    def __init__(self, config: Config):
+        super().__init__(config)
+        self.print_interval = config.print_interval
+        _ = animation.FuncAnimation(self.fig, self._update, interval=100)
+        plt.ion()
+        plt.draw()
+        plt.show()
+        plt.pause(0.01)
+
+    def process_generation(self, data, best_individual):
+        super().process_generation(data, best_individual)
+        if self.get_generation() % self.print_interval == 0:
+            plt.pause(0.01)
+
+    def finish(self):
         plt.ioff()
         plt.show()
 
-    def _init_output_methods(self, config: Config):
-        if "console" in config.output_methods:
-            self._init_console(config)
-        if "file" in config.output_methods:
-            self._init_file(config)
-        if "realtime" in config.output_methods:
-            self._init_realtime(config)
 
-    def _init_console(self, config: Config):
-        pass
+class ConsoleOutput(Output):
+    def __init__(self, config: Config):
+        super().__init__(config)
+        self.print_interval = config.print_interval
 
-    def _init_file(self, config: Config):
-        pass
+    def process_generation(self, data, best_individual):
+        super().process_generation(data, best_individual)
+        if self.get_generation() % self.print_interval == 0:
+            print("Generation:", self.get_generation())
+            print("Avg fitness: {}".format(self.get_avg_fitness()))
+            print("Max fitness: {}".format(self.get_max_fitness()))
+            print("Min fitness: {}".format(self.get_min_fitness()))
 
-    def _init_realtime(self, config: Config):
-        pass
+    def finish(self):
+        max_fitness = self.get_max_fitness()
+        if self.config.generations_limit == self.get_generation():
+            print("Max generation reached...Exiting with a best score of: {}".format(max_fitness))
+        else:
+            print("The target score was surpassed in generation: {} with a score of: {}"
+                  .format(self.get_generation(), max_fitness))
+        print("The individual stats are: \n{}".format(self.best_individual))
+
+
+class FileOutput(PlotOutput):
+    def __init__(self, config: Config, is_plotting):
+        super().__init__(config)
+        self.is_plotting = is_plotting
+
+    def process_generation(self, data, best_individual):
+        super().process_generation(data, best_individual)
+
+    def _out_file_name(self):
+        return pkg_resources.resource_filename(__data_pkg__, "results/{}.png".format(self.config.filename))
+
+    def finish(self):
+        self._update(None)
+        plt.draw()
+        plt.savefig(self._out_file_name())
+
+
+def _init_output_methods(config: Config):
+    output_methods = []
+    if "console" in config.output_methods:
+        output_methods.append(ConsoleOutput(config))
+    if "file" in config.output_methods:
+        output_methods.append(FileOutput(config, "realtime" in config.output_methods))
+    if "realtime" in config.output_methods:
+        output_methods.append(RealtimeOutput(config))
+    return output_methods
+
+
+class Hud:
+    def __init__(self, config: Config) -> None:
+        super().__init__()
+        self.best_individual = None
+        self.points = []
+        self.output_methods = _init_output_methods(config)
+        #plt.xkcd()
+
+    def add_points_get_max(self, generation, population):
+        fitness_list = []
+        for individual in population:
+            if self.best_individual is None or self.best_individual.fitness < individual.fitness:
+                self.best_individual = individual
+            fitness_list.append(individual.fitness)
+        self.points.append((
+            generation,
+            np.min(fitness_list),
+            np.average(fitness_list),
+            np.max(fitness_list),
+        ))
+        for output_method in self.output_methods:
+            output_method.process_generation(self.points, self.best_individual)
+        return self.get_max_fitness()
+
+    def get_max_fitness(self):
+        return _max_fitness(self.points)
+
+    def finish(self):
+        for output_method in self.output_methods:
+            output_method.finish()

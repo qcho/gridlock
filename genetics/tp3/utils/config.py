@@ -5,11 +5,11 @@ from ..data import __data_pkg__
 
 class Config:
     def __init__(self, filename):
-        self.filename = "configs/{}".format(filename)
+        self.filename = filename
         self._parse_config()
 
     def _parse_config(self):
-        with open(pkg_resources.resource_filename(__data_pkg__, self.filename), 'r') as fp:
+        with open(pkg_resources.resource_filename(__data_pkg__, "configs/{}".format(self.filename)), 'r') as fp:
             json_object = json.load(fp)
             self.dataset = json_object['dataset']
             self.population_size = json_object['population_size']

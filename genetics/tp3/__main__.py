@@ -44,7 +44,7 @@ def _run(config: Config):
     experiment = Genetic(config, population, items)
     hud = Hud(config)
     experiment.natural_selection(hud)
-    hud.wait()
+    hud.finish()
 
 
 def main():
