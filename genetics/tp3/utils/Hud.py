@@ -175,7 +175,6 @@ def _init_output_methods(config: Config):
 
 class Hud:
     def __init__(self, config: Config) -> None:
-        super().__init__()
         self.best_individual = None
         self.points = []
         self.output_methods = _init_output_methods(config)
