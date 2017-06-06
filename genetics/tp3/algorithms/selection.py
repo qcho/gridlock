@@ -38,11 +38,7 @@ def _elite_sample(population, amount: int):
 
 
 def _random_sample(population, amount: int):
-    result = []
-    for _ in range(amount):
-        result.append(sample(population, 1)[0])
-
-    return result
+    return sample(population, amount)
 
 
 def _roulette(population, amount: int):
