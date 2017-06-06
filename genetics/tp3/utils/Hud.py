@@ -28,33 +28,40 @@ def _last_fitness(points):
 class Output:
     __metaclass__ = ABCMeta
 
+    def __init__(self):
+        self.data = []
+
     @abstractmethod
     def process_generation(self, data):
-        pass
+        self.data = data
 
 
 class RealtimeOutput(Output):
     def __init__(self, config: Config):
+        super().__init__()
         self.config = config
 
     def process_generation(self, data):
+        super().process_generation(data)
         pass
 
 
 class ConsoleOutput(Output):
     def __init__(self, config: Config):
+        super().__init__()
         self.config = config
 
     def process_generation(self, data):
-        pass
+        super().process_generation(data)
 
 
 class FileOutput(Output):
     def __init__(self, config: Config):
+        super().__init__()
         self.config = config
 
     def process_generation(self, data):
-        pass
+        super().process_generation(data)
 
 
 class Hud:
