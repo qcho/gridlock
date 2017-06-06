@@ -8,7 +8,6 @@ class Hud:
         super().__init__()
         self.print_interval = print_interval
         self.points = [(0, 0.0, 0.0, 0.0, 0.0)]
-        print(plt.style.available)
         #plt.xkcd()
         self.fig, self.ax = plt.subplots()
         self.min_line, = self.ax.plot([0], [0], label="Min")
