@@ -69,7 +69,7 @@ class Hud:
         self.max_line.set_label("Max: ${0:.2f}$".format(self.get_max_fitness()))
         plt.legend(handles=[self.max_line, self.avg_line, self.min_line])
 
-    def _update(self, i):
+    def _update(self, _):
         self._set_texts()
         self.min_line.set_xdata([p[0] for p in self.points])
         self.min_line.set_ydata([p[1] for p in self.points])
