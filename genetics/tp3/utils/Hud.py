@@ -5,6 +5,24 @@ import numpy as np
 from tp3.utils.config import Config
 
 
+def _generation(points):
+    return points[-1][0]
+
+
+def _min_fitness(points):
+    return points[-1][1]
+
+
+def _avg_fitness(points):
+    return points[-1][2]
+
+
+def _max_fitness(points):
+    return points[-1][3]
+
+
+def _last_fitness(points):
+    return points[-1]
 class RealtimeOutput:
     def __init__(self, config: Config):
         self.config = config
@@ -80,19 +98,19 @@ class Hud:
         return self.get_max_fitness()
 
     def get_generation(self):
-        return self.points[-1][0]
+        return _generation(self.points)
 
     def get_min_fitness(self):
-        return self.points[-1][1]
+        return _min_fitness(self.points)
 
     def get_avg_fitness(self):
-        return self.points[-1][2]
+        return _avg_fitness(self.points)
 
     def get_max_fitness(self):
-        return self.points[-1][3]
+        return _max_fitness(self.points)
 
     def get_last_fitness(self):
-        return self.points[-1]
+        return _last_fitness(self.points)
 
     def wait(self):
         plt.ioff()
