@@ -51,6 +51,7 @@ def _run(config: Config):
 def arg_parser():
     parser = argparse.ArgumentParser(description="SIA: Algorítmos genéticos")
     parser.add_argument('--config', metavar='config', nargs='?', default='default.json', help="Config to load")
+    parser.add_argument('--seed', metavar='seed', nargs='?', help="Seed for random generator", type=int)
     parser.add_argument('--all', help="Run all configs", action='store_true')
     parser.add_argument('--list', action='store_true')
     parser.add_argument('--fragments', metavar='fragments', nargs='*', type=float, help="Fragment to run")
@@ -80,8 +81,9 @@ def main():
                     config_files.append(config)
     total = len(config_files)
     for i, config_name in enumerate(config_files):
-        seed(1)
         print("Running:", config_name, "[{}/{}]".format(i + 1, total))
+        if "seed" in arguments:
+            seed(arguments.seed)
         _run(Config(config_name))
 
 if __name__ == "__main__":
