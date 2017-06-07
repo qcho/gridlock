@@ -1,11 +1,11 @@
 from multiprocessing import freeze_support
-from random import sample
+from random import sample, seed
 import argparse
 from .algorithms.genetic import Genetic
 from .algorithms.selection import set_tournament_constants, set_boltzmann_constants
 from .models.characters import Character, Warrior, Archer, Defender, Assassin
 from .utils.Hud import Hud
-from .utils.config import Config, all_report_configs, combinator
+from .utils.config import Config, all_report_configs, combinator, all_configs
 from .utils.parser import databases
 
 
@@ -67,7 +67,10 @@ def main():
 
     config_files = [arguments.config] if not arguments.all else all_report_configs()
 
-    for config_name in config_files:
+    total = len(config_files)
+    for i, config_name in enumerate(config_files):
+        seed(1)
+        print("Running:", config_name, "[{}/{}]".format(i, total))
         _run(Config(config_name))
 
 if __name__ == "__main__":
