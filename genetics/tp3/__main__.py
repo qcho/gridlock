@@ -58,6 +58,13 @@ def main():
     freeze_support()
     argument_parser = arg_parser()
     arguments = argument_parser.parse_args()
+    if "help" in arguments and arguments.help:
+        arguments.print_help()
+        exit(0)
+    if "list" in arguments and arguments.list:
+        print(all_configs())
+        exit(0)
+
     config_files = [arguments.config] if not arguments.all else all_report_configs()
 
     for config_name in config_files:
