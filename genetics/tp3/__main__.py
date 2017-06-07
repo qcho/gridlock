@@ -1,5 +1,5 @@
 from multiprocessing import freeze_support
-from memory_profiler import profile
+# from memory_profiler import profile
 from random import sample, seed
 import argparse
 from .algorithms.genetic import Genetic

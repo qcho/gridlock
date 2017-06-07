@@ -40,8 +40,6 @@ setup(
         'numpy',
         'matplotlib',
         'jsonschema',
-        'memory_profiler',
-        'psutil'
     ],
 
     # List additional groups of dependencies here (e.g. development
