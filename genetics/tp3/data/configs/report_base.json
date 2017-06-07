@@ -7,7 +7,7 @@
   "mutation_chance": 0.075,
   "crossover_chance": 0.75,
   "child_per_generation": 200,
-  "goal_score": 120,
+  "goal_score": 100,
   "print_every_n_generations": 100,
   "population_class": "warrior",
   "breed_selection": {
