@@ -5,23 +5,6 @@ import random as r
 from .selection import mark_new_gen
 
 
-def combinator(config):
-    for A in [0.0, 0.25, 0.5, 0.75, 1.0]:
-        config.a_ratio = A
-        for cross_func in cross.crossover_function_dictionary:
-            config.crossover_type = cross_func
-            for selection_good in ['elite-sample', 'boltzmann', 'tournaments-deterministic', 'roulette']:
-                config.breed_selection_method_1 = selection_good
-                for selection_bad in ['random-sample', 'universal', 'ranking', 'tournaments-stochastic',
-                                      'elite-sample']:
-                    config.breed_selection_method_2 = selection_bad
-                    config.filename = "{}".format(A) + "_" + cross_func + "_" + selection_bad + "_" + selection_bad
-                    config.generation_gap_selection_method_1 = selection_good
-                    config.generation_gap_selection_method_2 = selection_bad
-                    config.b_ratio = 1 - A
-                    config.write_json()
-
-
 class Genetic:
     def __init__(self, config, population, items):
         super().__init__()
