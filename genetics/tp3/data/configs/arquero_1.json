@@ -1,6 +1,6 @@
 {
   "dataset": "fulldata",
-  "outputs": ["console", "realtime"],
+  "outputs": ["file"],
   "output_path": "out",
   "population_size": 500,
   "generations_limit": 1000,
