@@ -27,7 +27,7 @@ class Item:
 
     @property
     def agility(self):
-        return self._strength
+        return self._agility
 
     @property
     def id(self):
