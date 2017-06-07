@@ -1,0 +1,96 @@
+Generation: 100
+Avg fitness: 35.81894075234479
+Max fitness: 37.11181948773583
+Min fitness: 21.24938549443688
+Generation: 200
+Avg fitness: 35.966053774518265
+Max fitness: 37.32138367769966
+Min fitness: 19.510035240061104
+Generation: 300
+Avg fitness: 35.85566708710754
+Max fitness: 37.32141998894773
+Min fitness: 16.299791274619295
+Generation: 400
+Avg fitness: 35.90411249182408
+Max fitness: 37.32141998894773
+Min fitness: 14.236912330325865
+Generation: 500
+Avg fitness: 35.82320309383948
+Max fitness: 37.44256770013452
+Min fitness: 20.49903820179473
+Generation: 600
+Avg fitness: 36.251758140491475
+Max fitness: 37.44256770013452
+Min fitness: 22.038347007120958
+Generation: 700
+Avg fitness: 35.979158765072036
+Max fitness: 37.44256770013452
+Min fitness: 22.743796038767808
+Generation: 800
+Avg fitness: 36.252765481266515
+Max fitness: 37.600603715054696
+Min fitness: 15.793733898055123
+Generation: 900
+Avg fitness: 36.11867647614798
+Max fitness: 37.85374154848306
+Min fitness: 18.821376107788222
+Generation: 1000
+Avg fitness: 36.41114768189906
+Max fitness: 37.89550038270076
+Min fitness: 13.711721699054532
+Generation: 1100
+Avg fitness: 36.52030332344167
+Max fitness: 37.89550038270076
+Min fitness: 13.132597003618496
+Generation: 1200
+Avg fitness: 36.58077822652424
+Max fitness: 37.89550038270076
+Min fitness: 14.424934938867581
+Generation: 1300
+Avg fitness: 36.504957795450366
+Max fitness: 37.89550038270076
+Min fitness: 24.060916245478467
+Generation: 1400
+Avg fitness: 36.81501131600824
+Max fitness: 37.89550038270076
+Min fitness: 13.646975470754466
+Generation: 1500
+Avg fitness: 36.58104480755447
+Max fitness: 38.05255687334281
+Min fitness: 15.119975756258297
+Generation: 1600
+Avg fitness: 36.81977457875717
+Max fitness: 38.05255687334281
+Min fitness: 21.22730034070092
+Generation: 1700
+Avg fitness: 36.51434630785771
+Max fitness: 38.05255687334281
+Min fitness: 18.014817081715094
+Generation: 1800
+Avg fitness: 36.44566326719604
+Max fitness: 38.05255687334281
+Min fitness: 17.9481654298631
+Generation: 1900
+Avg fitness: 36.266020562083156
+Max fitness: 38.09955435394749
+Min fitness: 20.796910356315486
+Generation: 2000
+Avg fitness: 36.64108442983563
+Max fitness: 38.09955435394749
+Min fitness: 16.52215231915985
+Max generation reached...Exiting with a best score of: 38.09955435394749
+The individual stats are: 
+Fitness: 38.09955435394749 
+Height: 1.9151963583298497 
+Items: 
+ ItemType.WEAPON (id: 144562)
+	 Str: +23.0774721766 | Agi: +21.8609689772 | Exp: +2.0541859286 | Res: +2.1815791447 | Life: +0.6818471674
+ ItemType.BOOTS (id: 757199)
+	 Str: +4.3118615236 | Agi: +4.2523488271 | Exp: +0.9880382465 | Res: +0.1349835076 | Life: +0.1617029280
+ ItemType.HELMET (id: 454794)
+	 Str: +8.5776368887 | Agi: +19.0559917083 | Exp: +0.0199479257 | Res: +0.7750850845 | Life: +0.1941035995
+ ItemType.GLOVES (id: 50682)
+	 Str: +4.7391175916 | Agi: +4.4244149307 | Exp: +0.4612542683 | Res: +0.0151670983 | Life: +0.2814209630
+ ItemType.ARMOUR (id: 762549)
+	 Str: +21.5923371667 | Agi: +13.4912143649 | Exp: +2.4237034900 | Res: +0.5109412290 | Life: +1.8866732858
+
