@@ -1,0 +1,48 @@
+{
+  "dataset": "fulldata",
+  "outputs": [
+    "file"
+  ],
+  "output_path": "out",
+  "population_size": 400,
+  "generations_limit": 2000,
+  "mutation_chance": 0.075,
+  "crossover_chance": 0.75,
+  "child_per_generation": 200,
+  "goal_score": 100,
+  "print_every_n_generations": 100,
+  "population_class": "warrior",
+  "breed_selection": {
+    "method_1": "tournaments-deterministic",
+    "method_2": "tournaments-stochastic",
+    "ratio": 0.0
+  },
+  "generation_gap_selection": {
+    "method_1": "tournaments-deterministic",
+    "method_2": "tournaments-stochastic",
+    "ratio": 1.0
+  },
+  "child_to_keep_selection": {
+    "method_1": "elite-sample",
+    "method_2": "boltzmann",
+    "ratio": 0.3
+  },
+  "replacement_method": "method_2",
+  "crossover_type": "uniform",
+  "special_modifiers": {
+    "strength": 1.2,
+    "agility": 1.0,
+    "expertise": 0.8,
+    "resistance": 0.8,
+    "life": 0.8
+  },
+  "tournaments": {
+    "group_size": 50,
+    "stochastic_randomness": 0.75
+  },
+  "boltzmann": {
+    "starting_temp": 100,
+    "minimum_temp": 50,
+    "cooling_step": 0.5
+  }
+}

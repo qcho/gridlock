@@ -13,12 +13,12 @@
   "print_every_n_generations": 100,
   "population_class": "warrior",
   "breed_selection": {
-    "method_1": "roulette",
+    "method_1": "elite-sample",
     "method_2": "elite-sample",
     "ratio": 0.0
   },
   "generation_gap_selection": {
-    "method_1": "roulette",
+    "method_1": "elite-sample",
     "method_2": "elite-sample",
     "ratio": 1.0
   },

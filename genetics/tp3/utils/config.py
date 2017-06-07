@@ -14,7 +14,8 @@ def combinator(config):
                 for selection_bad in ['random-sample', 'universal', 'ranking', 'tournaments-stochastic',
                                       'elite-sample']:
                     config.breed_selection_method_2 = selection_bad
-                    config.filename = "reports/{}".format(A) + "_" + cross_func + "_" + selection_bad + "_" + selection_bad + ".json"
+                    config.filename = "reports/{}".format(A) + "_" + cross_func + "_" + selection_good\
+                                      + "_" + selection_bad + ".json"
                     config.generation_gap_selection_method_1 = selection_good
                     config.generation_gap_selection_method_2 = selection_bad
                     config.b_ratio = 1 - A
