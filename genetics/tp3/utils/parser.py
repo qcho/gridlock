@@ -13,7 +13,6 @@ LOADED_DATABASES = {}
 
 def databases(dataset: str):
     if dataset in LOADED_DATABASES:
-        print("REUSING DB")
         return LOADED_DATABASES[dataset]
 
     cache_file_path = pkg_resources.resource_filename(__data_pkg__, "{}.pkl".format(dataset))
