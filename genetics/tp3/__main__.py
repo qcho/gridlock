@@ -1,4 +1,5 @@
 from multiprocessing import freeze_support
+from memory_profiler import profile
 from random import sample, seed
 import argparse
 from .algorithms.genetic import Genetic
@@ -31,6 +32,7 @@ def class_setter(population_class):
     }[population_class]
 
 
+@profile
 def _run(config: Config):
     set_tournament_constants(randomness=config.randomness, tournaments_group_size=config.tournaments_group_size)
     set_boltzmann_constants(config.boltzmann_starting_temp, config.boltzmann_minimum_temp,
