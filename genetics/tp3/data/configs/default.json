@@ -4,7 +4,7 @@
   "output_path": "out",
   "population_size": 100,
   "generations_limit": 10000,
-  "mutation_chance": 0.25,
+  "mutation_chance": 0.1,
   "crossover_chance": 0.85,
   "child_per_generation": 50,
   "goal_score": 40,
@@ -13,12 +13,12 @@
   "breed_selection": {
     "method_1": "elite-sample",
     "method_2": "ranking",
-    "ratio": 0.15
+    "ratio": 0.3
   },
   "generation_gap_selection": {
     "method_1": "elite-sample",
     "method_2": "boltzmann",
-    "ratio": 0.15
+    "ratio": 0.3
   },
   "child_to_keep_selection": {
     "method_1": "elite-sample",
