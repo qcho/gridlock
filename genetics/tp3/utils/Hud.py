@@ -175,7 +175,8 @@ class TextOutput(Output):
             print("The target score was surpassed in generation: {} with a score of: {}"
                   .format(self.get_generation(), max_fitness), file=self.file)
         print("The individual stats are: \n{}".format(self.best_individual), file=self.file)
-        self.file.close()
+        if self.file != sys.stdout:
+            self.file.close()
 
 
 class FileOutput(PlotOutput):
@@ -193,7 +194,7 @@ class FileOutput(PlotOutput):
     def finish(self):
         self._update(None)
         plt.draw()
-        plt.savefig(self.out_file_name() + ".png")
+        plt.savefig(self.out_file_name() + ".png", dpi=300)
         self.text_output.finish()
 
 
