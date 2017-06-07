@@ -81,7 +81,7 @@ def main():
     total = len(config_files)
     for i, config_name in enumerate(config_files):
         seed(1)
-        print("Running:", config_name, "[{}/{}]".format(i, total))
+        print("Running:", config_name, "[{}/{}]".format(i + 1, total))
         _run(Config(config_name))
 
 if __name__ == "__main__":
