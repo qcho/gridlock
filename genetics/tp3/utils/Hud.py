@@ -1,5 +1,6 @@
 from abc import ABCMeta
 import sys
+from operator import attrgetter
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -212,16 +213,16 @@ def _init_output_methods(config: Config):
 
 class Hud:
     def __init__(self, config: Config) -> None:
-        self.best_individual = None
         self.points = []
         self.stats = []
         self.output_methods = _init_output_methods(config)
 
     def add_points_get_max(self, generation, population):
         fitness_list = []
+        best_individual = None
         for individual in population:
-            if self.best_individual is None or self.best_individual.fitness < individual.fitness:
-                self.best_individual = individual
+            if best_individual is None or best_individual.fitness < individual.fitness:
+                best_individual = individual
             fitness_list.append(individual.fitness)
         self.points.append((
             generation,
@@ -231,15 +232,15 @@ class Hud:
         ))
         self.stats.append((
             generation,
-            self.best_individual.height,
-            self.best_individual.strength,
-            self.best_individual.agility,
-            self.best_individual.expertise,
-            self.best_individual.resistance,
-            self.best_individual.life
+            best_individual.height,
+            best_individual.strength,
+            best_individual.agility,
+            best_individual.expertise,
+            best_individual.resistance,
+            best_individual.life
         ))
         for output_method in self.output_methods:
-            output_method.process_generation(self.points, self.stats, self.best_individual)
+            output_method.process_generation(self.points, self.stats, best_individual)
         return self.get_max_fitness()
 
     def get_max_fitness(self):
