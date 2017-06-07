@@ -5,7 +5,7 @@ from .algorithms.genetic import Genetic
 from .algorithms.selection import set_tournament_constants, set_boltzmann_constants
 from .models.characters import Character, Warrior, Archer, Defender, Assassin
 from .utils.Hud import Hud
-from .utils.config import Config, all_configs
+from .utils.config import Config, all_report_configs, combinator
 from .utils.parser import databases
 
 
@@ -54,10 +54,11 @@ def arg_parser():
 
 
 def main():
+    # combinator(Config("report_base.json"))
     freeze_support()
     argument_parser = arg_parser()
     arguments = argument_parser.parse_args()
-    config_files = [arguments.config] if not arguments.all else all_configs()
+    config_files = [arguments.config] if not arguments.all else all_report_configs()
 
     for config_name in config_files:
         _run(Config(config_name))
