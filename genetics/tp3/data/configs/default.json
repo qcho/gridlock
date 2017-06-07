@@ -1,24 +1,24 @@
 {
   "dataset": "fulldata",
-  "outputs": ["realtime"],
+  "outputs": ["file"],
   "output_path": "out",
-  "population_size": 200,
-  "generations_limit": 2000,
-  "mutation_chance": 0.075,
-  "crossover_chance": 0.75,
-  "child_per_generation": 100,
+  "population_size": 100,
+  "generations_limit": 10000,
+  "mutation_chance": 0.25,
+  "crossover_chance": 0.85,
+  "child_per_generation": 50,
   "goal_score": 40,
   "print_every_n_generations": 100,
   "population_class": "warrior",
   "breed_selection": {
     "method_1": "elite-sample",
-    "method_2": "boltzmann",
-    "ratio": 0.3
+    "method_2": "ranking",
+    "ratio": 0.15
   },
   "generation_gap_selection": {
     "method_1": "elite-sample",
     "method_2": "boltzmann",
-    "ratio": 0.3
+    "ratio": 0.15
   },
   "child_to_keep_selection": {
     "method_1": "elite-sample",
