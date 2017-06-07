@@ -186,7 +186,7 @@ class FileOutput(PlotOutput):
 
     def process_generation(self, data, stats, best_individual):
         super().process_generation(data, stats, best_individual)
-        self.text_output.process_generation(data, best_individual)
+        self.text_output.process_generation(data, stats, best_individual)
 
     def out_file_name(self):
         return pkg_resources.resource_filename(__data_pkg__, "results/{}".format(self.config.filename))
