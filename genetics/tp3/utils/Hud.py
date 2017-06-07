@@ -65,7 +65,7 @@ class PlotOutput(Output):
         self.height_line, = self.axs[1].plot([0], [0], label="Height")
         self.str_line, = self.axs[1].plot([0], [0], label="Strength")
         self.agi_line, = self.axs[1].plot([0], [0], label="Agility")
-        self.exp_line, = self.axs[1].plot([0], [0], label="Experience")
+        self.exp_line, = self.axs[1].plot([0], [0], label="Expertise")
         self.res_line, = self.axs[1].plot([0], [0], label="Resilience")
         self.life_line, = self.axs[1].plot([0], [0], label="Life")
         self.axs[1].set_ylabel("Best individual stats")
@@ -120,7 +120,7 @@ class PlotOutput(Output):
             self.height_line.set_label("Height: ${0:.2f}$".format(self.best_individual.height))
             self.str_line.set_label("Strength: ${0:.2f}$".format(self.best_individual.strength))
             self.agi_line.set_label("Agility: ${0:.2f}$".format(self.best_individual.agility))
-            self.exp_line.set_label("Experience: ${0:.2f}$".format(self.best_individual.expertise))
+            self.exp_line.set_label("Expertise: ${0:.2f}$".format(self.best_individual.expertise))
             self.res_line.set_label("Resilience: ${0:.2f}$".format(self.best_individual.resistance))
             self.life_line.set_label("Life: ${0:.2f}$".format(self.best_individual.life))
 
