@@ -51,6 +51,7 @@ def arg_parser():
     parser.add_argument('--config', metavar='config', nargs='?', default='default.json', help="Config to load")
     parser.add_argument('--all', help="Run all configs", action='store_true')
     parser.add_argument('--list', action='store_true')
+    parser.add_argument('--fragments', metavar='fragments', nargs='*', type=float, help="Fragment to run")
     return parser
 
 
@@ -66,8 +67,15 @@ def main():
         print(all_configs())
         exit(0)
 
-    config_files = [arguments.config] if not arguments.all else all_report_configs()
-
+    all_config_files = [arguments.config] if not arguments.all else all_report_configs()
+    config_files = []
+    if arguments.fragments is None:
+        config_files = all_config_files
+    else:
+        for fragment in arguments.fragments:
+            for config in all_config_files:
+                if "{}".format(fragment) in config:
+                    config_files.append(config)
     total = len(config_files)
     for i, config_name in enumerate(config_files):
         seed(1)
