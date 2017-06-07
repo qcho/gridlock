@@ -74,6 +74,7 @@ class Character:
             self._attack_modifier = _attack_modifier(self.height)
         return self._attack_modifier
 
+    @property
     def defense_modifier(self):
         if self._defense_modifier is None:
             self._defense_modifier = _defense_modifier(self.height)
