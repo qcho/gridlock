@@ -21,7 +21,8 @@ First we need to initialize  the environment:
 ```
 make install
 ```
-There are a couple of ways to run the project.
+There are a couple of ways to run the project.  
+All configs are located inside the tp3/data/configs folder. After changing any you should `make install` before running the project.  
 You can specify which config to use when running:
 ```
 ./venv/bin/tp3 --config default.json
@@ -29,4 +30,9 @@ You can specify which config to use when running:
 Or you can run the application in report-mode that will run everything inside configs/reports/:
 ```
 ./venv/bin/tp3 --all
+```
+
+There's also help for the application:  
+```
+./venv/bin/tp3 --help
 ```
