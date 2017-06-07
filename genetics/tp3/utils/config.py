@@ -21,6 +21,10 @@ def combinator(config):
                     config.write_json()
 
 
+def all_configs():
+    return [config for config in pkg_resources.resource_listdir(__data_pkg__, "configs/") if ".json" in config]
+
+
 def all_report_configs():
     return ["reports/" + file for file in pkg_resources.resource_listdir(__data_pkg__, "configs/reports/")]
 
