@@ -46,100 +46,140 @@ class Output:
 
 
 class PlotOutput(Output):
+    fig = None
+    axs = None
+    min_line = None
+    avg_line = None
+    max_line = None
+    str_line = None
+    height_line = None
+    agi_line = None
+    exp_line = None
+    res_line = None
+    life_line = None
+    points = None
+    initialized = False
+    references = 0
+
     def __init__(self, config: Config):
         super().__init__(config)
+        PlotOutput.references += 1
+        if PlotOutput.initialized:
+            self.points.append((0, 0.0, 0.0, 0.0, 0.0))
+            self.stats.append((0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
+            return
 
-        self.fig, self.axs = plt.subplots(2, sharex=True)
-        self.fig.canvas.set_window_title("TPE3 - GENETICS")
+        PlotOutput.fig, PlotOutput.axs = plt.subplots(2, sharex=True)
+        PlotOutput.fig.canvas.set_window_title("TPE3 - GENETICS")
 
         self.points.append((0, 0.0, 0.0, 0.0, 0.0))
-        self.min_line, = self.axs[0].plot([0], [0], label="Min")
-        self.avg_line, = self.axs[0].plot([0], [0], label="Avg")
-        self.max_line, = self.axs[0].plot([0], [0], label="Max")
-        self.axs[0].set_ylabel("Fitness")
-        self.axs[0].set_xlabel("Generation")
-        self.axs[0].set_xlim(0, config.generations_limit)
-        self.axs[0].set_ylim(0, config.goal_score)
+        PlotOutput.min_line, = PlotOutput.axs[0].plot([0], [0], label="Min")
+        PlotOutput.avg_line, = PlotOutput.axs[0].plot([0], [0], label="Avg")
+        PlotOutput.max_line, = PlotOutput.axs[0].plot([0], [0], label="Max")
+        PlotOutput.axs[0].set_ylabel("Fitness")
+        PlotOutput.axs[0].set_xlabel("Generation")
+        PlotOutput.axs[0].set_xlim(0, config.generations_limit)
+        PlotOutput.axs[0].set_ylim(0, config.goal_score)
 
         self.stats.append((0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
-        self.height_line, = self.axs[1].plot([0], [0], label="Height")
-        self.str_line, = self.axs[1].plot([0], [0], label="Strength")
-        self.agi_line, = self.axs[1].plot([0], [0], label="Agility")
-        self.exp_line, = self.axs[1].plot([0], [0], label="Expertise")
-        self.res_line, = self.axs[1].plot([0], [0], label="Resilience")
-        self.life_line, = self.axs[1].plot([0], [0], label="Life")
-        self.axs[1].set_ylabel("Best individual stats")
-        self.axs[1].set_xlabel("Generation")
-        self.axs[1].set_xlim(0, config.generations_limit)
-        self.axs[1].set_ylim(0, 100)
-        self.axs[1].set_yscale("symlog")
+        PlotOutput.height_line, = PlotOutput.axs[1].plot([0], [0], label="Height")
+        PlotOutput.str_line, = PlotOutput.axs[1].plot([0], [0], label="Strength")
+        PlotOutput.agi_line, = PlotOutput.axs[1].plot([0], [0], label="Agility")
+        PlotOutput.exp_line, = PlotOutput.axs[1].plot([0], [0], label="Expertise")
+        PlotOutput.res_line, = PlotOutput.axs[1].plot([0], [0], label="Resilience")
+        PlotOutput.life_line, = PlotOutput.axs[1].plot([0], [0], label="Life")
+        PlotOutput.axs[1].set_ylabel("Best individual stats")
+        PlotOutput.axs[1].set_xlabel("Generation")
+        PlotOutput.axs[1].set_xlim(0, config.generations_limit)
+        PlotOutput.axs[1].set_ylim(0, 100)
+        PlotOutput.axs[1].set_yscale("symlog")
+        PlotOutput.initialized = True
 
     def _update(self, _):
         self._set_texts()
-        self.min_line.set_xdata([p[0] for p in self.points])
-        self.min_line.set_ydata([p[1] for p in self.points])
-        self.avg_line.set_xdata([p[0] for p in self.points])
-        self.avg_line.set_ydata([p[2] for p in self.points])
-        self.max_line.set_xdata([p[0] for p in self.points])
-        self.max_line.set_ydata([p[3] for p in self.points])
+        PlotOutput.min_line.set_xdata([p[0] for p in self.points])
+        PlotOutput.min_line.set_ydata([p[1] for p in self.points])
+        PlotOutput.avg_line.set_xdata([p[0] for p in self.points])
+        PlotOutput.avg_line.set_ydata([p[2] for p in self.points])
+        PlotOutput.max_line.set_xdata([p[0] for p in self.points])
+        PlotOutput.max_line.set_ydata([p[3] for p in self.points])
 
-        self.min_line.set_xdata([p[0] for p in self.points])
-        self.min_line.set_ydata([p[1] for p in self.points])
-        self.avg_line.set_xdata([p[0] for p in self.points])
-        self.avg_line.set_ydata([p[2] for p in self.points])
-        self.max_line.set_xdata([p[0] for p in self.points])
-        self.max_line.set_ydata([p[3] for p in self.points])
+        PlotOutput.min_line.set_xdata([p[0] for p in self.points])
+        PlotOutput.min_line.set_ydata([p[1] for p in self.points])
+        PlotOutput.avg_line.set_xdata([p[0] for p in self.points])
+        PlotOutput.avg_line.set_ydata([p[2] for p in self.points])
+        PlotOutput.max_line.set_xdata([p[0] for p in self.points])
+        PlotOutput.max_line.set_ydata([p[3] for p in self.points])
 
-        self.height_line.set_xdata([p[0] for p in self.stats])
-        self.height_line.set_ydata([p[1] for p in self.stats])
-        self.str_line.set_xdata([p[0] for p in self.stats])
-        self.str_line.set_ydata([p[2] for p in self.stats])
-        self.agi_line.set_xdata([p[0] for p in self.stats])
-        self.agi_line.set_ydata([p[3] for p in self.stats])
-        self.exp_line.set_xdata([p[0] for p in self.stats])
-        self.exp_line.set_ydata([p[4] for p in self.stats])
-        self.res_line.set_xdata([p[0] for p in self.stats])
-        self.res_line.set_ydata([p[5] for p in self.stats])
-        self.life_line.set_xdata([p[0] for p in self.stats])
-        self.life_line.set_ydata([p[6] for p in self.stats])
+        PlotOutput.height_line.set_xdata([p[0] for p in self.stats])
+        PlotOutput.height_line.set_ydata([p[1] for p in self.stats])
+        PlotOutput.str_line.set_xdata([p[0] for p in self.stats])
+        PlotOutput.str_line.set_ydata([p[2] for p in self.stats])
+        PlotOutput.agi_line.set_xdata([p[0] for p in self.stats])
+        PlotOutput.agi_line.set_ydata([p[3] for p in self.stats])
+        PlotOutput.exp_line.set_xdata([p[0] for p in self.stats])
+        PlotOutput.exp_line.set_ydata([p[4] for p in self.stats])
+        PlotOutput.res_line.set_xdata([p[0] for p in self.stats])
+        PlotOutput.res_line.set_ydata([p[5] for p in self.stats])
+        PlotOutput.life_line.set_xdata([p[0] for p in self.stats])
+        PlotOutput.life_line.set_ydata([p[6] for p in self.stats])
 
-        return self.min_line, self.avg_line, self.max_line, \
-            self.height_line, \
-            self.str_line, \
-            self.agi_line, \
-            self.exp_line, \
-            self.res_line, \
-            self.life_line
+        return PlotOutput.min_line, PlotOutput.avg_line, PlotOutput.max_line, \
+            PlotOutput.height_line, \
+            PlotOutput.str_line, \
+            PlotOutput.agi_line, \
+            PlotOutput.exp_line, \
+            PlotOutput.res_line, \
+            PlotOutput.life_line
 
     def _set_texts(self):
-        self.axs[0].set_title("Generation: ${}$".format(self.get_generation()))
-        self.min_line.set_label("Min: ${0:.2f}$".format(self.get_min_fitness()))
-        self.avg_line.set_label("Avg: ${0:.2f}$".format(self.get_avg_fitness()))
-        self.max_line.set_label("Max: ${0:.2f}$".format(self.get_max_fitness()))
+        PlotOutput.axs[0].set_title("Generation: ${}$".format(self.get_generation()))
+        PlotOutput.min_line.set_label("Min: ${0:.2f}$".format(self.get_min_fitness()))
+        PlotOutput.avg_line.set_label("Avg: ${0:.2f}$".format(self.get_avg_fitness()))
+        PlotOutput.max_line.set_label("Max: ${0:.2f}$".format(self.get_max_fitness()))
         if self.best_individual is not None:
-            self.height_line.set_label("Height: ${0:.2f}$".format(self.best_individual.height))
-            self.str_line.set_label("Strength: ${0:.2f}$".format(self.best_individual.strength))
-            self.agi_line.set_label("Agility: ${0:.2f}$".format(self.best_individual.agility))
-            self.exp_line.set_label("Expertise: ${0:.2f}$".format(self.best_individual.expertise))
-            self.res_line.set_label("Resilience: ${0:.2f}$".format(self.best_individual.resistance))
-            self.life_line.set_label("Life: ${0:.2f}$".format(self.best_individual.life))
+            PlotOutput.height_line.set_label("Height: ${0:.2f}$".format(self.best_individual.height))
+            PlotOutput.str_line.set_label("Strength: ${0:.2f}$".format(self.best_individual.strength))
+            PlotOutput.agi_line.set_label("Agility: ${0:.2f}$".format(self.best_individual.agility))
+            PlotOutput.exp_line.set_label("Expertise: ${0:.2f}$".format(self.best_individual.expertise))
+            PlotOutput.res_line.set_label("Resilience: ${0:.2f}$".format(self.best_individual.resistance))
+            PlotOutput.life_line.set_label("Life: ${0:.2f}$".format(self.best_individual.life))
 
-        self.axs[0].legend(handles=[self.max_line, self.avg_line, self.min_line])
-        self.axs[1].legend(handles=[
-            self.height_line,
-            self.str_line,
-            self.agi_line,
-            self.exp_line,
-            self.res_line,
-            self.life_line,
+        PlotOutput.axs[0].legend(handles=[PlotOutput.max_line, PlotOutput.avg_line, PlotOutput.min_line])
+        PlotOutput.axs[1].legend(handles=[
+            PlotOutput.height_line,
+            PlotOutput.str_line,
+            PlotOutput.agi_line,
+            PlotOutput.exp_line,
+            PlotOutput.res_line,
+            PlotOutput.life_line,
         ])
+
+    def finish(self):
+        super().finish()
+        PlotOutput.references -= 1
+        if PlotOutput.references == 0:
+            plt.close()
+            PlotOutput.fig = None
+            PlotOutput.axs = None
+            PlotOutput.min_line = None
+            PlotOutput.avg_line = None
+            PlotOutput.max_line = None
+            PlotOutput.str_line = None
+            PlotOutput.height_line = None
+            PlotOutput.agi_line = None
+            PlotOutput.exp_line = None
+            PlotOutput.res_line = None
+            PlotOutput.life_line = None
+            PlotOutput.points = None
+            PlotOutput.initialized = False
 
 
 class RealtimeOutput(PlotOutput):
     def __init__(self, config: Config):
         super().__init__(config)
         self.print_interval = config.print_interval
-        _ = animation.FuncAnimation(self.fig, self._update, interval=100)
+        _ = animation.FuncAnimation(PlotOutput.fig, self._update, interval=100)
         plt.ion()
         plt.show()
         plt.pause(0.01)
@@ -152,6 +192,7 @@ class RealtimeOutput(PlotOutput):
     def finish(self):
         plt.ioff()
         plt.show()
+        super().finish()
 
 
 class TextOutput(Output):
@@ -197,7 +238,7 @@ class FileOutput(PlotOutput):
         self.text_output.finish()
         plt.draw()
         plt.savefig(self.out_file_name() + ".png", dpi=300)
-        plt.close()
+        super().finish()
 
 
 def _init_output_methods(config: Config):
