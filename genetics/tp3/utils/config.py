@@ -3,6 +3,10 @@ import json
 from ..data import __data_pkg__
 
 
+def all_configs():
+    return pkg_resources.resource_listdir(__data_pkg__, "configs/")
+
+
 class Config:
     def __init__(self, filename):
         self.filename = filename

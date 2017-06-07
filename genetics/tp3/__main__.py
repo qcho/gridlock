@@ -1,12 +1,11 @@
-import sys
 from multiprocessing import freeze_support
 from random import sample
-
+import argparse
 from .algorithms.genetic import Genetic
 from .algorithms.selection import set_tournament_constants, set_boltzmann_constants
 from .models.characters import Character, Warrior, Archer, Defender, Assassin
 from .utils.Hud import Hud
-from .utils.config import Config
+from .utils.config import Config, all_configs
 from .utils.parser import databases
 
 
@@ -47,10 +46,21 @@ def _run(config: Config):
     hud.finish()
 
 
+def arg_parser():
+    parser = argparse.ArgumentParser(description="SIA: Algorítmos genéticos")
+    parser.add_argument('--config', metavar='config', nargs='?', default='default.json', help="Config to load")
+    parser.add_argument('--all', help="Run all configs", action='store_true')
+    return parser
+
+
 def main():
     freeze_support()
-    config = Config(sys.argv[1] if len(sys.argv) > 1 else "default.json")
-    _run(config)
+    argument_parser = arg_parser()
+    arguments = argument_parser.parse_args()
+    config_files = [arguments.config] if not arguments.all else all_configs()
+
+    for config_name in config_files:
+        _run(Config(config_name))
 
 if __name__ == "__main__":
     main()
