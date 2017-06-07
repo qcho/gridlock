@@ -193,9 +193,10 @@ class FileOutput(PlotOutput):
 
     def finish(self):
         self._update(None)
+        self.text_output.finish()
         plt.draw()
         plt.savefig(self.out_file_name() + ".png", dpi=300)
-        self.text_output.finish()
+        plt.close()
 
 
 def _init_output_methods(config: Config):
