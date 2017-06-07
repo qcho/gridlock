@@ -29,9 +29,9 @@ class Character:
 
     def __init__(self):
         self.items = {}
-        self.height = uniform(1.3, 2.0)
-        self.attack_modifier = _attack_modifier(self.height)
-        self.defense_modifier = _defense_modifier(self.height)
+        self._height = None
+        self._attack_modifier = None
+        self._defense_modifier = None
         self._fitness = None
         self._strength = None
         self._agility = None
@@ -57,7 +57,7 @@ class Character:
 
     def set_item(self, item: Item):
         self.items[item.type] = item
-        self.invalidate_caches()
+        self.invalidate_stats()
 
     def _items_properties_sum(self, property_fn):
         return np.sum(list(map(lambda x: property_fn.__get__(x, Item), self.items.values())))
@@ -67,6 +67,17 @@ class Character:
         if self._fitness is None:
             self._fitness = self._calculate_fitness()
         return self._fitness
+
+    @property
+    def attack_modifier(self):
+        if self._attack_modifier is None:
+            self._attack_modifier = _attack_modifier(self.height)
+        return self._attack_modifier
+
+    def defense_modifier(self):
+        if self._defense_modifier is None:
+            self._defense_modifier = _defense_modifier(self.height)
+        return self._defense_modifier
 
     @property
     def strength(self):
@@ -113,6 +124,17 @@ class Character:
     def defense(self):
         return (self.resistance + self.expertise) * self.life * self.defense_modifier
 
+    @property
+    def height(self):
+        if self._height is None:
+            self._height = uniform(1.3, 2.0)
+        return self._height
+
+    @height.setter
+    def height(self, height):
+        self._height = height
+        self.invalidate_fitness()
+
     def __str__(self):
         string = "Height: {} \nItems: \n".format(self.height)
         for x in self.items.values():
@@ -126,15 +148,21 @@ class Character:
 
     def spawn(self):
         child = cPickle.loads(cPickle.dumps(self, -1))
-        child.invalidate_caches()
+        child.invalidate_stats()
+        child.invalidate_fitness()
         return child
 
-    def invalidate_caches(self):
-        self._fitness = None
+    def invalidate_stats(self):
+        self.invalidate_fitness()
         self._strength = None
         self._agility = None
         self._expertise = None
         self._resistance = None
         self._life = None
+
+    def invalidate_fitness(self):
+        self._fitness = None
         self._attack = None
         self._defense = None
+        self._attack_modifier = None
+        self._defense_modifier = None
