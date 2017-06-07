@@ -1,13 +1,13 @@
 {
-  "dataset": "testdata",
-  "outputs": ["file"],
+  "dataset": "fulldata",
+  "outputs": ["realtime"],
   "output_path": "out",
-  "population_size": 400,
+  "population_size": 200,
   "generations_limit": 2000,
   "mutation_chance": 0.075,
   "crossover_chance": 0.75,
-  "child_per_generation": 200,
-  "goal_score": 50,
+  "child_per_generation": 100,
+  "goal_score": 40,
   "print_every_n_generations": 100,
   "population_class": "warrior",
   "breed_selection": {
