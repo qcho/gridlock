@@ -155,3 +155,5 @@ ENV/
 
 
 tp3/data/*.pkl
+tp3/data/results/*.png
+tp3/data/results/*.txt

@@ -1,4 +1,5 @@
 from abc import ABCMeta
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,24 +10,8 @@ from .config import Config
 from ..data import __data_pkg__
 
 
-def _generation(points):
-    return points[-1][0]
-
-
-def _min_fitness(points):
-    return points[-1][1]
-
-
-def _avg_fitness(points):
-    return points[-1][2]
-
-
 def _max_fitness(points):
     return points[-1][3]
-
-
-def _last_fitness(points):
-    return points[-1]
 
 
 class Output:
@@ -47,19 +32,16 @@ class Output:
         pass
 
     def get_generation(self):
-        return _generation(self.points)
+        return self.points[-1][0]
 
     def get_min_fitness(self):
-        return _min_fitness(self.points)
+        return self.points[-1][1]
 
     def get_avg_fitness(self):
-        return _avg_fitness(self.points)
+        return self.points[-1][2]
 
     def get_max_fitness(self):
         return _max_fitness(self.points)
-
-    def get_last_fitness(self):
-        return _last_fitness(self.points)
 
 
 class PlotOutput(Output):
@@ -171,49 +153,54 @@ class RealtimeOutput(PlotOutput):
         plt.show()
 
 
-class ConsoleOutput(Output):
-    def __init__(self, config: Config):
+class TextOutput(Output):
+    def __init__(self, config: Config, file):
         super().__init__(config)
+        self.file = file
         self.print_interval = config.print_interval
 
     def process_generation(self, data, stats, best_individual):
         super().process_generation(data, stats, best_individual)
         if self.get_generation() % self.print_interval == 0:
-            print("Generation:", self.get_generation())
-            print("Avg fitness: {}".format(self.get_avg_fitness()))
-            print("Max fitness: {}".format(self.get_max_fitness()))
-            print("Min fitness: {}".format(self.get_min_fitness()))
+            print("Generation:", self.get_generation(), file=self.file)
+            print("Avg fitness: {}".format(self.get_avg_fitness()), file=self.file)
+            print("Max fitness: {}".format(self.get_max_fitness()), file=self.file)
+            print("Min fitness: {}".format(self.get_min_fitness()), file=self.file)
 
     def finish(self):
         max_fitness = self.get_max_fitness()
         if self.config.generations_limit == self.get_generation():
-            print("Max generation reached...Exiting with a best score of: {}".format(max_fitness))
+            print("Max generation reached...Exiting with a best score of: {}".format(max_fitness), file=self.file)
         else:
             print("The target score was surpassed in generation: {} with a score of: {}"
-                  .format(self.get_generation(), max_fitness))
-        print("The individual stats are: \n{}".format(self.best_individual))
+                  .format(self.get_generation(), max_fitness), file=self.file)
+        print("The individual stats are: \n{}".format(self.best_individual), file=self.file)
+        self.file.close()
 
 
 class FileOutput(PlotOutput):
     def __init__(self, config: Config):
         super().__init__(config)
+        self.text_output = TextOutput(config, open(self.out_file_name() + ".txt", "w"))
 
     def process_generation(self, data, stats, best_individual):
         super().process_generation(data, stats, best_individual)
+        self.text_output.process_generation(data, best_individual)
 
-    def _out_file_name(self):
-        return pkg_resources.resource_filename(__data_pkg__, "results/{}.png".format(self.config.filename))
+    def out_file_name(self):
+        return pkg_resources.resource_filename(__data_pkg__, "results/{}".format(self.config.filename))
 
     def finish(self):
         self._update(None)
         plt.draw()
-        plt.savefig(self._out_file_name())
+        plt.savefig(self.out_file_name() + ".png")
+        self.text_output.finish()
 
 
 def _init_output_methods(config: Config):
     output_methods = []
     if "console" in config.output_methods:
-        output_methods.append(ConsoleOutput(config))
+        output_methods.append(TextOutput(config, sys.stdout))
     if "file" in config.output_methods:
         output_methods.append(FileOutput(config))
     if "realtime" in config.output_methods:
@@ -223,12 +210,10 @@ def _init_output_methods(config: Config):
 
 class Hud:
     def __init__(self, config: Config) -> None:
-        super().__init__()
         self.best_individual = None
         self.points = []
         self.stats = []
         self.output_methods = _init_output_methods(config)
-        #plt.xkcd()
 
     def add_points_get_max(self, generation, population):
         fitness_list = []
