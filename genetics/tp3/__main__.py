@@ -50,6 +50,7 @@ def arg_parser():
     parser = argparse.ArgumentParser(description="SIA: Algorítmos genéticos")
     parser.add_argument('--config', metavar='config', nargs='?', default='default.json', help="Config to load")
     parser.add_argument('--all', help="Run all configs", action='store_true')
+    parser.add_argument('--list', action='store_true')
     return parser
 
 
